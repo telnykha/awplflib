@@ -10,7 +10,7 @@
 //                           License Agreement
 //                  Locate Framework  Computer Vision Library
 //
-// Copyright (C) 2004-2017, Alt-Soft.net, all rights reserved.
+// Copyright (C) 2004-2018, NN-Videolab.net, all rights reserved.
 // Third party copyrights are property of their respective owners.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -29,7 +29,7 @@
 // This software is provided by the copyright holders and contributors "as is" and
 // any express or implied warranties, including, but not limited to, the implied
 // warranties of merchantability and fitness for a particular purpose are disclaimed.
-// In no event shall the Alt-Soft.net or contributors be liable for any direct,
+// In no event shall the NN-Videolab.net or contributors be liable for any direct,
 // indirect, incidental, special, exemplary, or consequential damages
 // (including, but not limited to, procurement of substitute goods or services;
 // loss of use, data, or profits; or business interruption) however caused
@@ -41,7 +41,7 @@
 //		File: LFFaceDescriptor.cpp
 //		Purpose: implementation of TLFFaceImageDescriptor
 //
-//      CopyRight 2004-1017 (c) ALT-Soft.net
+//      CopyRight 2004-2018 (c) NN-Videolab.net
 //M*/
 
 #include "_LF.h"
@@ -54,7 +54,7 @@ const awp2DPoint FaceGraph1[24] =
 {0.740806042,	0.05590989 },
 {1.285927469,	0.020966209},
 {0.202673351,	0.621997526},
-{0.531143955,	0.510177746},
+{0.531143955,	0.520187746},
 {0.824670877,	0.580065108},
 {0.104831044,	1.104220327},
 {0.943479393,	1.055299173},

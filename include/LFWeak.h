@@ -10,7 +10,7 @@
 //                           License Agreement
 //                  Locate Framework  Computer Vision Library
 //
-// Copyright (C) 2004-2017, Alt-Soft.net, all rights reserved.
+// Copyright (C) 2004-2018, NN-Videolab.net, all rights reserved.
 // Third party copyrights are property of their respective owners.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -29,7 +29,7 @@
 // This software is provided by the copyright holders and contributors "as is" and
 // any express or implied warranties, including, but not limited to, the implied
 // warranties of merchantability and fitness for a particular purpose are disclaimed.
-// In no event shall the Alt-Soft.net or contributors be liable for any direct,
+// In no event shall the NN-Videolab.net or contributors be liable for any direct,
 // indirect, incidental, special, exemplary, or consequential damages
 // (including, but not limited to, procurement of substitute goods or services;
 // loss of use, data, or profits; or business interruption) however caused
@@ -40,7 +40,7 @@
 //	Locate Framework  4.0
 //	File: LFWeak.h
 //	Purpose: Weak classifiers
-//	Copyright (C) 2004-2017, Alt-Soft.net, all rights reserved.
+//	Copyright (C) 2004-2018, NN-Videolab.net, all rights reserved.
 //M*/
 
 #ifndef HLWEAKH

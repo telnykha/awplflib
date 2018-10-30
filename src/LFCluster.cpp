@@ -45,7 +45,6 @@
 //      CopyRight 2004-1017 (c) ALT-Soft.net
 //M*/
 
-
 #include "_LF.h"
 #include "float.h"
 TLFClusterItem::TLFClusterItem(TLFDetectedItem* item)
