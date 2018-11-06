@@ -116,6 +116,9 @@ public:
 
 	TLFLabColor* Center();
 	TLFLabColor* Nearlest(TLFLabColor& color, double& dist, int& index);
+    bool SortFromColor(TLFLabColor& color, TLFLabColorDatabase& db);
+    double Distance(TLFLabColor& color, int idx);
+    bool  Copy(TLFLabColorDatabase& _db, int start, int end);
 
 	virtual const char* GetName()
 	{

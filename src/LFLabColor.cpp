@@ -275,13 +275,13 @@ TLFLabColor* TLFLabColorDatabase::Nearlest(TLFLabColor& color, double& dist, int
 	return GetColor(index);
 }
 // exchange sorting
-bool TLFLabColorDatabase::SortFromColor(TLFLabColor& color)
+bool TLFLabColorDatabase::SortFromColor(TLFLabColor& color, TLFLabColorDatabase& db)
 {
     for (int i = 0; i < this->GetCount(); i++)
     {
         double min = 1e10;
         int index = -1;
-        for (int j = i; j < this->GetCount();i++)
+        for (int j = i; j < this->GetCount();j++)
         {
             double d = this->Distance(color, j);
             if (d < min)
@@ -291,8 +291,12 @@ bool TLFLabColorDatabase::SortFromColor(TLFLabColor& color)
             }
         }
         if (index >= 0)
-            this->Exchange(i,index);
+        {
+            Exchange(i,index);
+            db.Exchange(i, index);
+        }
     }
+    return true;
 }
 // distance to color in the database by index
 double TLFLabColorDatabase::Distance(TLFLabColor& color, int idx)
@@ -305,9 +309,12 @@ double TLFLabColorDatabase::Distance(TLFLabColor& color, int idx)
 
 bool  TLFLabColorDatabase::Copy(TLFLabColorDatabase& _db, int start, int end)
 {
+    if (start < 0 || start > end || end >= GetCount())
+        return false;
     _db.Clear();
     for (int i = start; i < end; i++)
     	_db.AddColor(*GetColor(i));
+    return true;
 }
 
 
