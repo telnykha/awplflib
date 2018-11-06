@@ -148,6 +148,25 @@ TLFLabColorDatabase::TLFLabColorDatabase()
 {
 
 }
+
+TLFLabColorDatabase::TLFLabColorDatabase(TLFLabColorDatabase& _db)
+{
+    for (int i = 0; i < _db.GetCount(); i++)
+        this->AddColor(*_db.GetColor(i));
+}
+
+TLFLabColorDatabase& TLFLabColorDatabase::operator=(TLFLabColorDatabase& _db)
+{
+ 	if (this != &_db)
+    {
+	    Clear();
+        for (int i = 0; i < _db.GetCount(); i++)
+            AddColor(*_db.GetColor(i));
+    }
+	return *this;
+}
+
+
 void TLFLabColorDatabase::AddColor(TLFLabColor& color)
 {
 	TLFLabColor* c = new TLFLabColor(color);
@@ -159,9 +178,6 @@ TLFLabColor* TLFLabColorDatabase::GetColor(int index)
 		return NULL;
 	TLFLabColor* c = dynamic_cast<TLFLabColor*>(Get(index));
     return c;
-//	if (c == NULL)
-//		return NULL; // ну мало ли что там может торчать.
-//	return new TLFLabColor(*c);
 }
 
 bool TLFLabColorDatabase::SaveToXml(const char* lpFileName)
@@ -258,3 +274,40 @@ TLFLabColor* TLFLabColorDatabase::Nearlest(TLFLabColor& color, double& dist, int
 	ind = index;
 	return GetColor(index);
 }
+// exchange sorting
+bool TLFLabColorDatabase::SortFromColor(TLFLabColor& color)
+{
+    for (int i = 0; i < this->GetCount(); i++)
+    {
+        double min = 1e10;
+        int index = -1;
+        for (int j = i; j < this->GetCount();i++)
+        {
+            double d = this->Distance(color, j);
+            if (d < min)
+            {
+                min = d;
+                index = j;
+            }
+        }
+        if (index >= 0)
+            this->Exchange(i,index);
+    }
+}
+// distance to color in the database by index
+double TLFLabColorDatabase::Distance(TLFLabColor& color, int idx)
+{
+   if (idx < 0 || idx >= this->GetCount())
+     return -1;
+   TLFLabColor* c = this->GetColor(idx);
+   return c->CIE76(color);
+}
+
+bool  TLFLabColorDatabase::Copy(TLFLabColorDatabase& _db, int start, int end)
+{
+    _db.Clear();
+    for (int i = start; i < end; i++)
+    	_db.AddColor(*GetColor(i));
+}
+
+

@@ -105,6 +105,8 @@ class TLFLabColorDatabase : public TLFObjectList
 {
 public:
 	TLFLabColorDatabase();
+	TLFLabColorDatabase(TLFLabColorDatabase& _db);
+    TLFLabColorDatabase& operator=(TLFLabColorDatabase& _db);
 
 	void AddColor(TLFLabColor& color);
 	TLFLabColor* GetColor(int index);
