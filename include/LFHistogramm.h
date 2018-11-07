@@ -68,6 +68,11 @@ public:
 	double GetThrBin(int bin);
 	double GetBin(int bin);
 	double GetSum();
+	double GetMax();
+	double GetMin();
+	double GetMaxBin(int& bin);
+	double GetMinBin(int& bin);
+
 
 	bool Save(const char* lpFileName);
 	bool Load(const char* lpFileName);

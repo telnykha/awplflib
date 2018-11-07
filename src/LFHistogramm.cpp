@@ -163,7 +163,73 @@ double TLFHistogramm::GetThrBin(int bin)
 	return m_min + bin*delta;
 }
 
+#define _CHECK_NULL_ \
+	if (m_data == NULL)\
+		return -1;\
+
+
 double TLFHistogramm::GetBin(int bin)
 {
+	_CHECK_NULL_
+
 	return m_data[bin];
 }
+
+double TLFHistogramm::GetMax()
+{
+	_CHECK_NULL_
+
+	double max = m_data[0];
+	for (int i = 1; i < m_num_bins; i++)
+	{
+		if (m_data[i] > max)
+			max = m_data[i];
+	}
+	return max;
+}
+double TLFHistogramm::GetMin()
+{
+	_CHECK_NULL_
+
+	double min = m_data[0];
+	for (int i = 1; i < m_num_bins; i++)
+	{
+		if (m_data[i] < min)
+			min = m_data[i];
+	}
+	return min;
+}
+double TLFHistogramm::GetMaxBin(int& bin)
+{
+	bin = -1;
+	_CHECK_NULL_
+    double max = m_data[0];
+	bin = 0;
+	for (int i = 1; i < m_num_bins; i++)
+	{
+		if (m_data[i] > max)
+		{
+			max = m_data[i];
+			bin = i;
+		}
+	}
+	return max;
+}
+
+double TLFHistogramm::GetMinBin(int& bin)
+{
+	bin = -1;
+	_CHECK_NULL_
+	double min = m_data[0];
+	bin = 0;
+	for (int i = 1; i < m_num_bins; i++)
+	{
+		if (m_data[i] < min)
+		{
+			min = m_data[i];
+			bin = i;
+		}
+	}
+	return min;
+}
+
