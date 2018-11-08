@@ -152,7 +152,7 @@ protected:
 	TLFObjectList    m_clusterItems;
 	TLFObjectList    m_clusters;
 	virtual void UpdateBlobs();
-	virtual void Search(int x, int y, int id);
+	virtual bool Search(int& x, int& y, int id);
 	void MakeClusterList();
 	void  GetDescr(int idx);
 	int GetBlobIndex();
@@ -171,10 +171,11 @@ class TLFClusterTrack : public TLFClusterRecursive
 protected:
 	SLFBinaryBlob      m_blobs_tmp[LF_NUM_CLUSTERS];
 	virtual void UpdateBlobs();
-	virtual void Search(int x, int y, int id);
+	virtual bool Search(int& x, int& y, int id);
 	SLFBinaryBlob* NearlestBlob(SLFBinaryBlob& blob);
 	std::map<int, SClusterDescr> m_power;
 	std::vector<SLFBinaryBlob> m_result;
+	int m_stack_depth;
 public:
 	TLFClusterTrack(ILFObjectDetector* detector, double minw, double minh, double maxw, double maxh);
 	virtual ~TLFClusterTrack();

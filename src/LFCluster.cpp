@@ -555,11 +555,11 @@ void TLFClusterRecursive::MakeClusters()
 
 }
 
-void TLFClusterRecursive::Search(int x, int y, int id)
+bool TLFClusterRecursive::Search(int& x, int& y, int id)
 {
 	TLFTileScanner* scanner = dynamic_cast<TLFTileScanner*>(m_detector->GetScanner());
 	if (scanner == NULL)
-		return;
+		return false;
 	int w = scanner->GetNumX() -2;
 	int h = scanner->GetNumY() -2;
 
@@ -584,6 +584,7 @@ void TLFClusterRecursive::Search(int x, int y, int id)
 			}
 		}
 	}
+	return true;
 }
 
 
@@ -888,6 +889,7 @@ TLFClusterTrack::TLFClusterTrack(ILFObjectDetector* detector, double minw, doubl
 	{
 		m_blobs_tmp[i].color = -1;
 	}
+	m_stack_depth = 0;
 }
 TLFClusterTrack::~TLFClusterTrack()
 {
@@ -933,12 +935,19 @@ void TLFClusterTrack::MakeClusters()
 				d.power = 1;
 				d.cluster_id = m_cluster_idx;
 				m_power.insert(std::pair<int, SClusterDescr>(m_cluster_idx, d));
-				Search(j, i, m_cluster_idx);
+				int x = j;
+				int y = i;
+				m_stack_depth = 0;
+				Search(x, y, m_cluster_idx);
+				//while (Search(x, y, m_cluster_idx))
+				//{
+				//	m_power[m_cluster_idx].power++;
+				//	power++;
+				//}
 			}
 		}
 	}
 	// clear small clusters 
-	
 	std::map<int, SClusterDescr>::iterator it = m_power.begin();
 	for (int i = 0; i < m_detector->GetNumItems(); i++)
 	{
@@ -965,21 +974,6 @@ void TLFClusterTrack::MakeClusters()
 			++it;
 		}
 	}
-
-	//for (auto it0 = m_power.begin(); it0 != m_power.end();)
-	//{
-	//	if (it0->second.power < 10)
-	//	{
-	//		m_power.erase(it0);
-	//	}
-	//	else
-	//		++it0;
-	//}
-	
-	//std::cout << "power contains:\n";
-	//for (it = m_power.begin(); it != m_power.end(); ++it)
-	//	std::cout << it->first << " => " << it->second << '\n';
-
 	m_cluster_count = m_power.size();
 	MakeClusterList();
 	UpdateBlobs();
@@ -1051,35 +1045,43 @@ void TLFClusterTrack::UpdateBlobs()
 		}
 	}
 }
-
-void TLFClusterTrack::Search(int x, int y, int id)
+// blob coloring serach machine 
+bool TLFClusterTrack::Search(int& x, int& y, int id)
 {
 	TLFTileScanner* scanner = dynamic_cast<TLFTileScanner*>(m_detector->GetScanner());
 	if (scanner == NULL)
-		return;
+		return false;
+	m_stack_depth++;
+	//to aviod stack overfolw just find
+	//number of  recursive calls
+	if (m_stack_depth > 3000)
+		return false;
 	int w = scanner->GetNumX() - 2;
 	int h = scanner->GetNumY() - 2;
 
 	TLFDetectedItem* di = m_detector->GetItem(y*w + x);
 	di->SetClusterIdx(id);
 	di->SetColor(id);
-	for (int i = y - 3; i <= y + 3; i++)
+	for (int i = y - 5; i <= y + 5; i++)
 	{
 		if (i < 0 || i >= h)
 			continue;
-		for (int j = x - 3; j <= x + 3; j++)
+		for (int j = x - 5; j <= x + 5; j++)
 		{
 			if (j < 0 || j >= w)
 				continue;
 			di = m_detector->GetItem(i*w + j);
 			if (di != NULL && di->HasObject() && di->GetClusterIdx() == -1)
 			{
-
 				m_power[id].power++;
+				x = j;
+				y = i;
 				Search(j, i, id);
+				//return true;
 			}
 		}
 	}
+	return false;
 }
 
 static double BlobDist(SLFBinaryBlob& b1, SLFBinaryBlob& b2)
