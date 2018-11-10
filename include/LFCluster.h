@@ -176,6 +176,8 @@ protected:
 	std::map<int, SClusterDescr> m_power;
 	std::vector<SLFBinaryBlob> m_result;
 	int m_stack_depth;
+	int m_x;
+	int m_y;
 public:
 	TLFClusterTrack(ILFObjectDetector* detector, double minw, double minh, double maxw, double maxh);
 	virtual ~TLFClusterTrack();

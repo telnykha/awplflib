@@ -922,6 +922,7 @@ void TLFClusterTrack::MakeClusters()
 
 	m_cluster_idx = 0;
 	m_power.clear();
+	bool res = true;
 	for (int i = 0; i < h; i++)
 	{
 		for (int j = 0; j < w; j++)
@@ -929,21 +930,28 @@ void TLFClusterTrack::MakeClusters()
 			TLFDetectedItem* di = m_detector->GetItem(i*w + j);
 			if (di != NULL && di->HasObject() && di->GetClusterIdx() == -1)
 			{
-				m_cluster_idx++;
-				SClusterDescr d;
-				d.blob_idx = 0;
-				d.power = 1;
-				d.cluster_id = m_cluster_idx;
-				m_power.insert(std::pair<int, SClusterDescr>(m_cluster_idx, d));
+				if (res)
+				{
+					m_cluster_idx++;
+					SClusterDescr d;
+					d.blob_idx = 0;
+					d.power = 1;
+					d.cluster_id = m_cluster_idx;
+					if (res)
+						m_power.insert(std::pair<int, SClusterDescr>(m_cluster_idx, d));
+					m_stack_depth = 0;
+
+				}
 				int x = j;
 				int y = i;
 				m_stack_depth = 0;
-				Search(x, y, m_cluster_idx);
-				//while (Search(x, y, m_cluster_idx))
-				//{
-				//	m_power[m_cluster_idx].power++;
-				//	power++;
-				//}
+				m_x = x; 
+				m_y = y;
+				do
+				{
+					res = Search(m_x, m_y, m_cluster_idx);
+					m_stack_depth = 0;
+				} while (!res);
 			}
 		}
 	}
@@ -1055,10 +1063,12 @@ bool TLFClusterTrack::Search(int& x, int& y, int id)
 	//to aviod stack overfolw just find
 	//number of  recursive calls
 	if (m_stack_depth > 3000)
+	{
 		return false;
+	}
 	int w = scanner->GetNumX() - 2;
 	int h = scanner->GetNumY() - 2;
-
+	bool res = false;
 	TLFDetectedItem* di = m_detector->GetItem(y*w + x);
 	di->SetClusterIdx(id);
 	di->SetColor(id);
@@ -1074,14 +1084,17 @@ bool TLFClusterTrack::Search(int& x, int& y, int id)
 			if (di != NULL && di->HasObject() && di->GetClusterIdx() == -1)
 			{
 				m_power[id].power++;
-				x = j;
-				y = i;
-				Search(j, i, id);
-				//return true;
+				m_x = j;
+				m_y = i;
+				res = Search(j, i, id);
+				if (!res)
+				{
+					return res;
+				}
 			}
 		}
 	}
-	return false;
+	return true;
 }
 
 static double BlobDist(SLFBinaryBlob& b1, SLFBinaryBlob& b2)
