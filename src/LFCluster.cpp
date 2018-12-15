@@ -1072,11 +1072,11 @@ bool TLFClusterTrack::Search(int& x, int& y, int id)
 	TLFDetectedItem* di = m_detector->GetItem(y*w + x);
 	di->SetClusterIdx(id);
 	di->SetColor(id);
-	for (int i = y - 5; i <= y + 5; i++)
+	for (int i = y - 2; i <= y + 2; i++)
 	{
 		if (i < 0 || i >= h)
 			continue;
-		for (int j = x - 5; j <= x + 5; j++)
+		for (int j = x - 2; j <= x + 2; j++)
 		{
 			if (j < 0 || j >= w)
 				continue;

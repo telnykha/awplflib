@@ -102,6 +102,57 @@ double            TLFSFeature::fCalcValue(TLFImage* pImage)
 		}
 	}
 }
+
+TLFSAFeature::TLFSAFeature() : ILFFeature()
+{}
+TLFSAFeature::TLFSAFeature(int sxbase, int sybase, int wbase, int hbase) : ILFFeature(sxbase, sybase, wbase, hbase)
+{}
+TLFSAFeature::TLFSAFeature(ILFFeature* feature) : ILFFeature(feature)
+{}
+
+unsigned int      TLFSAFeature::uCalcValue(TLFImage* pImage)
+{
+	if (pImage == NULL)
+	{
+		m_fValue = 0;
+		return m_fValue;
+	}
+	else
+	{
+		double v1, v2, s, v;
+		s = m_w*m_h;
+		if (s == 0)
+		{
+			m_fValue = 0;
+			return m_fValue;
+		}
+
+		v1 = pImage->CalcLnSum(this->m_sx, this->m_sy, this->m_w, this->m_h);
+		v2 = pImage->CalcSqSum(this->m_sx, this->m_sy, this->m_w, this->m_h);
+		v1 /= s;
+		v2 /= s;
+		v = v2 - v1*v1;
+		if (v >= 0)
+		{
+			m_fValue = floor(16*floor((floor(sqrt(v) / 16. +0.5))) + v1 / 16. +0.5);
+
+			return (unsigned int)m_fValue;
+		}
+		else
+		{
+			m_fValue = 0;
+			return m_fValue;
+		}
+	}
+}
+
+double            TLFSAFeature::fCalcValue(TLFImage* pImage)
+{
+	double v = (double)uCalcValue(pImage);
+	return v;
+}
+
+
 /*
 	H - feature 
 */

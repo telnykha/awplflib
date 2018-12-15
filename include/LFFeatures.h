@@ -98,6 +98,27 @@ public:
 };
 
 /*
+	SA - feature 
+*/
+class TLFSAFeature : public ILFFeature
+{
+public:
+	TLFSAFeature();
+	TLFSAFeature(int sxbase, int sybase, int wbase, int hbase);
+	TLFSAFeature(ILFFeature* feature);
+
+	virtual unsigned int      uCalcValue(TLFImage* pImage);
+	virtual double            fCalcValue(TLFImage* pImage);
+
+	virtual const char* GetName()
+	{
+		return "TLFSAFeature";
+	}
+};
+
+
+
+/*
 	horizontal feature with norm 
 */
 class TLFHFeature : public ILFFeature

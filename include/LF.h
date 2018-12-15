@@ -805,8 +805,6 @@ protected:
 	int				m_angle;           /*detection angle*/
 	int				m_racurs;		   /**/
 	bool			m_hasObject;       /**/
-	int				m_bh;			   /*базовая высота объекта*/
-	int				m_bw;			   /*базовая ширина объекта*/
 	ILFPredictor*   m_predictor;
 	UUID			m_id;
 	int				m_health;
@@ -861,6 +859,9 @@ public:
 	/*работа с  xml файлом*/
 	TiXmlElement* SaveXML();
 	bool LoadXML(TiXmlElement* parent);
+
+	int				m_bh;			   /*базовая высота объекта*/
+	int				m_bw;			   /*базовая ширина объекта*/
 
 
 	virtual const char* GetName()
