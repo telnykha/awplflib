@@ -97,6 +97,9 @@ public:
 	virtual bool SaveXML(const char* lpFileName);
 	virtual bool LoadXML(const char* lpFileName);
 
+	virtual TiXmlElement* SaveXML();
+	virtual bool LoadXML(TiXmlElement* parent);
+
 	virtual void Clear();
 
 	virtual const char* GetName()

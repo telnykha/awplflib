@@ -881,12 +881,15 @@ protected:
 public:
 	TLFSemanticImageDescriptor();
 	TLFSemanticImageDescriptor(awpImage* pImage);
+	TLFSemanticImageDescriptor(int w, int h);
 	virtual ~TLFSemanticImageDescriptor();
 	/*Working with image*/
 	void SetImage(awpImage* pImage);
 	/*работа с xml файлом*/
 	virtual bool SaveXML(const char* lpFileName);
 	virtual bool LoadXML(const char* lpFileName);
+	virtual TiXmlElement* SaveXML();
+	virtual bool LoadXML(TiXmlElement* e);
 #ifdef LOAD_FROM_STREAM
 	virtual bool LoadStream(std::istream& in);
 #endif

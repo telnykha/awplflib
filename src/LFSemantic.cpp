@@ -162,7 +162,7 @@ bool TLFSemanticDictinary::SaveXML(const char* lpFileName)
 	TiXmlDeclaration* decl = new TiXmlDeclaration("1.0", "", "");
 	doc.LinkEndChild(decl);
 	TiXmlElement* dscr = new TiXmlElement(this->GetName());
-	doc.LinkEndChild(dscr);
+
 	dscr->SetAttribute("Description", this->m_Description.c_str());
 	for (int i = 0; i < this->GetCount(); i++)
 	{
@@ -171,6 +171,8 @@ bool TLFSemanticDictinary::SaveXML(const char* lpFileName)
 		if (e != NULL)
 			dscr->LinkEndChild(e);
 	}
+	doc.LinkEndChild(dscr);
+
 	return doc.SaveFile(lpFileName);
 
 }
@@ -213,6 +215,55 @@ bool TLFSemanticDictinary::LoadXML(const char* lpFileName)
 
 	return true;
 }
+
+TiXmlElement* TLFSemanticDictinary::SaveXML()
+{
+	TiXmlElement* dscr = new TiXmlElement(this->GetName());
+
+	dscr->SetAttribute("Description", this->m_Description.c_str());
+	for (int i = 0; i < this->GetCount(); i++)
+	{
+		TLFSemanticDictinaryItem* di = this->GetWordFromDictinary(i);
+		TiXmlElement* e = di->SaveXML();
+		if (e != NULL)
+			dscr->LinkEndChild(e);
+	}
+	return dscr;
+}
+
+bool TLFSemanticDictinary::LoadXML(TiXmlElement* parent)
+{
+	TiXmlElement* pElem = parent;
+
+	if (pElem == NULL)
+		return false;
+
+	if (strcmp(pElem->Value(), GetName()) != 0)
+		return false;
+
+	//int w, h;
+	this->m_Description = pElem->Attribute("Description");
+
+
+	for (TiXmlNode* child = pElem->FirstChild(); child; child = child->NextSibling())
+	{
+		TLFSemanticDictinaryItem* di = new TLFSemanticDictinaryItem();
+		if (strcmp(child->Value(), di->GetName()) != 0)
+		{
+			Clear();
+			return false;
+		}
+		if (!di->LoadXML(child->ToElement()))
+		{
+			Clear();
+			return false;
+		}
+		this->Add(di);
+	}
+
+	return true;
+}
+
 int  TLFSemanticDictinary::GetDictinaryItemsCount()
 {
 	return this->GetCount();

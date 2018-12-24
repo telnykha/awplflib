@@ -343,7 +343,7 @@ void TLFObjectList::Delete(int index)
         delete tmp;
 //    m_Count--;
     if (index < m_Count)
-    {
+	{
       //  MoveMemory(&m_List[index], &m_List[index +1], (m_Count - index)*sizeof(TLFObject**));
       for (int i = index+1; i <= m_Count; i++)
       {
@@ -373,7 +373,7 @@ TLFObjectList* TLFObjectList::Expand()
 TLFObject* TLFObjectList::Extract(TLFObject* pObject)
 {
     int i;
-    TLFObject* res = NULL;
+	TLFObject* res = NULL;
     i = IndexOf(pObject);
     if (i >= 0)
     {
@@ -403,7 +403,7 @@ void TLFObjectList::Insert(int index, TLFObject* pObject)
     if (index < 0 || index > m_Count)
         return;
     if (m_Count == m_Capacity)
-        Grow();
+		Grow();
     if (index < m_Count)
         memcpy(&m_List[index], &m_List[index +1], (m_Count - index)*sizeof(TLFObject**));
     m_List[index] = pObject;
@@ -463,7 +463,7 @@ void QuickSort(TLFObject** pList, int l, int r, TLFListSortCompare Compare)
            while (Compare(pList[i], P) < 0)
             i++;
            while (Compare(pList[j], P) >0 )
-            j--;
+			j--;
             if (i <= j )
             {
                 T = pList[i];
@@ -493,7 +493,7 @@ int TLFObjectList::GetCapacity()
 
 int TLFObjectList::GetCount()
 {
-    return m_Count;
+	return m_Count;
 }
 
 TLFObject** TLFObjectList::GetList()
@@ -520,6 +520,13 @@ TLFSemanticImageDescriptor::TLFSemanticImageDescriptor(awpImage* pImage)
 		m_imageHeight = pImage->sSizeY;
 	}
 }
+
+TLFSemanticImageDescriptor::TLFSemanticImageDescriptor(int w, int h)
+{
+	m_imageWidth = w;
+	m_imageHeight = h;
+}
+
 TLFSemanticImageDescriptor::~TLFSemanticImageDescriptor()
 {
 }
@@ -545,24 +552,20 @@ int TLFSemanticImageDescriptor::Height()
 /*работа с xml файлом*/
 bool TLFSemanticImageDescriptor::SaveXML(const char* lpFileName)
 {
-
-//	if (m_Image.GetImage() == NULL)
-		//return false;
-
 	TiXmlDocument doc;
 	TiXmlDeclaration* decl = new TiXmlDeclaration( "1.0", "", "" );
-    doc.LinkEndChild( decl );
+	doc.LinkEndChild( decl );
 	TiXmlElement* dscr = new TiXmlElement(this->GetName());
 	doc.LinkEndChild(dscr);
-    dscr->SetAttribute("ImageWidth",  m_imageWidth);
-    dscr->SetAttribute("ImageHeight", m_imageHeight);
-    for (int i = 0; i < GetCount(); i++)
-    {
-         TLFDetectedItem* di = this->GetDetectedItem(i);
-         TiXmlElement* e = di->SaveXML();
-         if (e != NULL)
+	dscr->SetAttribute("ImageWidth",  m_imageWidth);
+	dscr->SetAttribute("ImageHeight", m_imageHeight);
+	for (int i = 0; i < GetCount(); i++)
+	{
+		 TLFDetectedItem* di = this->GetDetectedItem(i);
+		 TiXmlElement* e = di->SaveXML();
+		 if (e != NULL)
 			dscr->LinkEndChild(e);
-    }
+	}
 	return doc.SaveFile(lpFileName);
 }
 bool TLFSemanticImageDescriptor::LoadXML(const char* lpFileName)
@@ -571,16 +574,16 @@ bool TLFSemanticImageDescriptor::LoadXML(const char* lpFileName)
 
    TiXmlDocument doc;
    if (!doc.LoadFile(lpFileName))
-    return false;
+	return false;
    TiXmlHandle hDoc(&doc);
    TiXmlElement* pElem = NULL;
 
    pElem = hDoc.FirstChildElement().Element();
    if (pElem == NULL)
-    return false;
+	return false;
 
    if (strcmp(pElem->Value(), GetName()) != 0)
-    return false;
+	return false;
 
    int w, h;
    pElem->QueryIntAttribute("ImageWidth", &w);
@@ -588,18 +591,18 @@ bool TLFSemanticImageDescriptor::LoadXML(const char* lpFileName)
 
    for(TiXmlNode* child = pElem->FirstChild(); child; child = child->NextSibling() )
    {
-        TLFDetectedItem* di = new TLFDetectedItem();
-        if (strcmp(child->Value(), di->GetName()) != 0)
-        {
-            Clear();
-            return false;
-        }
-        if (!di->LoadXML(child->ToElement()))
-        {
-            Clear();
-            return false;
-        }
-        Add(di);
+		TLFDetectedItem* di = new TLFDetectedItem();
+		if (strcmp(child->Value(), di->GetName()) != 0)
+		{
+			Clear();
+			return false;
+		}
+		if (!di->LoadXML(child->ToElement()))
+		{
+			Clear();
+			return false;
+		}
+		Add(di);
    }
 
    return true;
@@ -658,6 +661,54 @@ bool	 TLFSemanticImageDescriptor::_SaveXml(TiXmlElement* parent)
 	return true;
 }
 
+TiXmlElement* TLFSemanticImageDescriptor::SaveXML()
+{
+	TiXmlElement* dscr = new TiXmlElement(this->GetName());
+	dscr->SetAttribute("ImageWidth",  m_imageWidth);
+	dscr->SetAttribute("ImageHeight", m_imageHeight);
+	for (int i = 0; i < GetCount(); i++)
+	{
+		 TLFDetectedItem* di = this->GetDetectedItem(i);
+		 TiXmlElement* e = di->SaveXML();
+		 if (e != NULL)
+			dscr->LinkEndChild(e);
+	}
+	return dscr;
+}
+bool TLFSemanticImageDescriptor::LoadXML(TiXmlElement* e)
+{
+   this->Clear();
+
+   TiXmlElement* pElem = e;
+   if (pElem == NULL)
+	return false;
+
+   if (strcmp(pElem->Value(), GetName()) != 0)
+	return false;
+
+   int w, h;
+   pElem->QueryIntAttribute("ImageWidth", &w);
+   pElem->QueryIntAttribute("ImageHeight", &h);
+
+   for(TiXmlNode* child = pElem->FirstChild(); child; child = child->NextSibling() )
+   {
+		TLFDetectedItem* di = new TLFDetectedItem();
+		if (strcmp(child->Value(), di->GetName()) != 0)
+		{
+			Clear();
+			return false;
+		}
+		if (!di->LoadXML(child->ToElement()))
+		{
+			Clear();
+			return false;
+		}
+		Add(di);
+   }
+
+   return true;
+
+}
 
 #ifdef LOAD_FROM_STREAM
 bool TLFSemanticImageDescriptor::LoadStream(std::istream& in)
