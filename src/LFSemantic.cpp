@@ -50,12 +50,14 @@ TLFSemanticDictinaryItem::TLFSemanticDictinaryItem()
 {
 	this->m_strLabel = "Unknown";
 	this->m_scanner = new TLFScanner();
+    awpRGBtoWeb(0,255,0, &m_color);
 }
 
 TLFSemanticDictinaryItem::TLFSemanticDictinaryItem(const char* lpWord)
 {
 	this->m_strLabel = lpWord;
     this->m_scanner = new TLFScanner();
+    awpRGBtoWeb(0,255,0, &m_color);
 }
 TLFSemanticDictinaryItem::~TLFSemanticDictinaryItem()
 {
@@ -79,6 +81,16 @@ bool TLFSemanticDictinaryItem::SaveXML(const char* lpFileName)
 	TiXmlElement* dscr = SaveXML();
 	return doc.SaveFile(lpFileName);
 }
+
+int TLFSemanticDictinaryItem::GetColor()
+{
+     return this->m_color;
+}
+void TLFSemanticDictinaryItem::SetColor(int color)
+{
+    this->m_color = color;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 bool TLFSemanticDictinaryItem::LoadXML(const char* lpFileName)
 {
@@ -89,6 +101,7 @@ TiXmlElement* TLFSemanticDictinaryItem::SaveXML()
 {
 	TiXmlElement* dscr = new TiXmlElement(this->GetName());
 	dscr->SetAttribute("noun", this->m_strLabel.c_str());
+    dscr->SetAttribute("color", m_color);
 	if (m_scanner != NULL)
 	{
 		TiXmlElement* scanner_dscr = m_scanner->SaveXML();
@@ -103,6 +116,13 @@ bool TLFSemanticDictinaryItem::LoadXML(TiXmlElement* parent)
 	if (strcmp(parent->Value(), GetName()) != 0)
 		return false;
     this->m_strLabel = parent->Attribute("noun");
+    const char* ch = parent->Attribute("color");
+    if (ch != NULL)
+    {
+        m_color = parent->QueryIntAttribute("color", &m_color);
+    }
+    else
+        awpRGBtoWeb(0,255,0, &m_color);
     if (!this->m_scanner->LoadXML(parent->FirstChildElement()))
     	return false;
 	return true;

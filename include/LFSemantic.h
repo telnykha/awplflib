@@ -55,6 +55,7 @@ class TLFSemanticDictinaryItem : public TLFObject
 protected:
 	ILFScanner*		   m_scanner;
 	std::string        m_strLabel;
+    int                m_color;
 public:
 	TLFSemanticDictinaryItem();
 	TLFSemanticDictinaryItem(const char* lpWord);
@@ -62,6 +63,8 @@ public:
 
 	const char* GetItemLabel();
 	ILFScanner* GetScanner();
+    int GetColor();
+    void SetColor(int color);
 	virtual bool SaveXML(const char* lpFileName);
 	virtual bool LoadXML(const char* lpFileName);
 
