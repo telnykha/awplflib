@@ -119,7 +119,7 @@ bool TLFSemanticDictinaryItem::LoadXML(TiXmlElement* parent)
     const char* ch = parent->Attribute("color");
     if (ch != NULL)
     {
-        m_color = parent->QueryIntAttribute("color", &m_color);
+        parent->QueryIntAttribute("color", &m_color);
     }
     else
         awpRGBtoWeb(0,255,0, &m_color);
