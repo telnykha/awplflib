@@ -290,7 +290,7 @@ bool TLFMotionEngine::FindObjects()
 
 	BuildForeground();
 
-	if (this->m_needTrack)
+/*	if (this->m_needTrack)
 	{
 		m_processor.SetSourceImage(&m_foreground);
 		m_result.Predict(this);
@@ -312,7 +312,7 @@ bool TLFMotionEngine::FindObjects()
 		}
 		else
 			OverlapsFilter(&this->m_result);
-	}
+	}*/
 	return true;
 }
 TiXmlElement*  TLFMotionEngine::SaveXML()
@@ -458,11 +458,11 @@ void    TLFMotionEngine::BuildForeground()
 			{
 				awpRect    item_rect = item->GetBounds()->GetRect();
 				awpImage*  fg = m_foreground.GetImage();
-				awpFillRect(fg, &item_rect, 0, 1);
-
-				TLFDetectedItem* di = new TLFDetectedItem(item);
-				di->Resize(m_resizeCoef);
-				m_tmpList.Add(di);
+				awpFillRect(fg, &item_rect, 0, 255);
+				// todo: Here is memory leak!!!!!! 
+				//TLFDetectedItem* di = new TLFDetectedItem(item);
+				//di->Resize(m_resizeCoef);
+				//m_tmpList.Add(di);
 				count++;
 			}
 		}

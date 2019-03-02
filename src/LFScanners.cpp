@@ -4,8 +4,8 @@
 
 ILFScanner::ILFScanner()
 {
-	this->m_BaseHeight = 24;
-	this->m_BaseWidth = 24;
+	this->m_BaseHeight = 4;
+	this->m_BaseWidth = 4;
 	m_FragmentsCount = 0;
 	m_Fragments = NULL;
 

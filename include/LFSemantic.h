@@ -65,6 +65,7 @@ public:
 	ILFScanner* GetScanner();
     int GetColor();
     void SetColor(int color);
+
 	virtual bool SaveXML(const char* lpFileName);
 	virtual bool LoadXML(const char* lpFileName);
 
