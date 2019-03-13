@@ -13,7 +13,7 @@ LDFLAGS=
 #output library path 
 LIB    = lib/
 #awpipl2 library path 
-AWPLIB = ../awpipl2/lib/
+AWPLIB = ../awpipl/lib/
 
 #library source path 
 SRCPATH= src/ 
@@ -21,7 +21,7 @@ SRCPATH= src/
 #roc path 
 APPROC = utils/roc/
 
-INC= -Iinclude -I../awpipl2/include
+INC= -Iinclude -I../awpipl/include
 
 # source files: awplflib library proper
 LIBSOURCES= LFAttrBuildImpl.cpp LFAttrFilter.cpp LFAttrTrainer.cpp LFAttrTrainer.cpp\
@@ -32,7 +32,7 @@ LIBSOURCES= LFAttrBuildImpl.cpp LFAttrFilter.cpp LFAttrTrainer.cpp LFAttrTrainer
 	LFImage.cpp LFImageProcessor.cpp LFLabColor.cpp LFMotion.cpp LFPackage.cpp\
 	LFParameter.cpp LFPredictors.cpp LFSample.cpp LFScanners.cpp LFSemantic.cpp\
 	LFStrong.cpp LFStrongImpl.cpp LFThresholdProc.cpp LFUtils.cpp LFVector.cpp\
-	LFWeak.cpp LFWeakImpl.cpp LFZones.cpp LFDatabase.cpp LFAvgFeature.cpp
+	LFWeak.cpp LFWeakImpl.cpp LFZones.cpp LFDatabase.cpp LFAvgFeature.cpp LFSabotage.cpp
 
 LIBOBJECTS= LFAttrBuildImpl.o LFAttrFilter.o LFAttrTrainer.o LFAttrTrainer.o\
 	LFAttrTrainer.o LFBuilder.o LFBuffer.o LFCluster.o LFColorDetector.o\
@@ -42,12 +42,12 @@ LIBOBJECTS= LFAttrBuildImpl.o LFAttrFilter.o LFAttrTrainer.o LFAttrTrainer.o\
 	LFImage.o LFImageProcessor.o LFLabColor.o LFMotion.o LFPackage.o\
 	LFParameter.o LFPredictors.o LFSample.o LFScanners.o LFSemantic.o\
 	LFStrong.o LFStrongImpl.o LFThresholdProc.o LFUtils.o LFVector.o\
-	LFWeak.o LFWeakImpl.o LFZones.o LFDatabase.o LFAvgFeature.o
+	LFWeak.o LFWeakImpl.o LFZones.o LFDatabase.o LFAvgFeature.o LFSabotage.o
 
-all: awplflib.a rocmain roc 
+all: awplflib.a rocmain roc clean
 
 awplflib:   
-	$(CC)  -c $(INC) $(addprefix src/, $(LIBSOURCES)) 
+	$(CC)  -fPIC -c $(INC) $(addprefix src/, $(LIBSOURCES)) 
 awplflib.a: awplflib
 	ar cr $(LIB)awplflib.a $(LIBOBJECTS)
 rocmain:

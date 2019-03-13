@@ -63,7 +63,10 @@ extern "C"
 #include <string>
 #include <iostream>     
 #include <stdio.h>
+extern "C"
+{
 #include "awpipl.h"  
+}
 #include "tinyxml.h"
 
 typedef int(*TLFListSortCompare)(void * Item1, void * Item2);

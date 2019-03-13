@@ -38,7 +38,7 @@ int TLFSabotageWeak::Classify(TLFImage* pImage, double* value2)
 	double adt = 0;
 	if (m_classifyCount > 1)
 	{
-        AWPDWORD ct = GetTickCount();
+        AWPDWORD ct = LFGetTickCount();
         AWPDWORD dt = ct - this->m_ct;
 		m_ct = ct;
 		int num = this->m_classifyCount >= SABOTAGE_BUF_SIZE ? SABOTAGE_BUF_SIZE : this->m_classifyCount;
@@ -55,7 +55,7 @@ int TLFSabotageWeak::Classify(TLFImage* pImage, double* value2)
 		}
 	}
 	else
-		m_ct = GetTickCount();
+		m_ct = LFGetTickCount();
 	
 
 	double value = this->m_pFeature->fCalcValue(pImage);
@@ -307,11 +307,11 @@ bool TLFSabotage::PorocessImage(awpImage* img, bool* result)
 		// состояние сцены изменилось
 		if (this->m_event_duration == 0)
 		{
-			this->m_event_start = GetTickCount();
+			this->m_event_start = LFGetTickCount();
 			this->m_event_duration = 1;
 		}
 		else
-			this->m_event_duration = GetTickCount() - m_event_start;
+			this->m_event_duration = LFGetTickCount() - m_event_start;
 
 		if (this->m_event_duration > this->m_time_thr)
 		{

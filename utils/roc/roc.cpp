@@ -142,7 +142,7 @@ int main(int argc, char* argv[])
 				double Far, Frr , t, e;
 				db.GetFarFrr(engine, Far, Frr, e, t, overlap);
 				printf("++++++++ Far/Frr calculation. +++++++++++++\n");
-				printf("Database: name =%s\n", db.GetPath());
+				//printf("Database: name =%s\n", db.GetPath());
 				printf("Database: images count = %i\n", db.GetImagesCount());
 				printf("Database: items count  = %i\n", db.GetItemsCount());
 				printf("Engine: name = %s\n", strEngine.c_str());

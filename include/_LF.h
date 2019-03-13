@@ -76,7 +76,10 @@
 	#include <omp.h>
 #endif
 
-#include "awpipl.h"
+extern "C"
+{
+#include "awpipl.h"  
+}
 #include "LF.h"
 
 typedef struct tagawpColor
