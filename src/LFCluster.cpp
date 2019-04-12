@@ -787,14 +787,19 @@ void TLFClusterRecursive::UpdateBlobs()
 			m_blobs[i].wait = 0;
 			LF_UUID_CREATE(m_blobs[i].id)
 		}
-		else if (this->SizeFilter(m_blobs[i]) && m_blobs[i].state == 4)
+		else if (m_blobs[i].state == 4)
 		{
-			m_blobs[i].wait++;
-			if (m_blobs[i].wait > 15)
+			if (this->SizeFilter(m_blobs[i]))
 			{
-				m_blobs[i].wait = 0;
-				m_blobs[i].state = 1;
+				m_blobs[i].wait++;
+				if (m_blobs[i].wait > 15)
+				{
+					m_blobs[i].wait = 0;
+					m_blobs[i].state = 1;
+				}
 			}
+			else
+				m_blobs[i].state = 3;
 		}
 		else if (this->SizeFilter(m_blobs[i]) && m_blobs[i].state == 1)
 		{

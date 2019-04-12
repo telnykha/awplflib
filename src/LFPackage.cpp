@@ -90,6 +90,7 @@ void TLFPackageEngine::SetDelay(int value)
 
 void    TLFPackageEngine::BuildForeground()
 {
+	m_tmpList.Clear();
 	ILFObjectDetector* d = (ILFObjectDetector*)m_detectors.Get(0);
 	if (!d)
 		return;
@@ -136,12 +137,12 @@ TLFImage* TLFPackageEngine::GetForegroundImage()
 
 void TLFPackageEngine::OverlapsFilter(TLFSemanticImageDescriptor* descriptor)
 {
-	SLFBinaryBlob* blob = this->m_cluster_maker->GetBlobs();
+//	SLFBinaryBlob* blob = this->m_cluster_maker->GetBlobs();
 	this->m_result.Clear();
 	SLFBinaryBlob* blobs = this->m_cluster_maker->GetBlobs();
 	for (int i = 0; i < LF_NUM_CLUSTERS; i++)
 	{
-		if (blobs[i].state > 0)
+		if (blobs[i].state > 0 && blobs[i].state < 4)
 		{
 			awpRect rect;
 			rect.left = (AWPSHORT)blobs[i].sx;
