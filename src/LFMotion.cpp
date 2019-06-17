@@ -178,7 +178,7 @@ int  TLFMotionDetector::Detect()
 
 		if (di != NULL)
 		{
-			//	di->SetHasObject(false);
+			di->SetHasObject(false);
 			TLFRect* rect = di->GetBounds();
 			if (rect != NULL)
 			{
@@ -196,7 +196,8 @@ int  TLFMotionDetector::Detect()
 				vv = weak_v->Classify(&this->m_Image);
 				vd = weak_d->Classify(&this->m_Image);
 
-				di->SetHasObject(vv + vh + vd > 0 && va + vs > 0);
+				//di->SetHasObject(vv + vh + vd > 0 && va + vs > 0);
+				di->SetHasObject(vv + vh + vd + va + vs > 2);
 				di->SetRaiting(0);
 			}
 		}
@@ -220,7 +221,7 @@ void TLFMotionDetector::SetThreshold(double Value)
 {
 	if (Value < 0 || Value > 1)
 		return;
-	m_threshold = 15 * (1 - Value);
+	m_threshold = 18 * (1 - Value);
 	Value = m_threshold;
 	TLFMotionWeak* weak = NULL;
 	for (int i = 0; i < m_weaks_a.GetCount(); i++)
