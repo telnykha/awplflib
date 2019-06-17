@@ -321,7 +321,8 @@ int  TSCObjectDetector::Detect()
 			bool has_object = true;
 			double scale = (double)(m_scanner->GetFragmentRect(i).right - m_scanner->GetFragmentRect(i).left)/(double)this->m_baseWidth;
 			sf.Setup(scale, scale, m_scanner->GetFragmentRect(i).left, m_scanner->GetFragmentRect(i).top);
-//			if (sf.fCalcValue(&m_Image) > 0)
+			double variance = sf.fCalcValue(&m_Image);
+			if (variance > 30)
 			{
 				for (int j = 0; j < m_Strongs.GetCount(); j++)
 				{
@@ -336,8 +337,8 @@ int  TSCObjectDetector::Detect()
 					}
 				}
 			}
- //			else
- //				has_object = false;
+ 			else
+ 				has_object = false;
 
 			if (has_object)
 			{
@@ -513,7 +514,7 @@ bool TLFFGBGDetector::Init(awpImage* pImage, bool scan)
 		this->m_weaks_h.Clear();
 		this->m_weaks_v.Clear();
 		this->m_weaks_d.Clear();
-		//printf("treshold = %f\n", m_threshold);
+		printf("treshold = %f\n", m_threshold);
 		m_scanner->Scan(&m_Image);
 
 		for (int i = 0; i < m_scanner->GetFragmentsCount(); i++)

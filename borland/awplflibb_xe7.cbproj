@@ -57,7 +57,6 @@
         <BCC_SourceDebuggingOn>true</BCC_SourceDebuggingOn>
         <DynamicRTL>true</DynamicRTL>
         <BCC_DisableOptimizations>true</BCC_DisableOptimizations>
-        <FinalOutputDir>$(PHOTON)\lib\</FinalOutputDir>
         <BRCC_OutputDir>..\obj\</BRCC_OutputDir>
         <TASM_IncludePath>$(BDS)\Projects\awplflib\src;C:\Program Files (x86)\Borland\CBuilder6\Projects;..\src;..\include;..;$(BDS)\include;..\..\awpipl2\include;..\..\TinyXML\src;..\..\awpipl2\include\_include;..\..\FVLCore\src;$(TASM_IncludePath)</TASM_IncludePath>
         <BRCC_IncludePath>$(BDS)\Projects\awplflib\src;C:\Program Files (x86)\Borland\CBuilder6\Projects;..\src;..\include;..;$(BDS)\include;..\..\awpipl2\include;..\..\TinyXML\src;..\..\awpipl2\include\_include;..\..\FVLCore\src;$(BRCC_IncludePath)</BRCC_IncludePath>
@@ -407,13 +406,13 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="..\..\Modules\utils\photon4\\lib\awplflibb_xe7.lib" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="..\..\Modules\utils\photon4\lib\awplflibb_xe7.lib" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>awplflibb_xe7.lib</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="..\..\Modules\utils\photon4\lib\awplflibb_xe7.lib" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="..\..\Modules\utils\photon4\\lib\awplflibb_xe7.lib" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>awplflibb_xe7.lib</RemoteName>
                         <Overwrite>true</Overwrite>

@@ -156,6 +156,12 @@ int  ILFDetectEngine::GetItemsCount()
 {
 	return m_result.GetItemsCount();
 }
+
+int ILFDetectEngine::GetDetectorsCount()
+{
+	return this->m_detectors.GetCount();
+}
+
 TLFDetectedItem* ILFDetectEngine::GetItem(int index)
 {
 	if (index < 0 || index >= m_result.GetItemsCount())

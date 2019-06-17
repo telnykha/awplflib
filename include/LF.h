@@ -1024,7 +1024,7 @@ public:
 	void SetMaskImage(awpImage* img);
 
 	awpImage* GetSourceImage();
-
+	int GetDetectorsCount();
 	virtual const char* GetName()
 	{
 		return "ILFDetectEngine";
