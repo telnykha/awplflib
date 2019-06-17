@@ -47,7 +47,7 @@ LIBOBJECTS= LFAttrBuildImpl.o LFAttrFilter.o LFAttrTrainer.o LFAttrTrainer.o\
 all: awplflib.a rocmain roc clean
 
 awplflib:   
-	$(CC)  -fPIC -c $(INC) $(addprefix src/, $(LIBSOURCES)) 
+	$(CC)  -fPIC -Ofast -c $(INC) $(addprefix src/, $(LIBSOURCES)) 
 awplflib.a: awplflib
 	ar cr $(LIB)awplflib.a $(LIBOBJECTS)
 rocmain:
