@@ -316,6 +316,7 @@ int  TSCObjectDetector::Detect()
 	TLFSFeature sf(0,0,this->m_baseWidth, this->m_baseHeight);
 	for (int i = 0; i < m_scanner->GetFragmentsCount(); i++)
 	{
+		
 		if (!m_scanner->GetFragment(i)->HasObject)
 		{
 			bool has_object = true;
@@ -324,6 +325,7 @@ int  TSCObjectDetector::Detect()
 			double variance = sf.fCalcValue(&m_Image);
 			if (variance > 30)
 			{
+				//printf("-------------------------------\n");
 				for (int j = 0; j < m_Strongs.GetCount(); j++)
 				{
 
@@ -335,6 +337,8 @@ int  TSCObjectDetector::Detect()
 						has_object = false;
 						break;
 					}
+					//else
+					//	printf("classifyed %i\t %f.\n", j, err);
 				}
 			}
  			else
@@ -452,7 +456,6 @@ bool          TSCObjectDetector::LoadXML(TiXmlElement* parent)
 		TCSStrong* pHc = new TCSStrong();
 		if (pHc->LoadXML(child->ToElement()))
 		{
-
 			m_Strongs.Add(pHc);
 		}
 		else
