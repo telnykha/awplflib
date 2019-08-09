@@ -447,15 +447,23 @@ bool TLFTileScanner::Scan(int w, int h)
 	{
 		for (int j = 0; j < num_x; j++)
 		{
-			if (overlap*j*this->m_BaseWidth + m_BaseWidth >= w || overlap*i*this->m_BaseHeight + m_BaseHeight >= h)
+			if (overlap*j*this->m_BaseWidth + m_BaseWidth > w || overlap*i*this->m_BaseHeight + m_BaseHeight > h)
 				continue;
 
 			m_Fragments[c].Angle = 0;
 			m_Fragments[c].HasObject = false;
-			m_Fragments[c].Rect.left = AWPSHORT(overlap*j*this->m_BaseWidth);
-			m_Fragments[c].Rect.top = AWPSHORT(overlap*i*this->m_BaseHeight);
-			m_Fragments[c].Rect.right = m_Fragments[c].Rect.left + this->m_BaseWidth;
-			m_Fragments[c].Rect.bottom = m_Fragments[c].Rect.top + this->m_BaseHeight;
+			m_Fragments[c].Rect.left = AWPSHORT(overlap*j*this->m_BaseWidth + 0.5);
+			m_Fragments[c].Rect.top  = AWPSHORT(overlap*i*this->m_BaseHeight + 0.5);
+
+            if (overlap*j*this->m_BaseWidth + m_BaseWidth == w)
+				m_Fragments[c].Rect.right = m_Fragments[c].Rect.left + this->m_BaseWidth - 1;
+            else
+				m_Fragments[c].Rect.right = m_Fragments[c].Rect.left + this->m_BaseWidth;
+
+           if (overlap*i*this->m_BaseHeight + m_BaseHeight == h)
+				m_Fragments[c].Rect.bottom = m_Fragments[c].Rect.top + this->m_BaseHeight - 1;
+            else
+				m_Fragments[c].Rect.bottom = m_Fragments[c].Rect.top + this->m_BaseHeight;
 
 				  if (c == 0)
 				  {

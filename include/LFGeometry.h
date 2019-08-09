@@ -129,12 +129,13 @@ protected:
 	awpRect m_Rect;
 public:
 	TLFRect();
-	TLFRect(awpRect& r);
+    TLFRect(awpRect r);
 	TLFRect(int left, int top, int w, int h);
 	TLFRect(TLFRect& r);
 	virtual ~TLFRect();
 	awpRect GetRect();
 	void SetRect(awpRect Rect);
+	void SetRect(int left, int top, int w, int h);
 
 	double RectOverlap(TLFRect& rect);
 	double RectOverlap(awpRect& rect);

@@ -339,7 +339,7 @@ double            TLFVAFeature::fCalcValue(TLFImage* pImage)
 }
 
 /*
-	D - feature 
+	D - feature
 */
 TLFDFeature::TLFDFeature() : ILFFeature()
 {
@@ -634,10 +634,10 @@ awpRect TLFLBPFeature::GetRect()
 
 TLFColorSensor::TLFColorSensor(AWPWORD sx, AWPWORD sy, AWPWORD xbase, AWPWORD ybase) :ILFFeature()
 {
-	this->m_sxBase = sx;
-	this->m_syBase = sy;
-	this->m_wBase = xbase;
-	this->m_hBase = ybase;
+	m_sxBase = sx;
+	m_syBase = sy;
+	m_wBase = xbase;
+	m_hBase = ybase;
 }
 TLFColorSensor::TLFColorSensor() : ILFFeature()
 {
@@ -652,7 +652,7 @@ calc features value
 */
 unsigned int     TLFColorSensor::uCalcValue(TLFImage* pImage)
 {
-	if (pImage == NULL || pImage->GetBlueIntegral() == NULL || 
+	if (pImage == NULL || pImage->GetBlueIntegral() == NULL ||
 		pImage->GetGreenIntegral() == NULL ||
 		pImage->GetRedIntegral() == NULL)
 		return 0;
@@ -660,7 +660,7 @@ unsigned int     TLFColorSensor::uCalcValue(TLFImage* pImage)
 	unsigned int code = 0;
 
 	double s = m_w*m_h;
-	
+
 	AWPBYTE rvalue = (AWPBYTE)floor(pImage->CalcRLnSum(this->m_sx, this->m_sy, this->m_w, this->m_h) / s + 0.5);
 	AWPBYTE gvalue = (AWPBYTE)floor(pImage->CalcGLnSum(this->m_sx, this->m_sy, this->m_w, this->m_h) / s + 0.5);
 	AWPBYTE bvalue = (AWPBYTE)floor(pImage->CalcBLnSum(this->m_sx, this->m_sy, this->m_w, this->m_h) / s + 0.5);
@@ -792,7 +792,7 @@ unsigned int     TCSSensor::uCalcValue(TLFImage* pImage)
 }
 double            TCSSensor::fCalcValue(TLFImage* pImage)
 {
-	return (double)this->CalcValue(pImage->GetImage(), 0);
+	return (double)this->CalcValue(pImage->GetIntegralImage(), 0);
 }
 
 awpRect TCSSensor::GetRect()
@@ -820,7 +820,7 @@ TCSSensor& TCSSensor::operator = (TCSSensor& Sensor)
   return *this;
 }
 /*
-	Features facory 
+	Features facory
 */
 ILFFeature*  LFCreateFeature(ILFFeature* feature)
 {
@@ -880,13 +880,13 @@ ILFFeature*  LFCreateFeature(ILFFeature* feature)
 	}
 	else if (strcmp(name, "TLFDFeature") == 0)
 	{
-		TLFDAFeature* cw = dynamic_cast<TLFDAFeature*>(feature);
-		return new TLFDAFeature(cw);
+		TLFDFeature* cw = dynamic_cast<TLFDFeature*>(feature);
+		return new TLFDFeature(cw);
 	}
 	else if (strcmp(name, "TLFDAFeature") == 0)
 	{
-		TLFDFeature* cw = dynamic_cast<TLFDFeature*>(feature);
-		return new TLFDFeature(cw);
+		TLFDAFeature* cw = dynamic_cast<TLFDAFeature*>(feature);
+		return new TLFDAFeature(cw);
 	}
 	else if (strcmp(name, "TLFCFeature") == 0)
 	{
@@ -1072,8 +1072,6 @@ awpRect		  LFRectToFeatureBlock(const char* lpName, awpRect& rect)
 		return result;
 }
 
-
-
 TLFFeatureList::TLFFeatureList()
 {
 	int sx = 0;
@@ -1120,3 +1118,25 @@ const char* TLFFeatureList::FeatureName(int index)
 	else
 		return "";
 }
+
+ILFFeature*   LFCreateFeature(const char* lpName, TiXmlElement* parent)
+{
+    ILFFeature* result = LFCreateFeature(lpName, 0,0,6,6);
+    if (result == NULL)
+        return result;
+    if (!result->LoadXML(parent))
+    {
+        delete result;
+        return NULL;
+    }
+    return result;
+}
+
+ILFFeature*   LFCreateFeature(TiXmlElement* parent)
+{
+    if (parent == NULL)
+        return NULL;
+    return LFCreateFeature(parent->Value(), parent);
+}
+
+

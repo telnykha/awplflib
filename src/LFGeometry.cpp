@@ -156,13 +156,19 @@ TLFRect::TLFRect()
 {
 	memset(&m_Rect, 0, sizeof(m_Rect));
 }
-TLFRect::TLFRect(awpRect& r)
+/*TLFRect::TLFRect(awpRect& r)
 {
 	m_Rect.left = r.left;
 	m_Rect.top  = r.top;
 	m_Rect.right = r.right;
 	m_Rect.bottom = r.bottom;
+}*/
+
+TLFRect::TLFRect(awpRect r)
+{
+    m_Rect = r;
 }
+
 
 TLFRect::TLFRect(int left, int top, int w, int h)
 {
@@ -187,6 +193,15 @@ void TLFRect::SetRect(awpRect Rect)
 {
 	m_Rect = Rect;
 }
+
+void TLFRect::SetRect(int left, int top, int w, int h)
+{
+    m_Rect.left = left;
+    m_Rect.top = top;
+    m_Rect.right = left + w;
+    m_Rect.bottom = top + h;
+}
+
 
 bool TLFRect::IsEmpty()
 {

@@ -909,8 +909,8 @@ void TLFClusterTrack::MakeClusters()
 	if (scanner == NULL)
 		return;
 
-	int w = scanner->GetNumX() - 2;
-	int h = scanner->GetNumY() - 2;
+	int w = scanner->GetNumX() - 1;
+	int h = scanner->GetNumY() - 1;
 
 	for (int i = 0; i < h; i++)
 	{
@@ -1071,19 +1071,19 @@ bool TLFClusterTrack::Search(int& x, int& y, int id)
 	{
 		return false;
 	}
-	int w = scanner->GetNumX() - 2;
-	int h = scanner->GetNumY() - 2;
+	int w = scanner->GetNumX()-1;
+	int h = scanner->GetNumY()-1;
 	bool res = false;
 	TLFDetectedItem* di = m_detector->GetItem(y*w + x);
 	di->SetClusterIdx(id);
 	di->SetColor(id);
-	for (int i = y - 4; i <= y + 4; i++)
+	for (int i = y - 2; i <= y + 4; i++)
 	{
-		if (i < 0 || i >= h)
+		if (i < 0 || i > h)
 			continue;
-		for (int j = x - 4; j <= x + 4; j++)
+		for (int j = x - 2; j <= x + 4; j++)
 		{
-			if (j < 0 || j >= w)
+			if (j < 0 || j > w)
 				continue;
 			di = m_detector->GetItem(i*w + j);
 			if (di != NULL && di->HasObject() && di->GetClusterIdx() == -1)

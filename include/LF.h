@@ -350,6 +350,12 @@ public:
 	virtual void Setup(double scale_x, double scale_y,  AWPWORD dx, AWPWORD dy);
 	virtual void Scale(double factor);
 	virtual void Shift(int dx, int dy);
+    /**
+        Setting the feature inside the specified rectangle.
+        The following values change:
+        m_sx,m_sy,m_w,m_h
+    */
+    virtual void Setup(TLFRect& rect);
 	/*
 		XML io operations
 	*/
@@ -668,19 +674,19 @@ public:
    /**
    \brief  setup threshold to the detetector
    */
-   virtual  void SetThreshold(double Value)				    = 0;
+   virtual  void SetThreshold(double Value)			       = 0;
    /**
-   \brief  clears internal image, scanner data and results 
+   \brief  clears internal image, scanner data and results
    */
    virtual  void Clear();
    /**
-   \brief access to aperture minimum horizontal size 
-   \retrun aperture width   
+   \brief access to aperture minimum horizontal size
+   \retrun aperture width
    */
    int  GetBaseWidth();
    /**
-   \brief deprecated 	
-   \brief setup aperture minimum horizontal size 
+   \brief deprecated
+   \brief setup aperture minimum horizontal size
    */
    void SetBaseWidht(int w);
    /**
@@ -694,17 +700,17 @@ public:
    */
    void SetBaseHeight(int h);
    /**
-   \brief access to aperture rotation angle 
+   \brief access to aperture rotation angle
    */
    int  GetAngle();
    /**
    \brief deprecated
-   \brief setup aperture rotation angle 
+   \brief setup aperture rotation angle
    */
    void SetAngle(int value);
    /**
    \brief access to the view of the object to which the detector was trained
-   \retrun object view 
+   \retrun object view
    */
    int  GetRacurs();
    /**
@@ -714,13 +720,13 @@ public:
    void SetRacurs(int value);
    /**
    \brief deprecated
-   \brief access to object type 
+   \brief access to object type
    \retrun aperture width
    */
    std::string GetObjectType();
    /**
    \brief access to the internal image for analysis
-   \retrun pointer to TLFImage object 
+   \retrun pointer to TLFImage object
    */
    TLFImage*	 GetImage();
    /**
@@ -729,44 +735,44 @@ public:
    */
    ILFScanner*   GetScanner();
    /**
-   \brief setup the internal scanner 
+   \brief setup the internal scanner
    \internal scanner is not created, just assigns this pointer
-   \destructor of this detector calls destructor of this scanner 
+   \destructor of this detector calls destructor of this scanner
    */
    void SetScanner(ILFScanner* scanner);
    /**
-   \brief number of items 
-   \retrun number of detected items,Different detectors can return a different 
-   \number of items. Only such items for which a successful classification 
+   \brief number of items
+   \retrun number of detected items,Different detectors can return a different
+   \number of items. Only such items for which a successful classification
    \was performed, others are all items considered by the detector.
-   \See TLFDetectedItem for more info 
-   \retrun number of items 
+   \See TLFDetectedItem for more info
+   \retrun number of items
    */
    int  GetNumItems();
    /**
-   \brief Pointer to the specific item, defined by its index 
+   \brief Pointer to the specific item, defined by its index
    \ the index should be >=0 and < value, returned by GetNumItems()
-   \retrun Pointer to the detected item. 
+   \retrun Pointer to the detected item.
    */
    TLFDetectedItem* GetItem(int index);
 
-   //todo: add full functional log support 
+   //todo: add full functional log support
 
    /**
-   \brief detector can save their images to the specific path 
+   \brief detector can save their images to the specific path
    */
    void SaveImages(std::string path);
 
 	/**
-	\brief save detector to XML structure 
+	\brief save detector to XML structure
 	*/
 	virtual TiXmlElement* SaveXML() = 0;
 	/**
-	\brief Load detector from XML structure 
+	\brief Load detector from XML structure
 	*/
 	virtual bool          LoadXML(TiXmlElement* parent) = 0;
 	/**
-	\brief retrurns internal calss name 
+	\brief retrurns internal calss name
 	*/
 	virtual const char* GetName()
 	{

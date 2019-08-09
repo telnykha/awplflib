@@ -83,6 +83,15 @@ void ILFFeature::Setup(double scale_x, double scale_y, AWPWORD dx, AWPWORD dy)
    m_w = int(m_wBase*scale_x + 0.5);
    m_h = int(m_hBase*scale_y + 0.5);
 }
+
+void ILFFeature::Setup(TLFRect& rect)
+{
+    m_sx = rect.Left();
+    m_sy = rect.Top();
+    m_w  = rect.Width();
+    m_h  = rect.Height();
+}
+
 void ILFFeature::Scale(double factor)
 {
 	m_sx = (int)(m_sxBase*factor + 0.5);

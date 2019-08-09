@@ -3,7 +3,7 @@
         <ProjectGuid>{BD2C9908-7A2F-4116-A0C2-B8B48908B676}</ProjectGuid>
         <ProjectType>CppStaticLibrary</ProjectType>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>1</TargetedPlatforms>
         <AppType>StaticLibrary</AppType>
         <FrameworkType>None</FrameworkType>
@@ -55,7 +55,7 @@
         <BCC_SourceDebuggingOn>true</BCC_SourceDebuggingOn>
         <DynamicRTL>true</DynamicRTL>
         <BCC_DisableOptimizations>true</BCC_DisableOptimizations>
-        <FinalOutputDir>$(PHOTON)\lib\</FinalOutputDir>
+        <FinalOutputDir>$(PHOTON41)\lib\</FinalOutputDir>
         <BRCC_OutputDir>..\obj\</BRCC_OutputDir>
         <TASM_IncludePath>$(BDS)\Projects\awplflib\src;C:\Program Files (x86)\Borland\CBuilder6\Projects;..\src;..\include;..;$(BDS)\include;..\..\awpipl2\include;..\..\TinyXML\src;..\..\awpipl2\include\_include;..\..\FVLCore\src;$(TASM_IncludePath)</TASM_IncludePath>
         <BRCC_IncludePath>$(BDS)\Projects\awplflib\src;C:\Program Files (x86)\Borland\CBuilder6\Projects;..\src;..\include;..;$(BDS)\include;..\..\awpipl2\include;..\..\TinyXML\src;..\..\awpipl2\include\_include;..\..\FVLCore\src;$(BRCC_IncludePath)</BRCC_IncludePath>

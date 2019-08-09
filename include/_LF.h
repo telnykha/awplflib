@@ -225,6 +225,9 @@ public:
 ILFPredictor* LFCreatePredictor(const char* lpName, ILFDetectEngine* engine);
 ILFFeature*   LFCreateFeature(ILFFeature* feature);
 ILFFeature*   LFCreateFeature(const char* lpName, int sx, int sy, int w, int h);
+ILFFeature*   LFCreateFeature(const char* lpName, TiXmlElement* parent);
+ILFFeature*   LFCreateFeature(TiXmlElement* parent);
+
 ILFWeak*      LFCreateWeak(ILFWeak* weak);
 ILFWeak*      LFCreateWeak(const char* lpName);
 ILFStrong*    LFCreateStrong(const char* lpName);
