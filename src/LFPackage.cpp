@@ -11,22 +11,60 @@ TLFPackageEngine::TLFPackageEngine() : ILFDetectEngine()
     d->SetDelay(15);
 
 	this->m_detectors.Add(d);
- 	m_cluster_maker = new TLFClusterRecursive(d, m_minWidth, m_minHeight, m_maxWidth, m_maxHeight);
+	m_cluster_maker = new TLFClusterTrack(d, m_minWidth, m_minHeight, m_maxWidth, m_maxHeight);
 	m_strPredictorName = "TLFIntegralImagePredictor";
+#ifdef _DEBUG
+	UUID id;
+	LF_UUID_CREATE(id);
+	std::string str = LFGUIDToString(&id);
+	str += ".package";
+	m_strFileName = str;
+	m_logFile = fopen(m_strFileName.c_str(), "w+t");
+	fclose(m_logFile);
+	m_logFile = NULL;
+#endif 
 }
+
+TLFPackageEngine::~TLFPackageEngine()
+{
+#ifdef _DEBUG
+	if (m_logFile != NULL)
+		fclose(m_logFile);
+#endif
+}
+
 
 void TLFPackageEngine::InitDetectors()
 {
-   ILFObjectDetector* d = (ILFObjectDetector*)m_detectors.Get(0);
+#ifdef _DEBUG 
+	m_logFile = fopen(m_strFileName.c_str(), "a+t");
+	fprintf(m_logFile, "Entrer TLFPackageEngine::InitDetectors()\n");
+	fclose(m_logFile);
+	m_logFile = NULL;
+#endif 
+	ILFObjectDetector* d = (ILFObjectDetector*)m_detectors.Get(0);
    if (d != NULL)
    {
 	   awpImage* img = m_SourceImage.GetImage();
 	   d->Init(img);
    }
+#ifdef _DEBUG 
+   m_logFile = fopen(m_strFileName.c_str(), "a+t");
+   fprintf(m_logFile, "Leave TLFPackageEngine::InitDetectors()\n");
+   fclose(m_logFile);
+   m_logFile = NULL;
+#endif 
 }
 
 void TLFPackageEngine::Clear()
 {
+#ifdef _DEBUG 
+	m_logFile = fopen(m_strFileName.c_str(), "a+t");
+	fprintf(m_logFile, "Entrer TLFPackageEngine::Clear()\n");
+	fclose(m_logFile);
+	m_logFile = NULL;
+#endif 
+
 	this->m_tmpList.Clear();
 	this->m_result.Clear();
 	this->m_tmp_result.Clear();
@@ -38,6 +76,12 @@ void TLFPackageEngine::Clear()
 			d->Clear();
 		}
 	}
+#ifdef _DEBUG 
+	m_logFile = fopen(m_strFileName.c_str(), "a+t");
+	fprintf(m_logFile, "Leave TLFPackageEngine::Clear()\n");
+	fclose(m_logFile);
+	m_logFile = NULL;
+#endif 
 }
 bool TLFPackageEngine::LoadXML(TiXmlElement* parent)
 {
@@ -49,6 +93,12 @@ TiXmlElement*  TLFPackageEngine::SaveXML()
 }
 bool TLFPackageEngine::FindObjects()
 {
+#ifdef _DEBUG 
+	m_logFile = fopen(m_strFileName.c_str(), "a+t");
+	fprintf(m_logFile, "Enter TLFPackageEngine::FindObjects()\n");
+	fclose(m_logFile);
+	m_logFile = NULL;
+#endif 
 	if (this->m_SourceImage.GetImage() == NULL)
 		return false;
 	if (this->m_SourceImage.GetImage()->dwType != AWP_BYTE)
@@ -59,8 +109,14 @@ bool TLFPackageEngine::FindObjects()
    	m_cluster_maker->MakeClusters();
 	BuildForeground();
 	this->OverlapsFilter(&m_tmp_result);
-	return true;
 
+#ifdef _DEBUG 
+	m_logFile = fopen(m_strFileName.c_str(), "a+t");
+	fprintf(m_logFile, "Leave TLFPackageEngine::FindObjects()\n");
+	fclose(m_logFile);
+	m_logFile = NULL;
+#endif 
+	return true;
 }
 
 bool TLFPackageEngine::DetectInRect(awpRect* rect)
@@ -90,6 +146,12 @@ void TLFPackageEngine::SetDelay(int value)
 
 void    TLFPackageEngine::BuildForeground()
 {
+#ifdef _DEBUG 
+	m_logFile = fopen(m_strFileName.c_str(), "a+t");
+	fprintf(m_logFile, "Enter TLFPackageEngine::BuildForeground()\n");
+	fclose(m_logFile);
+	m_logFile = NULL;
+#endif
 	m_tmpList.Clear();
 	ILFObjectDetector* d = (ILFObjectDetector*)m_detectors.Get(0);
 	if (!d)
@@ -122,7 +184,12 @@ void    TLFPackageEngine::BuildForeground()
 			}
 		}
 	}
-
+#ifdef _DEBUG 
+	m_logFile = fopen(m_strFileName.c_str(), "a+t");
+	fprintf(m_logFile, "Leave TLFPackageEngine::BuildForeground()\n");
+	fclose(m_logFile);
+	m_logFile = NULL;
+#endif
 }
 
 awpImage* TLFPackageEngine::GetForeground()
@@ -137,7 +204,13 @@ TLFImage* TLFPackageEngine::GetForegroundImage()
 
 void TLFPackageEngine::OverlapsFilter(TLFSemanticImageDescriptor* descriptor)
 {
-//	SLFBinaryBlob* blob = this->m_cluster_maker->GetBlobs();
+#ifdef _DEBUG 
+	m_logFile = fopen(m_strFileName.c_str(), "a+t");
+	fprintf(m_logFile, "Enter TLFPackageEngine::OverlapsFilter()\n");
+	fclose(m_logFile);
+	m_logFile = NULL;
+#endif
+	//	SLFBinaryBlob* blob = this->m_cluster_maker->GetBlobs();
 	this->m_result.Clear();
 	SLFBinaryBlob* blobs = this->m_cluster_maker->GetBlobs();
 	for (int i = 0; i < LF_NUM_CLUSTERS; i++)
@@ -156,6 +229,12 @@ void TLFPackageEngine::OverlapsFilter(TLFSemanticImageDescriptor* descriptor)
 			m_result.Add(item);
 		}
 	}
+#ifdef _DEBUG 
+	m_logFile = fopen(m_strFileName.c_str(), "a+t");
+	fprintf(m_logFile, "Leave TLFPackageEngine::OverlapsFilter()\n");
+	fclose(m_logFile);
+	m_logFile = NULL;
+#endif
 }
 
 float TLFPackageEngine::GetMinWidth()

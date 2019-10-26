@@ -3,6 +3,11 @@
 
 class TLFPackageEngine : public ILFDetectEngine
 {
+protected: 
+#ifdef _DEBUG
+	FILE* m_logFile;
+	std::string m_strFileName;
+#endif 
 protected:
 
 	float m_minWidth;
@@ -20,7 +25,7 @@ protected:
 	TLFClusterRecursive* m_cluster_maker;
 public:
 	TLFPackageEngine();
-
+	virtual ~TLFPackageEngine();
 	virtual void Clear();
 	virtual bool LoadXML(TiXmlElement* parent);
 	virtual bool FindObjects();

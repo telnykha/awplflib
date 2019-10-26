@@ -55,6 +55,8 @@ public:
 	TLFBuffer(unsigned int size, double value);
 	virtual ~TLFBuffer();
 	void Push(double value);
+	void  SetData(double* data);
+	double* GetData();
 	double GetSum();
 	double GetAvg();
 	double GetValue(int index);

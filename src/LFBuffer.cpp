@@ -72,6 +72,22 @@ void TLFBuffer::Push(double value)
 	memcpy(m_data, p1, (m_size - 1)*sizeof(double));
 	m_data[m_size - 1] = value;
 }
+void  TLFBuffer::SetData(double* data)
+{
+	m_sum = 0;
+	for (int i = 0; i < m_size; i++)
+	{
+		m_data[i] = data[i];
+		m_sum += data[i];
+	}
+}
+
+double* TLFBuffer::GetData()
+{
+	return m_data;
+}
+
+
 double TLFBuffer::GetSum()
 {
 	return m_sum;
