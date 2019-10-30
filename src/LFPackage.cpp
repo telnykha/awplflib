@@ -248,7 +248,7 @@ void TLFPackageEngine::SetMinWidth(float value)
 		m_minWidth = value;
 		delete m_cluster_maker;
 		ILFObjectDetector* d = (ILFObjectDetector*)m_detectors.Get(0);
-		m_cluster_maker = new TLFClusterRecursive(d, m_minWidth, m_minHeight, m_maxWidth, m_maxHeight);
+		m_cluster_maker = new TLFClusterTrack(d, m_minWidth, m_minHeight, m_maxWidth, m_maxHeight);
 
 	}
 }
@@ -264,7 +264,7 @@ void TLFPackageEngine::SetMinHeight(float value)
 		m_minHeight = value;
 		delete m_cluster_maker;
 		ILFObjectDetector* d = (ILFObjectDetector*)m_detectors.Get(0);
-		m_cluster_maker = new TLFClusterRecursive(d, m_minWidth, m_minHeight, m_maxWidth, m_maxHeight);
+		m_cluster_maker = new TLFClusterTrack(d, m_minWidth, m_minHeight, m_maxWidth, m_maxHeight);
 	}
 }
 
@@ -280,7 +280,7 @@ void TLFPackageEngine::SetMaxWidth(float value)
 		m_maxWidth = value;
 		delete m_cluster_maker;
 		ILFObjectDetector* d = (ILFObjectDetector*)m_detectors.Get(0);
-		m_cluster_maker = new TLFClusterRecursive(d, m_minWidth, m_minHeight, m_maxWidth, m_maxHeight);
+		m_cluster_maker = new TLFClusterTrack(d, m_minWidth, m_minHeight, m_maxWidth, m_maxHeight);
 	}
 }
 
@@ -296,7 +296,7 @@ void  TLFPackageEngine::SetMaxHeight(float value)
 		m_maxHeight = value;
 		delete m_cluster_maker;
 		ILFObjectDetector* d = (ILFObjectDetector*)m_detectors.Get(0);
-		m_cluster_maker = new TLFClusterRecursive(d, m_minWidth, m_minHeight, m_maxWidth, m_maxHeight);
+		m_cluster_maker = new TLFClusterTrack(d, m_minWidth, m_minHeight, m_maxWidth, m_maxHeight);
 	}
 }
 

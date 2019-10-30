@@ -22,7 +22,7 @@ protected:
 	virtual void InitDetectors();
 	void    BuildForeground();
 
-	TLFClusterRecursive* m_cluster_maker;
+	TLFClusterTrack* m_cluster_maker;
 public:
 	TLFPackageEngine();
 	virtual ~TLFPackageEngine();
