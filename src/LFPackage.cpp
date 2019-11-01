@@ -175,7 +175,8 @@ void    TLFPackageEngine::BuildForeground()
 				awpRect    item_rect = item->GetBounds()->GetRect();
 				awpImage*  fg = m_foreground.GetImage();
 
-				awpFillRect(fg, &item_rect, 0,item->GetColor() + 1);
+				//awpFillRect(fg, &item_rect, 0,item->GetColor() + 1);
+				awpFillRect(fg, &item_rect, 0,255);
 
 				TLFDetectedItem* di = new TLFDetectedItem(item);
 				di->Resize(m_resizeCoef);

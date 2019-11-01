@@ -1201,6 +1201,7 @@ TLFAccWeak::TLFAccWeak(double t) : ILFWeak()
     m_delay = 0;
 	buf_size = 200;
 	m_buffer = NULL;
+	m_begin_counter = 0;
 }
 TLFAccWeak::TLFAccWeak(ILFFeature* feature, double t) : ILFWeak(feature)
 {
@@ -1211,6 +1212,7 @@ TLFAccWeak::TLFAccWeak(ILFFeature* feature, double t) : ILFWeak(feature)
     m_delay = 0;
 	buf_size = 200;
 	m_buffer = NULL;
+	m_begin_counter = 0;
 }
 TLFAccWeak::TLFAccWeak(TLFAccWeak& Weak)
 {
@@ -1223,6 +1225,7 @@ TLFAccWeak::TLFAccWeak(TLFAccWeak& Weak)
 	m_state = Weak.m_state;
 	buf_size = Weak.buf_size;
 	m_buffer = NULL;
+	m_begin_counter = 0;
 }
 
 TLFAccWeak::TLFAccWeak(TLFAccWeak* weak) : ILFWeak()
@@ -1245,6 +1248,7 @@ TLFAccWeak::TLFAccWeak(TLFAccWeak* weak) : ILFWeak()
         m_delay = 0;
 	}
 	m_buffer = NULL;
+	m_begin_counter = 0;
 }
 
 TLFAccWeak::~TLFAccWeak()
@@ -1269,46 +1273,52 @@ int TLFAccWeak::Classify(TLFImage* pImage, double* value)
 	double v = (double)m_pFeature->uCalcValue(pImage);
 	if (m_buffer == NULL)
 		m_buffer = new TLFRingBuffer(buf_size, v);
-
+	if (m_begin_counter == 0)
+		m_begin_counter = LFGetTickCount();
 	double a = m_buffer->GetAvg();
 
-	if (m_state == 0)
+	if (LFGetTickCount() - m_begin_counter > 1000*m_delay)
 	{
-		if (v > a + 2 * this->m_threshold || v < a - 2 * this->m_threshold)
-        {
-            if (m_delay == 0)
-            {
-				m_state = 1;
-            }
-            else
-            {
-            	m_state = -1;
-                m_delay_counter = LFGetTickCount();
-            }
-        }
-	}
-    else if (m_state == -1)
-    {
-		if (v >= a - m_threshold && v <= a + m_threshold)
-        {
-			m_state = 0;
-            m_delay_counter = 0;
-        }
-        else
-	    {
-            unsigned long the_delay = LFGetTickCount() - m_delay_counter;
-            if (the_delay > 1000*m_delay)
-            {
-            	m_state = 1;
-            }
-        }
-    }
-	else
-	{
-		if (v >= a - this->m_threshold && v <= a + this->m_threshold)
-			m_state = 0;
-	}
+		if (m_state == 0)
+		{
+			if (v > a + 2 * this->m_threshold || v < a - 2 * this->m_threshold)
+			{
+				if (m_delay == 0)
+				{
 
+					m_state = 1;
+				}
+				else
+				{
+					m_state = -1;
+					m_delay_counter = LFGetTickCount();
+				}
+			}
+		}
+		else if (m_state == -1)
+		{
+			if (v >= a - m_threshold && v <= a + m_threshold)
+			{
+				m_state = 0;
+				m_delay_counter = 0;
+			}
+			else
+			{
+				unsigned long the_delay = LFGetTickCount() - m_delay_counter;
+				if (the_delay > 1000 * m_delay)
+				{
+					m_state = 1;
+				}
+			}
+		}
+		else
+		{
+			// deactivate classifier 
+			if (v >= a - this->m_threshold && v <= a + this->m_threshold)
+				m_state = 0;
+		}
+
+	}
 	m_counter++;
 	if (m_counter % m_bg_stability == 0)
 		m_buffer->Push(v);

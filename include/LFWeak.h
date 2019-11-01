@@ -382,10 +382,11 @@ public:
 class TLFAccWeak : public ILFWeak
 {
 protected:
-	int buf_size;
+	int	   buf_size;
 	int	   m_counter;
 	double m_threshold;
 	int	   m_state;
+	int    m_begin_counter;
 	TLFRingBuffer* m_buffer;
 	int    m_bg_stability;
     unsigned int    m_delay;
