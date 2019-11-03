@@ -116,6 +116,8 @@
         <IntermediateOutputDir>Release_Build</IntermediateOutputDir>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
+        <BPILibOutputDir>awplflibb.lib</BPILibOutputDir>
+        <FinalOutputDir>$(PHOTON)\lib\</FinalOutputDir>
         <_TCHARMapping>wchar_t</_TCHARMapping>
         <Manifest_File>None</Manifest_File>
         <TLIB_PageSize>128</TLIB_PageSize>

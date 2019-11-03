@@ -4,18 +4,21 @@ TLFZone::TLFZone()
 {
   this->m_ZoneType = ZTUnknown;
   m_testRadius = 0.75;
+  m_classID = -1;
 }
 
 TLFZone::TLFZone(TEZoneTypes type)
 {
 	this->m_ZoneType = type;
     m_testRadius = 0.75;
+  m_classID = -1;
 }
 TLFZone::TLFZone(TLF2DRect& rect)
 {
 	this->m_ZoneType = ZTRect;
 	this->m_Rect = rect;
     m_testRadius = 0.75;
+  m_classID = -1;
 }
 //
 TLFZone::TLFZone(TLF2DContour& contour)
@@ -23,6 +26,7 @@ TLFZone::TLFZone(TLF2DContour& contour)
     this->m_ZoneType = ZTContour;
     this->m_contour = contour;
     m_testRadius = 0.75;
+	  m_classID = -1;
 }
 
 TLFZone::TLFZone(TLF2DLineSegment& segment)
@@ -30,6 +34,7 @@ TLFZone::TLFZone(TLF2DLineSegment& segment)
     this->m_ZoneType = ZTLineSegment;
     m_segment = segment;
     m_testRadius = 0.75;
+   m_classID = -1;
 }
 
 
@@ -41,6 +46,7 @@ TLFZone::TLFZone(TLFZone& zone)
     this->m_segment = zone.m_segment;
     this->m_openPolygon = zone.m_openPolygon;
     m_testRadius = 0.75;
+    this->m_classID = zone.m_classID;
 }
 
 TLFZone& TLFZone::operator =(TLFZone& zone)
@@ -53,6 +59,7 @@ TLFZone& TLFZone::operator =(TLFZone& zone)
         this->m_segment = zone.m_segment;
         this->m_openPolygon = zone.m_openPolygon;
         this->m_testRadius = zone.m_testRadius;
+        this->m_classID = zone.m_classID;
     }
 	return *this;
 }
@@ -615,6 +622,8 @@ bool TLFZone::LoadXML(TiXmlElement* parent)
     TEZoneTypes type;
 	parent->QueryIntAttribute("type", &itype);
 	type = (TEZoneTypes)itype;
+	if (parent->QueryIntAttribute("id", &m_classID) == TIXML_NO_ATTRIBUTE)
+    	m_classID = -1;
     if (type == ZTRect)
     {
          TLF2DRect* rect = new TLF2DRect();
@@ -691,7 +700,7 @@ bool TLFZone::SaveXML(TiXmlElement* parent)
 		return false;
 	TiXmlElement* f = new TiXmlElement(this->GetName());
 	f->SetAttribute("type", (int)this->m_ZoneType);
-
+	f->SetAttribute("id", this->m_classID);
 	if (this->IsRect())
     {
 		this->m_Rect.SaveXML(f);

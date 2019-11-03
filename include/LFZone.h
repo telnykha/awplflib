@@ -77,6 +77,7 @@ protected:
 	TLF2DContour		m_contour;
     TLF2DLineSegment    m_segment;
     TLF2DOpenPolygon    m_openPolygon;
+    int 				m_classID;
 
 protected:
 	bool IsPointNearRect(TLF2DPoint& point);
@@ -148,6 +149,17 @@ public:
     virtual bool LoadXML(TiXmlElement* parent);
     /** Save to XML*/
     virtual bool SaveXML(TiXmlElement* parent);
+
+    int GetClassID()
+
+    {
+    	return m_classID;
+    }
+
+    void SetClassID(int id)
+    {
+		m_classID = id;
+    }
 
 	virtual const char* GetName()
 	{
