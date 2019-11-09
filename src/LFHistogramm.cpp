@@ -100,7 +100,7 @@ void TLFHistogramm::AddElememt(double v)
 }
 bool TLFHistogramm::Save(const char* lpFileName)
 {
-	FILE* f = fopen(lpFileName, "w+t");
+	FILE* f = fopen(lpFileName, "a+t");
 	if (f != NULL)
 	{
 		for (int i = 0; i < this->m_num_bins; i++)
@@ -231,5 +231,20 @@ double TLFHistogramm::GetMinBin(int& bin)
 		}
 	}
 	return min;
+}
+
+double TLFHistogramm::Norm()
+{
+    double sum = 0;
+    _CHECK_NULL_
+
+	for (int i = 0; i < m_num_bins; i++)
+    	sum += m_data[i];
+    if (sum != 0)
+    {
+        for (int i = 0; i < m_num_bins; i++)
+            m_data[i] /= sum;
+    }
+    return sum;
 }
 

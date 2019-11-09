@@ -61,6 +61,7 @@ public:
 	virtual ~TLFHistogramm();
 
 	void Setup(int num_bins, double min, double max);
+    double Norm();
 
 	void AddElememt(double v);
 	double GetSumToBinForward(int bin);

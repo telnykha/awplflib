@@ -564,7 +564,7 @@ double TLFImage::CalcSqSum(int x, int y, int w, int h)
 
 double TLFImage::CalcRLnSum(int x, int y, int w, int h)
 {
-	if (this->m_rlnpix == NULL)
+	if (GetRedIntegral() == NULL)
 		return 0;
 	double* p = m_rlnpix + x + y*m_pIntegralRed->sSizeX;
 
@@ -575,7 +575,7 @@ double TLFImage::CalcRLnSum(int x, int y, int w, int h)
 }
 double TLFImage::CalcGLnSum(int x, int y, int w, int h)
 {
-	if (this->m_glnpix == NULL)
+	if (GetGreenIntegral() == NULL)
 		return 0;
 	double* p = m_glnpix + x + y*m_pIntegralGreen->sSizeX;
 
@@ -585,7 +585,7 @@ double TLFImage::CalcGLnSum(int x, int y, int w, int h)
 }
 double TLFImage::CalcBLnSum(int x, int y, int w, int h)
 {
-	if (this->m_blnpix == NULL)
+	if (GetBlueIntegral() == NULL)
 		return 0;
 	double* p = m_blnpix + x + y*m_pIntegralBlue->sSizeX;
 
