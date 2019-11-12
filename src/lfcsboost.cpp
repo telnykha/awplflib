@@ -45,7 +45,7 @@ TCSAdaBoost::TCSAdaBoost()
     m_widthBase = 24;
     m_heightBase = 24;
     m_nFeaturesCount = 200;
-	m_FinishFar = 0.5;
+	m_FinishFar = 0.1;
   	m_strOutName = "cascade.dat";
     m_nTestFaces = 0;
     m_nTestNonFaces = 0;
@@ -162,6 +162,7 @@ bool TCSAdaBoost::Boost(int stage)
 
 	if (m_Features.GetCount() == 0)
 	{
+		DbgMsg("Error: features set is empty.\n");
 		return false;
 	}
 
@@ -180,7 +181,8 @@ omp_set_num_threads(8);
 #endif 
      	for ( int w = 0; w < m_Features.GetCount(); ++w )
         {
-       	    ++count;
+			//printf(".");
+			++count;
             TCSWeakTraining* wcinfo = (TCSWeakTraining*)m_Features.Get(w);
             wcinfo->SetEpsilon(0);
 
@@ -398,7 +400,7 @@ bool TCSAdaBoost::LoadSample(TLFObjectList& SampleList, int flag, std::string co
             string name = path + filesInfo.name;
 
             TCSSample* pSample = new TCSSample();
-            pSample->LoadImage0((char*)name.c_str());
+            pSample->LoadImage((char*)name.c_str());
 			if (pSample->GetImage()->sSizeX < this->m_widthBase || pSample->GetImage()->sSizeY < this->m_heightBase)
 			{
 				delete pSample;
@@ -519,6 +521,9 @@ void TCSAdaBoost::InitFeatures()
 					   m_Features.Add(wt);
 				   else
 					   delete wt;
+				   TLFColorSensor9Bit Sensor10(sx,sy,w,h);
+				   wt = new TCSWeakTraining(&Sensor10);
+				   m_Features.Add(wt);
 			   }
 		   }
 	   }
@@ -988,7 +993,7 @@ bool    TCSAdaBoostSign::LoadSamples(int flag, std::string const& path)
 	       string name = path + filesInfo.name;
 		
             TCSSample* pSample = new TCSSample();
-            pSample->LoadImage0((char*)name.c_str());
+            pSample->LoadImage((char*)name.c_str());
 
     //        if (pSample->Process())
             {

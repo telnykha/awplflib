@@ -4,21 +4,21 @@ TLFZone::TLFZone()
 {
   this->m_ZoneType = ZTUnknown;
   m_testRadius = 0.75;
-  m_classID = -1;
+  m_classID = 0;
 }
 
 TLFZone::TLFZone(TEZoneTypes type)
 {
 	this->m_ZoneType = type;
     m_testRadius = 0.75;
-  m_classID = -1;
+  m_classID = 0;
 }
 TLFZone::TLFZone(TLF2DRect& rect)
 {
 	this->m_ZoneType = ZTRect;
 	this->m_Rect = rect;
     m_testRadius = 0.75;
-  m_classID = -1;
+  m_classID = 0;
 }
 //
 TLFZone::TLFZone(TLF2DContour& contour)
@@ -26,7 +26,7 @@ TLFZone::TLFZone(TLF2DContour& contour)
     this->m_ZoneType = ZTContour;
     this->m_contour = contour;
     m_testRadius = 0.75;
-	  m_classID = -1;
+	  m_classID = 0;
 }
 
 TLFZone::TLFZone(TLF2DLineSegment& segment)
@@ -34,7 +34,7 @@ TLFZone::TLFZone(TLF2DLineSegment& segment)
     this->m_ZoneType = ZTLineSegment;
     m_segment = segment;
     m_testRadius = 0.75;
-   m_classID = -1;
+   m_classID = 0;
 }
 
 
@@ -842,17 +842,17 @@ int TLFZones::IsPointInZone(int x, int y, double dx, double dy)
 			TLF2DRect* rect = zone->GetRect();
 			if (x > dx*rect->GetLeftTop().X && x < dx*rect->GetRightBottom().X &&
 				y > dy*rect->GetLeftTop().Y && y < dy*rect->GetRightBottom().Y)
-				return i;
+				return zone->GetClassID();
 		}
 		else
 			if (IsPointInContour(x, y, zone->GetContour(), dx, dy))
-				return i;
+				return zone->GetClassID();
 	}
 	return -1;
 }
 
 
-awpImage* TLFZones::GetMaskImage(awpImage* source)
+awpImage* TLFZones::GetMaskImage(awpImage* source, bool use_class_info)
 {
 	if (source == NULL)
 		return NULL;
@@ -873,7 +873,8 @@ awpImage* TLFZones::GetMaskImage(awpImage* source)
 	{
 		for (int x = 0; x < img->sSizeX; x++)
 		{
-			if (IsPointInZone(x, y, dx, dy) < 0)
+            int v = IsPointInZone(x, y, dx, dy);
+			if (v  < 0)
 			{
 				AWPBYTE* pixels = (AWPBYTE*)img->pPixels;
 				pixels += (y*img->sSizeX + x)*img->bChannels;
@@ -888,7 +889,7 @@ awpImage* TLFZones::GetMaskImage(awpImage* source)
 				pixels += (y*img->sSizeX + x)*img->bChannels;
 				for (int i = 0; i < img->bChannels; i++)
 				{
-					pixels[i] = 1;
+					pixels[i] = use_class_info? v: 1;
 				}
 			}
 

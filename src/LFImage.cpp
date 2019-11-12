@@ -114,7 +114,7 @@ void TLFImage::FreeImages()
 
 }
 
-bool TLFImage::LoadImage0(const char* szFileName)
+bool TLFImage::LoadImage(const char* szFileName)
 {
     bool res = true;
 	FreeImages();
@@ -122,6 +122,9 @@ bool TLFImage::LoadImage0(const char* szFileName)
     {
         if (awpLoadImage(szFileName, &m_pImage) != AWP_OK)
            throw 0;
+		this->GetBlueIntegral();
+		this->GetGreenIntegral();
+		this->GetRedIntegral();
     }
     catch(...)
     {

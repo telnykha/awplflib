@@ -67,6 +67,7 @@ extern "C"
 {
 #include "awpipl.h"  
 }
+#define TIXML_USE_STL
 #include "tinyxml.h"
 
 typedef int(*TLFListSortCompare)(void * Item1, void * Item2);
@@ -250,7 +251,7 @@ public:
 	TLFImage(TLFImage& pImage);
 	virtual  ~TLFImage();
 
-	virtual bool LoadImage0(const char* szFileName);
+	virtual bool LoadImage(const char* szFileName);
 	virtual bool SaveImage(const char* szFileName);
 
 	// memory exchange

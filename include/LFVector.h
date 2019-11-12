@@ -56,6 +56,8 @@ public:
 	TLFDouble(TLFDouble* v);
 	double Get();
 	void   Set(double v);
+	bool LoadXML(TiXmlElement* parent);
+	TiXmlElement* SaveXML();
 	virtual const char* GetName(){ return "TLFDouble"; }
 };
 

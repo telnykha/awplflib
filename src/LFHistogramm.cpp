@@ -100,7 +100,7 @@ void TLFHistogramm::AddElememt(double v)
 }
 bool TLFHistogramm::Save(const char* lpFileName)
 {
-	FILE* f = fopen(lpFileName, "a+t");
+	FILE* f = fopen(lpFileName, "w+t");
 	if (f != NULL)
 	{
 		for (int i = 0; i < this->m_num_bins; i++)
@@ -233,18 +233,48 @@ double TLFHistogramm::GetMinBin(int& bin)
 	return min;
 }
 
-double TLFHistogramm::Norm()
+bool TLFHistogramm::LoadXML(TiXmlElement* parent)
 {
-    double sum = 0;
-    _CHECK_NULL_
+	if (parent == NULL)
+		return false;
+	if (strcmp(parent->Value(), GetName()) != 0)
+		return false;
+	parent->QueryDoubleAttribute("min", &this->m_min);
+	parent->QueryDoubleAttribute("max", &this->m_max);
+	parent->QueryIntAttribute("num", &this->m_num_bins);
+	if (m_num_bins < 0)
+		return false;
+	if (m_data != NULL)
+		free(m_data);
+	if (m_num_bins == 0)
+		return true;
+	m_data = (double*)malloc(m_num_bins*sizeof(double));
+	int c = 0;
+	TLFDouble d(0.);
+	for(TiXmlNode* child = parent->FirstChild(); child; child = child->NextSibling() )
+	{
+		TiXmlElement* e = child->ToElement();
+		if(!d.LoadXML(e))
+			return false;
+		m_data[c] = d.Get();
+		c++;
+	}
 
-	for (int i = 0; i < m_num_bins; i++)
-    	sum += m_data[i];
-    if (sum != 0)
-    {
-        for (int i = 0; i < m_num_bins; i++)
-            m_data[i] /= sum;
-    }
-    return sum;
+	return true;
 }
 
+TiXmlElement* TLFHistogramm::SaveXML()
+{
+	TiXmlElement* hst = new TiXmlElement(this->GetName());
+	hst->SetDoubleAttribute("min", this->m_min);
+	hst->SetDoubleAttribute("max", this->m_max);
+	hst->SetAttribute("num", this->m_num_bins);
+	TLFDouble value(0.);
+	for (int i = 0; i < this->m_num_bins; i++)
+	{
+		value.Set(m_data[i]);
+		TiXmlElement* v =  value.SaveXML();
+		hst->LinkEndChild(v);
+	}
+	return hst;
+}

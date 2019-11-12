@@ -1,9 +1,48 @@
-/*
-Locate Face 4.0
-File: LFFeatures.cpp
-Purpose: features implementation
-Copyright (c) AWPSoft.
-*/
+/*M///////////////////////////////////////////////////////////////////////////////////////
+//
+//  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
+//
+//  By downloading, copying, installing or using the software you agree to this license.
+//  If you do not agree to this license, do not download, install,
+//  copy or use the software.
+//
+//
+//                           License Agreement
+//                  Locate Framework  Computer Vision Library
+//
+// Copyright (C) 2004-2018, NN-Videolab.net, all rights reserved.
+// Third party copyrights are property of their respective owners.
+//
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
+//
+//   * Redistribution's of source code must retain the above copyright notice,
+//     this list of conditions and the following disclaimer.
+//
+//   * Redistribution's in binary form must reproduce the above copyright notice,
+//     this list of conditions and the following disclaimer in the documentation
+//     and/or other materials provided with the distribution.
+//
+//   * The name of the copyright holders may not be used to endorse or promote products
+//     derived from this software without specific prior written permission.
+//
+// This software is provided by the copyright holders and contributors "as is" and
+// any express or implied warranties, including, but not limited to, the implied
+// warranties of merchantability and fitness for a particular purpose are disclaimed.
+// In no event shall the NN-Videolab.net or contributors be liable for any direct,
+// indirect, incidental, special, exemplary, or consequential damages
+// (including, but not limited to, procurement of substitute goods or services;
+// loss of use, data, or profits; or business interruption) however caused
+// and on any theory of liability, whether in contract, strict liability,
+// or tort (including negligence or otherwise) arising in any way out of
+// the use of this software, even if advised of the possibility of such damage.
+//
+//      Locate Framework  (LF) Computer Vision Library.
+//		File: LFFeatures.cpp
+//		Purpose: implements features
+//
+//      CopyRight 2004-2019 (c) NN-Videolab.net
+//M*/
 #include "_LF.h"
 #pragma hdrstop
 
@@ -430,8 +469,9 @@ double            TLFDAFeature::fCalcValue(TLFImage* pImage)
 		return m_fValue;
 	}
 }
-
-
+/*
+	C - feature
+*/
 TLFCFeature::TLFCFeature() : ILFFeature()
 {
 
@@ -543,9 +583,9 @@ double            TLFCAFeature::fCalcValue(TLFImage* pImage)
 		return m_fValue;
 	}
 }
-
-
-
+/*
+	LBP - feature
+*/
 TLFLBPFeature::TLFLBPFeature() : ILFFeature()
 {
 
@@ -631,7 +671,9 @@ awpRect TLFLBPFeature::GetRect()
 	result.bottom = result.top + 3 * this->m_hBase;
 	return result;
 }
-
+/*
+	Color sensor
+*/
 TLFColorSensor::TLFColorSensor(AWPWORD sx, AWPWORD sy, AWPWORD xbase, AWPWORD ybase) :ILFFeature()
 {
 	m_sxBase = sx;
@@ -648,7 +690,8 @@ TLFColorSensor::TLFColorSensor(TLFColorSensor* sensor) : ILFFeature(sensor)
 
 }
 /*
-calc features value
+	calc features value
+	returns 24 bit unsigned integer
 */
 unsigned int     TLFColorSensor::uCalcValue(TLFImage* pImage)
 {
@@ -675,11 +718,68 @@ unsigned int     TLFColorSensor::uCalcValue(TLFImage* pImage)
 }
 double TLFColorSensor::fCalcValue(TLFImage* pImage)
 {
-	unsigned int result = uCalcValue(pImage);
-	return (double)result;
+	return (double)uCalcValue(pImage);
 }
+
+TLFColorSensor9Bit::TLFColorSensor9Bit() : ILFFeature()
+{
+
+}
+
+TLFColorSensor9Bit::TLFColorSensor9Bit(TLFColorSensor9Bit* sensor) : ILFFeature(sensor)
+{
+
+}
+TLFColorSensor9Bit::TLFColorSensor9Bit(AWPWORD sx, AWPWORD sy, AWPWORD xbase, AWPWORD ybase) : ILFFeature(sx, sy, xbase, ybase)
+{
+	m_sxBase = sx;
+	m_syBase = sy;
+	m_wBase = xbase;
+	m_hBase = ybase;
+	this->m_w = m_wBase;
+    this->m_h = m_hBase;
+}
+/*
+calc features value
+*/
+unsigned int      TLFColorSensor9Bit::uCalcValue(TLFImage* pImage)
+{
+	if (pImage == NULL || pImage->GetBlueIntegral() == NULL ||
+		pImage->GetGreenIntegral() == NULL ||
+		pImage->GetRedIntegral() == NULL)
+		return 0;
+
+	unsigned int code = 0;
+	double s = m_w*m_h;
+
+	//double rvalue = pImage->CalcRLnSum(this->m_sx, this->m_sy, this->m_w, this->m_h) / s;
+	//double gvalue = pImage->CalcGLnSum(this->m_sx, this->m_sy, this->m_w, this->m_h) / s;
+	//double bvalue = pImage->CalcBLnSum(this->m_sx, this->m_sy, this->m_w, this->m_h) / s;
+
+
+	double rvalue =pImage->CalcLnSum(this->m_sx, this->m_sy, this->m_w, this->m_h) / s;
+	double gvalue = pImage->CalcLnSum(this->m_sx, this->m_sy, this->m_w, this->m_h) / s;
+	double bvalue = pImage->CalcLnSum(this->m_sx, this->m_sy, this->m_w, this->m_h) / s;
+
+	unsigned int sr = (unsigned int)(rvalue / 32.);
+	unsigned int sg = (unsigned int)(gvalue / 32.);
+	unsigned int sb = (unsigned int)(bvalue / 32.);
+	unsigned int result = 0;
+
+	result |= sr;
+	result = result << 3;
+	result |= sg;
+	result = result << 3;
+	result |= sb;
+	return result;
+}
+double            TLFColorSensor9Bit::fCalcValue(TLFImage* pImage)
+{
+	return (double)uCalcValue(pImage);
+}
+
 //---------------------------------------------------------------------------
-// сенсор преобразования Census для произвольного изображения
+//
 TCSSensor::TCSSensor()
 {
   m_sxBase = 0;
@@ -731,7 +831,7 @@ TCSSensor::TCSSensor(TCSSensor* sensor) : ILFFeature(sensor)
 int  TCSSensor::CalcValue(awpImage* pImage, double avg)
 {
    if (m_w*m_h == 0 || pImage == NULL)
-    return 0;
+	return 0;
    double tarea = 9.0*m_w*m_h;
    double area =  1.0/(double)(m_w*m_h);
 
@@ -742,11 +842,10 @@ int  TCSSensor::CalcValue(awpImage* pImage, double avg)
 
    double* pix = (double*)pImage->pPixels;
    double total = avg;
-   //printf("%i\t%i\t%i\t%i\n", m_sx, m_sy, 3*m_w, 3*m_h);
    if (avg > 0)
-    total = avg;
+	total = avg;
    else
-    total = CalcSum(pix, m_sx, m_sy, 3*m_w, 3*m_h, pImage->sSizeX) / tarea;
+	total = CalcSum(pix, m_sx, m_sy, 3*m_w, 3*m_h, pImage->sSizeX) / tarea;
    int i = 0;
 
    v[0] = CalcSum(pix, m_sx, m_sy, m_w, m_h, pImage->sSizeX) * area;
@@ -760,27 +859,27 @@ int  TCSSensor::CalcValue(awpImage* pImage, double avg)
    v[8] = CalcSum(pix, m_sx + 2*m_w, m_sy + 2*m_h, m_w, m_h, pImage->sSizeX) * area;
 
    for (i = 0; i < 9; i++)
-      if (v[i] > total)
-        iv[i] = 1;
+	  if (v[i] > total)
+		iv[i] = 1;
 
-    int idx = 0;
-    idx |= iv[0];
-    idx  =idx << 1;
-    idx |= iv[1];
-    idx  =idx << 1;
-    idx |= iv[2];
-    idx  =idx << 1;
-    idx |= iv[3];
-    idx  =idx << 1;
-    idx |= iv[4];
-    idx  =idx << 1;
-    idx |= iv[5];
-    idx  =idx << 1;
-    idx |= iv[6];
-    idx  =idx << 1;
-    idx |= iv[7];
-    idx  =idx << 1;
-    idx |= iv[8];
+	int idx = 0;
+	idx |= iv[0];
+	idx  =idx << 1;
+	idx |= iv[1];
+	idx  =idx << 1;
+	idx |= iv[2];
+	idx  =idx << 1;
+	idx |= iv[3];
+	idx  =idx << 1;
+	idx |= iv[4];
+	idx  =idx << 1;
+	idx |= iv[5];
+	idx  =idx << 1;
+	idx |= iv[6];
+	idx  =idx << 1;
+	idx |= iv[7];
+	idx  =idx << 1;
+	idx |= iv[8];
 	m_uValue = idx;
 	m_fValue = idx;
    return m_uValue;
@@ -832,6 +931,11 @@ ILFFeature*  LFCreateFeature(ILFFeature* feature)
 	{
 		TLFColorSensor* cw = dynamic_cast<TLFColorSensor*>(feature);
 		return new TLFColorSensor(cw);
+	}
+	if (strcmp(name, "TLFColorSensor9Bit") == 0)
+	{
+		TLFColorSensor9Bit* cw = dynamic_cast<TLFColorSensor9Bit*>(feature);
+		return new TLFColorSensor9Bit(cw);
 	}
 	else if (strcmp(name, "CSFeature") == 0)
 	{
@@ -913,6 +1017,14 @@ ILFFeature* LFCreateFeature(const char* lpName, int sx, int sy, int w, int h)
 	{
 		return new TLFColorSensor(sx,sy,w,h);
 	}
+	if (strcmp(lpName, "TLFColorSensor9Bit") == 0)
+	{
+		return new TLFColorSensor9Bit(sx,sy,w,h);
+	}
+	if (strcmp(lpName, "TLFColorSensor9Bit") == 0)
+	{
+		return new TLFColorSensor9Bit(sx,sy,w,h);
+	}
 	else if (strcmp(lpName, "CSFeature") == 0)
 	{
 		return new TCSSensor(sx,sy,w,h);
@@ -983,7 +1095,7 @@ awpRect		  LFRectToFeatureBlock(const char* lpName, awpRect& rect)
 	int w, h;
 	w = rect.right - rect.left;
 	h = rect.bottom - rect.top;
-	if (strcmp(lpName, "TLFColorSensor") == 0)
+	if (strcmp(lpName, "TLFColorSensor") == 0 || strcmp(lpName, "TLFColorSensor9Bit") == 0)
 	{
 		result = rect;
 		return result;
@@ -1080,6 +1192,8 @@ TLFFeatureList::TLFFeatureList()
 	int h = 8;
 	ILFFeature* f = NULL;
 	f = LFCreateFeature("TLFColorSensor", sx,sy,w,h);
+	Add(f);
+	f = LFCreateFeature("TLFColorSensor9Bit", sx, sy, w, h);
 	Add(f);
 	f = LFCreateFeature("CSFeature", sx, sy, w, h);
 	Add(f);

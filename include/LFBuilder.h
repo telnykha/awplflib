@@ -93,7 +93,6 @@ public:
 	void		PrintDetectorInfo();
 	void		AddNewClassifier();
 	bool		Build();
-
-
 };
+
 #endif //__lf_builder_h__

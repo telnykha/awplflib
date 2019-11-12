@@ -191,7 +191,7 @@ public:
     /** Retrieve zone from list*/
 	TLFZone* GetZone(int index);
     /** Make mask from particular image based on zones information*/
-	awpImage* GetMaskImage(awpImage* source);
+	awpImage* GetMaskImage(awpImage* source, bool use_class_info = false);
     /** Make mask from particular image based on zones information*/
 	awpImage* GetMaskImage(awpImage* source, ILFScanner* scanner);
     /** Test point belonging paricular zone with index "idx"*/

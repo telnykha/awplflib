@@ -41,18 +41,19 @@
 //		File: LFFeatures.h
 //		Purpose: Declares features:
 //
-//		TLFAFeature			- simply brigness feature 
-//		TLFSFeature			- simply dispertion feature 
-//		TLFHFeature			- horizontal gradient feature with norm 
-//		TLFHAFeature		- just horizontal gradient feature 
-//		TLFVFeature			- vertical gradient feature with norm 
-//		TLFVAFeature        - just vertical gradient feature 
+//		TLFAFeature			- simply brigness feature
+//		TLFSFeature			- simply dispertion feature
+//		TLFHFeature			- horizontal gradient feature with norm
+//		TLFHAFeature		- just horizontal gradient feature
+//		TLFVFeature			- vertical gradient feature with norm
+//		TLFVAFeature        - just vertical gradient feature
 //		TLFDFeature			- diagonal gradient feature with norm
 //		TLFDAFeature        - just diagonal gradient feature
-//		TLFCFeature			- center feature with norm 
-//		TLFCAFeature		- just center feature 
+//		TLFCFeature			- center feature with norm
+//		TLFCAFeature		- just center feature
 //		TLFLBPFeature		- 256 pin binary pattern
-//		TLFColorSensor		- color feature 
+//		TLFColorSensor		- color 24 bit feature
+//      TLFColorSensor9Bit  - color feature 9 bit
 //		TCSSensor			- 512 pin binary pattern (census feature)
 //
 //      CopyRight 2004-2018 (c) NN-Videolab.net
@@ -298,7 +299,7 @@ public:
 
 class TLFColorSensor : public ILFFeature
 {
-public: 
+public:
 	TLFColorSensor();
 	TLFColorSensor(TLFColorSensor* sensor);
 	TLFColorSensor(AWPWORD sx, AWPWORD sy, AWPWORD xbase, AWPWORD ybase);
@@ -313,8 +314,27 @@ public:
 		return "TLFColorSensor";
 	}
 };
+
+class TLFColorSensor9Bit : public ILFFeature
+{
+public:
+	TLFColorSensor9Bit();
+	TLFColorSensor9Bit(TLFColorSensor9Bit* sensor);
+	TLFColorSensor9Bit(AWPWORD sx, AWPWORD sy, AWPWORD xbase, AWPWORD ybase);
+	/*
+	calc features value
+	*/
+	virtual unsigned int      uCalcValue(TLFImage* pImage);
+	virtual double            fCalcValue(TLFImage* pImage);
+
+	virtual const char* GetName()
+	{
+		return "TLFColorSensor9Bit";
+	}
+};
+
 //---------------------------------------------------------------------------
-// сенсор преобразования Census для произвольного изображения 
+// сенсор преобразования Census для произвольного изображения
 class TCSSensor : public ILFFeature
 {
 protected:
@@ -322,31 +342,31 @@ protected:
 	// возвращает значение [0..511]
 	int  CalcValue(awpImage* pImage, double avg = 0);
 public:
-    TCSSensor();
+	TCSSensor();
 	TCSSensor(TCSSensor* sensor);
-    TCSSensor(const TCSSensor& Sensor);
-    TCSSensor(int sx, int sy, int uw, int uh);
+	TCSSensor(const TCSSensor& Sensor);
+	TCSSensor(int sx, int sy, int uw, int uh);
 
 	virtual awpRect GetRect();
 
 	virtual unsigned int     uCalcValue(TLFImage* pImage);
 	virtual double           fCalcValue(TLFImage* pImage);
 
-    TCSSensor& operator = ( TCSSensor& Sensor);
+	TCSSensor& operator = ( TCSSensor& Sensor);
 
 	virtual const char* GetName()
 	{
 		return "CSFeature";
 	}
 };
-//todo: здесь клип выходит с ошибкой, скорее всего выход за пределы отведенной памяти. 
+//todo: здесь клип выходит с ошибкой, скорее всего выход за пределы отведенной памяти.
  inline double CalcSum(double* pix, int x, int y, int w, int h, int ww )
 {
-    double* p = pix + x + (y)*ww;
+	double* p = pix + x + (y)*ww;
 
-    h = h*ww;
+	h = h*ww;
 
-    return (p[0] + p[w + h] - p[h] - p[w]);
+	return (p[0] + p[w + h] - p[h] - p[w]);
 }
 
  class TLFFeatureList : public TLFObjectList

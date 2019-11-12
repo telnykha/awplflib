@@ -61,7 +61,6 @@ public:
 	virtual ~TLFHistogramm();
 
 	void Setup(int num_bins, double min, double max);
-    double Norm();
 
 	void AddElememt(double v);
 	double GetSumToBinForward(int bin);
@@ -77,6 +76,9 @@ public:
 
 	bool Save(const char* lpFileName);
 	bool Load(const char* lpFileName);
+
+	bool LoadXML(TiXmlElement* parent);
+	TiXmlElement* SaveXML();
 
 	// PROPS
 	int GetNumBins();

@@ -199,7 +199,7 @@ bool		TCSBuildDetector::BuildBkground()
 
 			TLFImage Image;
 			TLFImage Image1;
-			if (!Image.LoadImage0((char*)strImageName.c_str()))
+			if (!Image.LoadImage((char*)strImageName.c_str()))
 			{
 
 				continue;
@@ -488,7 +488,7 @@ bool		    TCSBuildDetector::CheckDetector()
 		{
 			TLFImage img;
 			std::string name = strPath + "\\" + filesInfo.name;
-			img.LoadImage0((char*)name.c_str());
+			img.LoadImage((char*)name.c_str());
 			if (img.GetImage() == NULL)
 				continue;
 			d->Init(img.GetImage(), false);

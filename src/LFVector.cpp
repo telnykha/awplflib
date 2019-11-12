@@ -66,6 +66,23 @@ void   TLFDouble::Set(double v)
 {
 	m_value = v;
 }
+bool TLFDouble::LoadXML(TiXmlElement* parent)
+{
+	this->m_value = 0;
+	if (parent == NULL)
+		return false;
+	if (strcmp(parent->Value(), this->GetName()) != 0)
+		return false;
+	if (parent->QueryDoubleAttribute("value", &this->m_value) == TIXML_NO_ATTRIBUTE)
+		return false;
+	return true;
+}
+TiXmlElement* TLFDouble::SaveXML()
+{
+	TiXmlElement* e = new TiXmlElement(GetName());
+	e->SetDoubleAttribute("value", this->m_value);
+    return e;
+}
 
 // 
 TLFDblVector::TLFDblVector(int id)
