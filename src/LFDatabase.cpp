@@ -207,7 +207,7 @@ void TLFDBLabeledImages::GetFarHST(TLFDetectEngine& engine, TLFHistogramm& hst, 
 		TLFDBSemanticDescriptor* d = (TLFDBSemanticDescriptor*)m_dataFiles.Get(i);
 		string strImageName = d->GetImageFile();
 		TLFImage img;
-		if (!img.LoadImage(strImageName.c_str()))
+		if (!img.LoadFromFile(strImageName.c_str()))
 			continue;
 		engine.SetSourceImage(&img, false);
 		TLFImage* img1 = detector->GetImage();
@@ -271,7 +271,7 @@ void TLFDBLabeledImages::GetFrrHST(TLFDetectEngine& engine, TLFHistogramm& hst, 
 		TLFDBSemanticDescriptor* d = (TLFDBSemanticDescriptor*)m_dataFiles.Get(i);
 		string strImageName = d->GetImageFile();
 		TLFImage img;
-		if (!img.LoadImage(strImageName.c_str()))
+		if (!img.LoadFromFile(strImageName.c_str()))
 			continue;
 		engine.SetSourceImage(&img, false);
 		TLFImage* img1 = detector->GetImage();
@@ -336,7 +336,7 @@ void TLFDBLabeledImages::GetFarFrrHST(TLFDetectEngine& engine, TLFHistogramm& fa
 		TLFDBSemanticDescriptor* d = (TLFDBSemanticDescriptor*)m_dataFiles.Get(i);
 		string strImageName = d->GetImageFile();
 		TLFImage img;
-		if (!img.LoadImage(strImageName.c_str()))
+		if (!img.LoadFromFile(strImageName.c_str()))
 			continue;
 		engine.SetSourceImage(&img, false);
 		TLFImage* img1 = detector->GetImage();
@@ -400,7 +400,7 @@ void TLFDBLabeledImages::GetFarFrr(TLFDetectEngine& engine, double& Far, double&
 		string strImageName = d->GetImageFile();
 		printf("processing: %s\n", strImageName.c_str());
 		TLFImage img;
-		img.LoadImage(strImageName.c_str());
+		img.LoadFromFile(strImageName.c_str());
 		ctime = LFGetTickCount();
 		engine.SetSourceImage(&img, true);
 		ptime += (LFGetTickCount() - ctime);
@@ -443,7 +443,7 @@ void TLFDBLabeledImages::CheckEngine(TLFDetectEngine& engine, double overlap)
 		string strImageName = d->GetImageFile();
 		printf("processing: %s\n", strImageName.c_str());
 		TLFImage img;
-		img.LoadImage(strImageName.c_str());
+		img.LoadFromFile(strImageName.c_str());
 		
 		for (int j = 0; j < d->GetCount(); j++)
 		{

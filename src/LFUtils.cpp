@@ -864,7 +864,7 @@ awpImage* TROI::GetRoiLowFrequency(awpImage* pImage)
     }
     awpReleaseImage(&src);
     awpResize(img, pImage->sSizeX, pImage->sSizeY);
-    awpFilter(img, AWP_BLUR_MORE , AWP_FILTER_METHOD_ORDINARY);
+    //awpFilter(img, AWP_BLUR_MORE , AWP_FILTER_METHOD_ORDINARY);
     return img;
     }
 

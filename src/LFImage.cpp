@@ -114,7 +114,7 @@ void TLFImage::FreeImages()
 
 }
 
-bool TLFImage::LoadImage(const char* szFileName)
+bool TLFImage::LoadFromFile(const char* szFileName)
 {
     bool res = true;
 	FreeImages();
@@ -133,7 +133,7 @@ bool TLFImage::LoadImage(const char* szFileName)
     return res;
 }
 
-bool TLFImage::SaveImage(const char* szFileName)
+bool TLFImage::SaveToFile(const char* szFileName)
 {
     bool res = true;
     if (m_pImage == NULL)

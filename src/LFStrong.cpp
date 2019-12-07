@@ -22,6 +22,8 @@ void TCSStrong::Setup( awpRect const& window, int det_width )
 int TCSStrong::Classify(TLFImage* pImage, double& err, double* vct)
 {
 	int c = GetCount();
+	if (c == 0)
+		return 0;
 	TCSWeak** pWCL = (TCSWeak**)GetList();
 	for (int i = 0; i < c; i++)
 	{

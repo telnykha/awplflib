@@ -187,7 +187,7 @@ void ILFObjectDetector::SaveImages(std::string path)
 	strFileName += "\\";
 	strFileName += LFGUIDToString(&id);
 	strFileName += ".awp";
-	m_Image.SaveImage(strFileName.c_str());
+	m_Image.SaveToFile(strFileName.c_str());
 
 }
 

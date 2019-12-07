@@ -400,7 +400,13 @@ bool TCSAdaBoost::LoadSample(TLFObjectList& SampleList, int flag, std::string co
             string name = path + filesInfo.name;
 
             TCSSample* pSample = new TCSSample();
-            pSample->LoadImage((char*)name.c_str());
+
+			pSample->LoadFromFile((char*)name.c_str());
+			double e = 0;
+			//if (!this->m_ResultClass.Classify(pSample, e))
+				//DbgMsg("error::" + string(filesInfo.name) + "\n");
+			//else
+			//	DbgMsg("success::" + string(filesInfo.name) + "\n");
 			if (pSample->GetImage()->sSizeX < this->m_widthBase || pSample->GetImage()->sSizeY < this->m_heightBase)
 			{
 				delete pSample;
@@ -713,7 +719,7 @@ void   TCSAdaBoost::SaveNegativeSamples(const char* lpPath)
 			filename += TypeToStr(total);
 			filename += ".awp";
 			total++;
-			s->SaveImage(filename.c_str());
+			s->SaveToFile(filename.c_str());
 		}
 	}
 }
@@ -993,7 +999,7 @@ bool    TCSAdaBoostSign::LoadSamples(int flag, std::string const& path)
 	       string name = path + filesInfo.name;
 		
             TCSSample* pSample = new TCSSample();
-            pSample->LoadImage((char*)name.c_str());
+            pSample->LoadFromFile((char*)name.c_str());
 
     //        if (pSample->Process())
             {

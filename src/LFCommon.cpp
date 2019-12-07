@@ -581,7 +581,8 @@ bool TLFSemanticImageDescriptor::LoadXML(const char* lpFileName)
    pElem = hDoc.FirstChildElement().Element();
    if (pElem == NULL)
 	return false;
-
+   const char* elem_value = pElem->Value();
+   const char* this_name = GetName();
    if (strcmp(pElem->Value(), GetName()) != 0)
 	return false;
 
