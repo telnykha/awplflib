@@ -39,7 +39,7 @@
 //
 //      Locate Framework  (LF) Computer Vision Library.
 //		File: LFDatabase.h
-//		Purpose: support database of semantic descripted images 
+//		Purpose: support database of semantic descripted images
 //
 //      CopyRight 2004-2018 (c) NN-Videolab.net
 //M*/
@@ -59,16 +59,15 @@ public:
 class TLFDBLabeledImages : public TLFObject
 {
 protected:
-	TLFProgress   m_progress; 
-	
-	std::string		m_strPath;
+	TLFProgress   m_progress;
+
+	std::string				m_strPath;
 	TLFObjectList			m_dataFiles;
 	TLFSemanticDictinary	m_dictinary;
-
 	bool LoadDatabase(const char* path);
 
 public:
-	
+
 	TLFDBLabeledImages(const char* path);
 	TLFDBLabeledImages();
 	virtual ~TLFDBLabeledImages();
@@ -82,7 +81,11 @@ public:
 	// properties 
 	int GetItemsCount();
 	int GetImagesCount();
+    int GetClassesCount();
+    int GetDescrFilesCount();
+    int GetLabelCount(const char* class_label);
 
+    std::string GetPath();
     TLFDBSemanticDescriptor* GetDescriptor(int index);
 	TLFSemanticDictinary*	 GetDictinary();
 

@@ -145,6 +145,7 @@ bool TLFDBLabeledImages::LoadDatabase(const char* path)
 				this->m_dataFiles.Add(d);
 			}		
 	}
+    m_strPath = path;
 	return true;
 }
 
@@ -169,7 +170,7 @@ int TLFDBLabeledImages::GetItemsCount()
 		TLFDBSemanticDescriptor* d = (TLFDBSemanticDescriptor*)m_dataFiles.Get(i);
 		count += d->GetCount();
 	}
-	
+
 	return count;
 }
 
@@ -495,13 +496,55 @@ void TLFDBLabeledImages::SetLabel(const char* label)
 
 
 }
-
-
-
 TLFDBSemanticDescriptor* TLFDBLabeledImages::GetDescriptor(int index)
 {
      if (index < 0 || index >= m_dataFiles.GetCount())
      	return NULL;
      return dynamic_cast<TLFDBSemanticDescriptor*> ( m_dataFiles.Get(index));
 }
+
+int TLFDBLabeledImages::GetClassesCount()
+{
+	return this->m_dictinary.GetCount();
+}
+
+int TLFDBLabeledImages::GetDescrFilesCount()
+{
+	int count = 0;
+	for (int i = 0; i < m_dataFiles.GetCount(); i++)
+	{
+		TLFDBSemanticDescriptor* d = (TLFDBSemanticDescriptor*)m_dataFiles.Get(i);
+        std::string strImgName = d->GetImageFile();
+        std::string strXmlName = LFChangeFileExt(strImgName, ".xml");
+        if (LFFileExists(strXmlName))
+			count ++;
+	}
+	return count;
+}
+
+std::string TLFDBLabeledImages::GetPath()
+{
+    return m_strPath;
+}
+
+int TLFDBLabeledImages::GetLabelCount(const char* class_label)
+{
+	int count = 0;
+	for (int i = 0; i < m_dataFiles.GetCount(); i++)
+	{
+		TLFDBSemanticDescriptor* d = (TLFDBSemanticDescriptor*)m_dataFiles.Get(i);
+        for (int j = 0; j < d->GetCount(); j++)
+        {
+            TLFDetectedItem* di = d->GetDetectedItem(j);
+            std::string str_type = di->GetType();
+            if (strcmp(class_label, str_type.c_str()) == 0)
+                count++;
+        }
+	}
+
+	return count;
+}
+
+
+
 
