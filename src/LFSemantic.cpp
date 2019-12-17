@@ -91,6 +91,12 @@ void TLFSemanticDictinaryItem::SetColor(int color)
     this->m_color = color;
 }
 
+void TLFSemanticDictinaryItem::SetItemLabel(const char* lpLabel)
+{
+    this->m_strLabel = lpLabel;
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////
 bool TLFSemanticDictinaryItem::LoadXML(const char* lpFileName)
 {

@@ -45,10 +45,10 @@
 //M*/
 #ifndef _lf_semantic_h_
 #define _lf_semantic_h_
-
+static const char* c_lpDictFileName = "dictionary.xml";
 /**
-\brief Elemnet of semantic dictionary, contains: class label, 
-\ aperture and scanner. 
+\brief Elemnet of semantic dictionary, contains: class label,
+\ aperture and scanner.
 */
 class TLFSemanticDictinaryItem : public TLFObject
 {
@@ -65,6 +65,7 @@ public:
 	ILFScanner* GetScanner();
     int GetColor();
     void SetColor(int color);
+    void SetItemLabel(const char* lpLabel);
 
 	virtual bool SaveXML(const char* lpFileName);
 	virtual bool LoadXML(const char* lpFileName);

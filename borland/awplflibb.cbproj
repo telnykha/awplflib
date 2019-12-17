@@ -3,7 +3,7 @@
         <ProjectGuid>{BD2C9908-7A2F-4116-A0C2-B8B48908B676}</ProjectGuid>
         <ProjectType>CppStaticLibrary</ProjectType>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Debug</Config>
+        <Config Condition="'$(Config)'==''">Release</Config>
         <TargetedPlatforms>1</TargetedPlatforms>
         <AppType>StaticLibrary</AppType>
         <FrameworkType>None</FrameworkType>
@@ -104,7 +104,6 @@
         <BCC_MonitorThis>true</BCC_MonitorThis>
         <BCC_MonitorGlobalAndStackData>true</BCC_MonitorGlobalAndStackData>
         <TLIB_PageSize>128</TLIB_PageSize>
-        <Manifest_File>None</Manifest_File>
         <BCC_Defines>_DEBUG;$(BCC_Defines);$(BCC_Defines)</BCC_Defines>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
@@ -124,7 +123,6 @@
         <TLIB_PageSize>128</TLIB_PageSize>
         <BCC_UserSuppliedOptions> -tWM -Vx -r- -k -Ve -r</BCC_UserSuppliedOptions>
         <BCC_Defines>NDEBUG;$(BCC_Defines);$(BCC_Defines)</BCC_Defines>
-        <FinalOutputDir>$(PHOTON41)\lib\</FinalOutputDir>
     </PropertyGroup>
     <ItemGroup>
         <CppCompile Include="..\src\LFAttrBuildImpl.cpp">

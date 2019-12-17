@@ -123,7 +123,7 @@ bool TLFDBLabeledImages::LoadDatabase(const char* path)
 	printf("open database %s\n", path);
 	std::string strDictinary = path;
 	strDictinary += c_separator;
-	strDictinary += "dictionary.xml";
+	strDictinary += c_lpDictFileName;
 	if (!m_dictinary.LoadXML(strDictinary.c_str()))
 	{
 		printf("error: cannot load dictinary \n");
