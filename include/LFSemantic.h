@@ -39,7 +39,7 @@
 //
 //      Locate Framework  (LF) Computer Vision Library.
 //		File: LFSemantic.h
-//		Purpose: contains semantic dictonary description 
+//		Purpose: contains semantic dictonary description
 //
 //      CopyRight 2004-2018 (c) NN-Videolab.net
 //M*/
@@ -55,17 +55,21 @@ class TLFSemanticDictinaryItem : public TLFObject
 protected:
 	ILFScanner*		   m_scanner;
 	std::string        m_strLabel;
-    int                m_color;
+	int                m_color;
+	std::string        m_id;
 public:
 	TLFSemanticDictinaryItem();
 	TLFSemanticDictinaryItem(const char* lpWord);
+	TLFSemanticDictinaryItem(TLFSemanticDictinaryItem& item);
 	virtual ~TLFSemanticDictinaryItem();
+	TLFSemanticDictinaryItem&  operator =(TLFSemanticDictinaryItem& item);
 
 	const char* GetItemLabel();
 	ILFScanner* GetScanner();
-    int GetColor();
-    void SetColor(int color);
-    void SetItemLabel(const char* lpLabel);
+	int GetColor();
+	void SetColor(int color);
+	void SetItemLabel(const char* lpLabel);
+	std::string GetId();
 
 	virtual bool SaveXML(const char* lpFileName);
 	virtual bool LoadXML(const char* lpFileName);
@@ -81,7 +85,7 @@ public:
 };
 /**
 \brief Semantic dictionary, contains list of TLFSemanticDictinaryItem
-\ 
+\
 */
 class TLFSemanticDictinary : public TLFObjectList
 {
@@ -92,12 +96,12 @@ public:
 	TLFSemanticDictinary();
 	virtual ~TLFSemanticDictinary();
 
-	void AddWordToDictinary(TLFSemanticDictinaryItem* item);
+	bool AddWordToDictinary(TLFSemanticDictinaryItem* item);
+	bool CheckItem(TLFSemanticDictinaryItem* item);
 	void DelWordForomDictinary(int index);
 	void DelWordForomDictinary(const char* lpWord);
 	TLFSemanticDictinaryItem* GetWordFromDictinary(int index);
 	TLFSemanticDictinaryItem* GetWordFromDictinary(const char* lpWord);
-	int  GetDictinaryItemsCount();
 
 	virtual bool SaveXML(const char* lpFileName);
 	virtual bool LoadXML(const char* lpFileName);

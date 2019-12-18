@@ -819,7 +819,6 @@ protected:
 	UUID			m_id;
 	int				m_health;
 	int				m_state;
-
 	int				m_cluster_idx;
 	int				m_color;
 public:
@@ -827,7 +826,7 @@ public:
 	TLFDetectedItem();
 	TLFDetectedItem(TLFDetectedItem& item);
 	TLFDetectedItem(TLFDetectedItem* pItem);
-    TLFDetectedItem(awpRect* pRect, double raiting, std::string type, int angle, int racurs, int bw, int bh, std::string strDetector,  UUID id, ILFPredictor* predictor = NULL);
+	TLFDetectedItem(awpRect* pRect, double raiting, std::string type, int angle, int racurs, int bw, int bh, std::string strDetector,  UUID id, ILFPredictor* predictor = NULL);
 	virtual ~TLFDetectedItem();
 	/*data exchange*/
 	TLFRect*	GetBounds();
@@ -843,7 +842,8 @@ public:
 	void		SetRacurs(int value);
 	int         GetBW();
 	int         GetBH();
-    void		GetId(UUID& id);
+
+	void		GetId(UUID& id);
 
 	int  GetClusterIdx();
 	void SetClusterIdx(int value);

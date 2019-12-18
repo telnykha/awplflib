@@ -41,7 +41,7 @@
 //		File: LFSemantic.cpp
 //		Purpose: implements TLFSemanticDictinaryItem, TLFSemanticDictinary
 //
-//      CopyRight 2004-2018 (c) NN-Videolab.net
+//      CopyRight 2004-2019 (c) NN-Videolab.net
 //M*/
 #include "_LF.h"
 
@@ -50,18 +50,49 @@ TLFSemanticDictinaryItem::TLFSemanticDictinaryItem()
 {
 	this->m_strLabel = "Unknown";
 	this->m_scanner = new TLFScanner();
-    awpRGBtoWeb(0,255,0, &m_color);
+	awpRGBtoWeb(0,255,0, &m_color);
+	UUID id;
+	LF_UUID_CREATE(id)
+	m_id = LFGUIDToString(&id);
 }
 
 TLFSemanticDictinaryItem::TLFSemanticDictinaryItem(const char* lpWord)
 {
 	this->m_strLabel = lpWord;
-    this->m_scanner = new TLFScanner();
-    awpRGBtoWeb(0,255,0, &m_color);
+	this->m_scanner = new TLFScanner();
+	awpRGBtoWeb(0,255,0, &m_color);
+	UUID id;
+	LF_UUID_CREATE(id)
+	m_id = LFGUIDToString(&id);
 }
+
+TLFSemanticDictinaryItem::TLFSemanticDictinaryItem(TLFSemanticDictinaryItem& item)
+{
+	m_strLabel = item.m_strLabel;
+	m_color = item.m_color;
+	m_scanner = new TLFScanner();
+	m_scanner->SetBaseHeight(item.m_scanner->GetBaseHeight());
+	m_scanner->SetBaseWidth(item.m_scanner->GetBaseWidth());
+	m_id = item.m_id;
+}
+
 TLFSemanticDictinaryItem::~TLFSemanticDictinaryItem()
 {
 	delete m_scanner;
+}
+
+TLFSemanticDictinaryItem&  TLFSemanticDictinaryItem::operator =(TLFSemanticDictinaryItem& item)
+{
+	if (this != &item)
+	{
+		m_strLabel = item.m_strLabel;
+		m_color = item.m_color;
+		m_scanner = new TLFScanner();
+		m_scanner->SetBaseHeight(item.m_scanner->GetBaseHeight());
+		m_scanner->SetBaseWidth(item.m_scanner->GetBaseWidth());
+		m_id = item.m_id;
+	}
+	return *this;
 }
 
 const char* TLFSemanticDictinaryItem::GetItemLabel()
@@ -84,18 +115,22 @@ bool TLFSemanticDictinaryItem::SaveXML(const char* lpFileName)
 
 int TLFSemanticDictinaryItem::GetColor()
 {
-     return this->m_color;
+	 return this->m_color;
 }
 void TLFSemanticDictinaryItem::SetColor(int color)
 {
-    this->m_color = color;
+	this->m_color = color;
 }
 
 void TLFSemanticDictinaryItem::SetItemLabel(const char* lpLabel)
 {
-    this->m_strLabel = lpLabel;
+	this->m_strLabel = lpLabel;
 }
 
+std::string TLFSemanticDictinaryItem::GetId()
+{
+	return m_id;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 bool TLFSemanticDictinaryItem::LoadXML(const char* lpFileName)
@@ -105,9 +140,10 @@ bool TLFSemanticDictinaryItem::LoadXML(const char* lpFileName)
 ////////////////////////////////////////////////////////////////////////////////
 TiXmlElement* TLFSemanticDictinaryItem::SaveXML()
 {
-	TiXmlElement* dscr = new TiXmlElement(this->GetName());
-	dscr->SetAttribute("noun", this->m_strLabel.c_str());
-    dscr->SetAttribute("color", m_color);
+	TiXmlElement* dscr = new TiXmlElement(GetName());
+	dscr->SetAttribute("noun", m_strLabel.c_str());
+	dscr->SetAttribute("color", m_color);
+	dscr->SetAttribute("id", m_id.c_str());
 	if (m_scanner != NULL)
 	{
 		TiXmlElement* scanner_dscr = m_scanner->SaveXML();
@@ -121,30 +157,53 @@ bool TLFSemanticDictinaryItem::LoadXML(TiXmlElement* parent)
 		return false;
 	if (strcmp(parent->Value(), GetName()) != 0)
 		return false;
-    this->m_strLabel = parent->Attribute("noun");
-    const char* ch = parent->Attribute("color");
-    if (ch != NULL)
-    {
-        parent->QueryIntAttribute("color", &m_color);
-    }
-    else
-        awpRGBtoWeb(0,255,0, &m_color);
-    if (!this->m_scanner->LoadXML(parent->FirstChildElement()))
-    	return false;
+	this->m_strLabel = parent->Attribute("noun");
+	const char* ch = parent->Attribute("color");
+	if (ch != NULL)
+	{
+		parent->QueryIntAttribute("color", &m_color);
+	}
+	else
+		awpRGBtoWeb(0,255,0, &m_color);
+	const char* id = parent->Attribute("id");
+	if (id != NULL)
+		m_id = id;
+	else
+	{
+		UUID id;
+		LF_UUID_CREATE(id)
+		m_id = LFGUIDToString(&id);
+	}
+	if (!this->m_scanner->LoadXML(parent->FirstChildElement()))
+		return false;
 	return true;
 }
 //---------------------------семантической словарь-----------------------------
 TLFSemanticDictinary::TLFSemanticDictinary()
 {
-	this->m_Description = "defult dictinary";
+	this->m_Description = "default dictinary";
 }
 TLFSemanticDictinary::~TLFSemanticDictinary()
 {
 }
 
-void TLFSemanticDictinary::AddWordToDictinary(TLFSemanticDictinaryItem* item)
+bool TLFSemanticDictinary::AddWordToDictinary(TLFSemanticDictinaryItem* item)
 {
+	const char* lpWord = item->GetItemLabel();
+	std::string id     = item->GetId();
+	// check dublicates
+	for (int i = 0; i < this->GetCount(); i++)
+	{
+		TLFSemanticDictinaryItem* di = this->GetWordFromDictinary(i);
+		if (strcmp(lpWord, di->GetItemLabel()) == 0 ||
+			id == di->GetId())
+		{
+			return false;
+		};
+	}
+
 	Add(item);
+	return true;
 }
 void TLFSemanticDictinary::DelWordForomDictinary(int index)
 {
@@ -154,7 +213,7 @@ void TLFSemanticDictinary::DelWordForomDictinary(int index)
 }
 void TLFSemanticDictinary::DelWordForomDictinary(const char* lpWord)
 {
-	for (int i = 0; i < this->GetDictinaryItemsCount(); i++)
+	for (int i = 0; i < this->GetCount(); i++)
 	{
 		TLFSemanticDictinaryItem* di = this->GetWordFromDictinary(i);
 		if (strcmp(lpWord, di->GetItemLabel()) == 0)
@@ -164,15 +223,17 @@ void TLFSemanticDictinary::DelWordForomDictinary(const char* lpWord)
 		};
 	}
 }
+
 TLFSemanticDictinaryItem* TLFSemanticDictinary::GetWordFromDictinary(int index)
 {
 	if (index < 0 || index > GetCount())
 		return NULL;
 	return (TLFSemanticDictinaryItem*)Get(index);
 }
+
 TLFSemanticDictinaryItem* TLFSemanticDictinary::GetWordFromDictinary(const char* lpWord)
 {
-	for (int i = 0; i < this->GetDictinaryItemsCount(); i++)
+	for (int i = 0; i < GetCount(); i++)
 	{
 		TLFSemanticDictinaryItem* di = this->GetWordFromDictinary(i);
 		if (strcmp(lpWord, di->GetItemLabel()) == 0)
@@ -215,8 +276,9 @@ bool TLFSemanticDictinary::LoadXML(const char* lpFileName)
 	pElem = hDoc.FirstChildElement().Element();
 	if (pElem == NULL)
 		return false;
-
-	if (strcmp(pElem->Value(), GetName()) != 0)
+	const char* lpValue = pElem->Value();
+	const char* lpName = GetName();
+	if (strcmp(lpValue, lpName) != 0)
 		return false;
 
 	//int w, h;
@@ -267,9 +329,7 @@ bool TLFSemanticDictinary::LoadXML(TiXmlElement* parent)
 	if (strcmp(pElem->Value(), GetName()) != 0)
 		return false;
 
-	//int w, h;
-	this->m_Description = pElem->Attribute("Description");
-
+	m_Description = pElem->Attribute("Description");
 
 	for (TiXmlNode* child = pElem->FirstChild(); child; child = child->NextSibling())
 	{
@@ -290,13 +350,26 @@ bool TLFSemanticDictinary::LoadXML(TiXmlElement* parent)
 	return true;
 }
 
-int  TLFSemanticDictinary::GetDictinaryItemsCount()
-{
-	return this->GetCount();
-}
-
 void TLFSemanticDictinary::Clear()
 {
 	this->m_Description = "";
-    inherited::Clear();
+	inherited::Clear();
 }
+
+bool TLFSemanticDictinary::CheckItem(TLFSemanticDictinaryItem* item)
+{
+	const char* lpWord = item->GetItemLabel();
+	std::string id     = item->GetId();
+	// check dublicates
+	for (int i = 0; i < GetCount(); i++)
+	{
+		TLFSemanticDictinaryItem* di = GetWordFromDictinary(i);
+		if (strcmp(lpWord, di->GetItemLabel()) == 0 && id != di->GetId())
+		{
+			return false;
+		};
+	}
+	return true;
+}
+
+
