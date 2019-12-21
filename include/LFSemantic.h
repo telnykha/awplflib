@@ -102,6 +102,7 @@ public:
 	void DelWordForomDictinary(const char* lpWord);
 	TLFSemanticDictinaryItem* GetWordFromDictinary(int index);
 	TLFSemanticDictinaryItem* GetWordFromDictinary(const char* lpWord);
+    std::string GetWordByUUID(const char* uuid);
 
 	virtual bool SaveXML(const char* lpFileName);
 	virtual bool LoadXML(const char* lpFileName);

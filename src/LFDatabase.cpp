@@ -80,7 +80,7 @@ static bool _HasDescription(std::string& strFileName)
 
 TLFDBSemanticDescriptor::TLFDBSemanticDescriptor(const char* lpFileName) : TLFSemanticImageDescriptor()
 {
-	this->m_strImageName = lpFileName;
+	m_strImageName = lpFileName;
 	std::string strXmlName = LFChangeFileExt(m_strImageName, ".xml");
 	if (LFFileExists(strXmlName))
 		this->LoadXML(strXmlName.c_str());
@@ -110,10 +110,31 @@ void TLFDBLabeledImages::SetProgress(TLFProgress progress)
 	this->m_progress = progress;
 }
 
-
-void TLFDBLabeledImages::CreateDictinary(const char* path)
+void TLFDBLabeledImages::ClearDatabase()
 {
-	// 
+    int c = m_dataFiles.GetCount();
+    for(int i = 0; i < c; i++)
+    {
+         TLFDBSemanticDescriptor* d = (TLFDBSemanticDescriptor*)m_dataFiles.Get(i);
+	 	 std::string strXmlName = d->GetImageFile();
+         strXmlName = LFChangeFileExt(strXmlName, ".xml");
+         if (LFFileExists(strXmlName))
+         {
+            LFDeleteFile(strXmlName.c_str());
+            if (m_progress != NULL)
+            {
+                std::string msg = LFGetFileName(strXmlName);
+                msg += ".xml";
+                m_progress(msg.c_str(), 100*i/c);
+            }
+         }
+    }
+    std::string strDictFile = m_strPath;
+    strDictFile += c_separator;
+    strDictFile += c_lpDictFileName;
+    LFDeleteFile(strDictFile.c_str());
+
+    Clear();
 }
 
 
@@ -445,7 +466,7 @@ void TLFDBLabeledImages::CheckEngine(TLFDetectEngine& engine, double overlap)
 		printf("processing: %s\n", strImageName.c_str());
 		TLFImage img;
 		img.LoadFromFile(strImageName.c_str());
-		
+
 		for (int j = 0; j < d->GetCount(); j++)
 		{
 			TLFDetectedItem* item = d->GetDetectedItem(j);
@@ -544,6 +565,78 @@ int TLFDBLabeledImages::GetLabelCount(const char* class_label)
 
 	return count;
 }
+
+void TLFDBLabeledImages::UpdateUUIDsDatabase()
+{
+    int c = m_dataFiles.GetCount();
+    for(int i = 0; i < c; i++)
+    {
+         TLFDBSemanticDescriptor* d = (TLFDBSemanticDescriptor*)m_dataFiles.Get(i);
+	 	 std::string strXmlName = d->GetImageFile();
+         strXmlName = LFChangeFileExt(strXmlName, ".xml");
+         for (int j = 0; j < d->GetCount(); j++)
+         {
+            TLFDetectedItem* item = d->GetDetectedItem(j);
+            std::string item_type = item->GetType();
+            for (int k = 0; k < m_dictinary.GetCount(); k++)
+            {
+                TLFSemanticDictinaryItem* si = m_dictinary.GetWordFromDictinary(k);
+                std::string noun = si->GetItemLabel();
+                std::string id   = si->GetId();
+                if (item_type == noun)
+                    item->SetType(id.c_str());
+            }
+         }
+         if (m_progress != NULL)
+         {
+            std::string msg = LFGetFileName(strXmlName);
+            msg += ".xml";
+            m_progress(msg.c_str(), 100*i/c);
+         }
+         d->SaveXML(strXmlName.c_str());
+    }
+}
+
+void TLFDBLabeledImages::UpdateDatabase()
+{
+    int c = m_dataFiles.GetCount();
+    for(int i = 0; i < c; i++)
+    {
+         TLFDBSemanticDescriptor* d = (TLFDBSemanticDescriptor*)m_dataFiles.Get(i);
+	 	 std::string strXmlName = d->GetImageFile();
+         strXmlName = LFChangeFileExt(strXmlName, ".xml");
+         for (int j = d->GetCount()-1; j >=0; j--)
+         {
+            TLFDetectedItem* item = d->GetDetectedItem(j);
+            std::string item_type = item->GetType();
+            bool found = false;
+            for (int k = 0; k < m_dictinary.GetCount(); k++)
+            {
+                TLFSemanticDictinaryItem* si = m_dictinary.GetWordFromDictinary(k);
+                std::string id   = si->GetId();
+                if (item_type == id)
+                {
+                    item->SetType(id.c_str());
+                    item->SetColor(si->GetColor());
+                    ILFScanner* s = si->GetScanner();
+                    item->m_bh = s->GetBaseHeight();
+                    item->m_bw = s->GetBaseWidth();
+                    found = true;
+                }
+            }
+            if (!found)
+                d->Delete(j);
+         }
+         if (m_progress != NULL)
+         {
+            std::string msg = LFGetFileName(strXmlName);
+            msg += ".xml";
+            m_progress(msg.c_str(), 100*i/c);
+         }
+         d->SaveXML(strXmlName.c_str());
+    }
+}
+
 
 
 

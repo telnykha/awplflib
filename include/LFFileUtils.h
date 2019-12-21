@@ -85,6 +85,7 @@ bool LFCreateDir(const char* lpPath);
 bool LFDirExist(const char* lpPath);
 bool LFRemoveDir(const char* lpPath);
 bool LFFileExists(const string& strFileName);
+bool LFDeleteFile(const char* lpName);
 
 bool LFGetDirFiles(const char* lpDir, TLFStrings& names);
 // functions to convert data

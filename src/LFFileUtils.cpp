@@ -1,5 +1,5 @@
 #include "_LF.h"
-
+#include "stdio.h"
 #ifndef __BCPLUSPLUS__
 std::string LFGetFilePath(const std::string& strPath)
 {
@@ -203,3 +203,10 @@ bool LFGetDirFiles(const char* lpDir, TLFStrings& names)
 	return _LFGetDirNamesLinux(lpDir, names);
 #endif
 }
+
+bool LFDeleteFile(const char* lpName)
+{
+  int res = remove(lpName);
+  return res == 0;
+}
+

@@ -210,8 +210,6 @@ void TLFDetectedItem::SetRacurs(int value)
 {
 	m_racurs = value;
 }
-
-
 int   TLFDetectedItem::GetBW()
 {
 	return this->m_bw;
@@ -336,8 +334,11 @@ void TLFDetectedItem::Rotate(awpPoint c, int angle)
 
 void		TLFDetectedItem::SetBounds(awpRect& rect)
 {
-	TLFRect* rect1 = this->GetBounds();
-	rect1->SetRect(rect);
+    if (this->m_pRect == NULL)
+    {
+        m_pRect = new TLFRect();
+    }
+    m_pRect->SetRect(rect);
 }
 
 TLFRect* TLFDetectedItem::Predict(ILFDetectEngine* engine)
@@ -413,6 +414,12 @@ const char*       TLFDetectedItem::GetDetectorName()
 {
 	return  m_strDetectorName.c_str();
 }
+
+void TLFDetectedItem::SetDetectorName(const char* lpName)
+{
+    m_strDetectorName = lpName;
+}
+
 
 bool TLFDetectedItem::HasObject()
 {

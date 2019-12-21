@@ -74,11 +74,12 @@ public:
 
 	bool InitDB(const char* path);
 	void Clear();
-
+    void ClearDatabase();
 	void CreateDictinary(const char* path);
-	
-	
-	// properties 
+    void UpdateUUIDsDatabase();
+    void UpdateDatabase();
+
+	// properties
 	int GetItemsCount();
 	int GetImagesCount();
     int GetClassesCount();
@@ -89,6 +90,7 @@ public:
     TLFDBSemanticDescriptor* GetDescriptor(int index);
 	TLFSemanticDictinary*	 GetDictinary();
 
+
 	// error distribution
 	void GetFarHST(TLFDetectEngine& engine, TLFHistogramm& hst , int stage, bool all, double overlap);
 	void GetFrrHST(TLFDetectEngine& engine, TLFHistogramm& hst, int stage, bool all, double overlap);
@@ -98,6 +100,8 @@ public:
 	void CheckEngine(TLFDetectEngine& engine, double overlap);
 	void SetLabel(const char* label);
 	void SetProgress(TLFProgress progress);
+
+
 
 	virtual const char* GetName()
 	{

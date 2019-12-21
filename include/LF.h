@@ -831,15 +831,21 @@ public:
 	/*data exchange*/
 	TLFRect*	GetBounds();
 	void		SetBounds(awpRect& rect);
+
 	double		GetRaiting();
 	void		SetRaiting(double value);
+
 	std::string	GetType();
-	std::string GetComment();
 	void		SetType(const char* value);
+
+	std::string GetComment();
 	void		SetComment(const char* value);
+
 	int         GetAngle();
+
 	int         GetRacurs();
 	void		SetRacurs(int value);
+
 	int         GetBW();
 	int         GetBH();
 
@@ -852,6 +858,7 @@ public:
 	void SetColor(int color);
 
 	const char*       GetDetectorName();
+    void SetDetectorName(const char* lpName);
 
 	bool HasObject();
 	void SetHasObject(bool v);
