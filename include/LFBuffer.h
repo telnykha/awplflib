@@ -52,7 +52,7 @@ protected:
 	double* m_data;
 	double m_sum;
 public:
-	TLFBuffer(unsigned int size, double value);
+	TLFBuffer(unsigned int size = 256, double value = 0);
 	virtual ~TLFBuffer();
 	void Push(double value);
 	void  SetData(double* data);
