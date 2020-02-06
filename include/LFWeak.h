@@ -46,7 +46,7 @@
 #ifndef HLWEAKH
 #define HLWEAKH
 /** \defgroup LFWeaks 
-*	Weak classifiers implemetation
+*	Implementations of the weak classifiers in the Locate Framework
 *   @{
 */
 class TLFColorWeak : public ILFWeak

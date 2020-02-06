@@ -46,7 +46,7 @@
 #ifndef _lf_vector_h_
 #define _lf_vector_h_
 /** \defgroup LFVectors
-*	List of doubles with Class Label 
+*	Implementation lebeled lists of numbers in the Locate Framework
 *   @{
 */
 class TLFDouble : public TLFObject

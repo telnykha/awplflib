@@ -40,19 +40,21 @@
 //	Locate Framework  4.0
 //	File: LFSample.h
 //	Purpose: Samples for training 
-//	Copyright (C) 2004-2018, NN-Videolab.net, all rights reserved.
+//	Copyright (C) 2004-2020, NN-Videolab.net, all rights reserved.
 //M*/
 
 #ifndef LFSAMPLE
 #define LFSAMPLE
 #include "LF.h"
-/** \addtogroup LFSample
+/** \defgroup LFSample
+*	Implementation sample data for AdaBoost trainig  of the Locate Framework
 *   @{
 */
+
 /*
-	Образец для обучения регулярного детектора объектов. 
-	Представляет собой интегральное изображение и дополнительную 
-	информацию. Вес, рейтинг и так далее. 
+A sample for training a regular object detector.
+It is an integrated image and additional
+information. Weight, rating and so on.
 */
 class TCSSample : public TLFImage
 {

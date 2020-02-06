@@ -47,7 +47,7 @@
 #define LFZONEH
 
 /** \defgroup LFZones
-*	Zones for processing 
+*	Imlementationi zones of interest in the Locate Framework
 *   @{
 */
 

@@ -47,7 +47,7 @@
 #ifndef __LFENGINE_H__
 #define __LFENGINE_H__
 /** \defgroup LFEngines
-*	General Semantic engines 
+*	Implementation general semantic engines of the Locate Framework
 *   @{
 */
 // general object detection engine 

@@ -47,7 +47,7 @@
 #ifndef _LF_PARAMETER_H_
 #define _LF_PARAMETER_H_
 /** \defgroup LFParameter
-*	Paramter implemetation 
+*	Implementation paramenter im the Locate Framework 
 *	@{
 */
 #define LF_MAX_NAME_LEN		128

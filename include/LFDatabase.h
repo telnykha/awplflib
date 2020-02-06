@@ -39,7 +39,7 @@
 //
 //      Locate Framework  (LF) Computer Vision Library.
 //		File: LFDatabase.h
-//		Purpose: support database of semantic descripted images
+//		Purpose: Implementation of the Locate Framework XML labeled database
 //
 //      CopyRight 2004-2020 (c) NN-Videolab.net
 //M*/
@@ -47,7 +47,7 @@
 #ifndef _lf_database_h_
 #define _lf_database_h_
 /** \defgroup LFDatabase
-*	Database of xml labeled images 
+*	Implementation of the Locate Framework XML labeled database
 *   @{
 */
 class TLFDBSemanticDescriptor : public TLFSemanticImageDescriptor

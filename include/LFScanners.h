@@ -45,8 +45,8 @@
 #ifndef ScannersH
 #define ScannersH
 
-/** \addtogroup LFScanners
-*	Image scanners implementation 
+/** \defgroup LFScanners
+*	Implementation classes for splitting the input image into rectangular areas in the Locate Framework 
 *   @{
 */
 

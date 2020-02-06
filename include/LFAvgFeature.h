@@ -47,7 +47,7 @@
 #ifndef _LF_AVG_FEATURE_
 #define _LF_AVG_FEATURE_
 /** \defgroup LFAvgFeature
-*	Implementation Time-Spatial Average Features
+*	Implementation of Time-Spatial Simply Features
 *   @{
 */
 #define FEATURE_AVG_SIZE 5 

@@ -241,9 +241,7 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\LFAttrBuildImpl.cpp" />
     <ClCompile Include="..\..\src\LFAttrFilter.cpp" />
-    <ClCompile Include="..\..\src\LFAttrTrainer.cpp" />
     <ClCompile Include="..\..\src\LFAvgFeature.cpp" />
     <ClCompile Include="..\..\src\LFBuffer.cpp" />
     <ClCompile Include="..\..\src\LFBuilder.cpp" />
@@ -286,10 +284,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\LF.h" />
-    <ClInclude Include="..\..\include\LFAttrBuilder.h" />
     <ClInclude Include="..\..\include\LFAttrFilter.h" />
-    <ClInclude Include="..\..\include\LFAttrLog.h" />
-    <ClInclude Include="..\..\include\LFAttrTrainer.h" />
     <ClInclude Include="..\..\include\LFAvgFeature.h" />
     <ClInclude Include="..\..\include\LFBuffer.h" />
     <ClInclude Include="..\..\include\LFBuilder.h" />

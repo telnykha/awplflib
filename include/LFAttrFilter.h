@@ -88,19 +88,5 @@ public:
         }
 };
 
-
-class TAttrCSStrongTrainer : public IAttrTrainer
-{
-protected:
-   TCSAdaBoostSign* ab;
-   virtual bool InitDatabase();
-public:
-  TAttrCSStrongTrainer(ILFAttrClassifier* classifier);
-  virtual ~TAttrCSStrongTrainer();
-
-  virtual void UpdateClassifier();
-  virtual LFTermCriteria EstimateErrors();
-  virtual bool InitConfig(const char* lpXmlName);
-};
 #endif // __LF_ATTR_FILTER__
 

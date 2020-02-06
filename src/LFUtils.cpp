@@ -1637,48 +1637,6 @@ awpImage* GetAOIImage(awpImage* pImage, awpPoint p1, awpPoint p2)
     }
     return  aoi_img;
 }
-/*
-ѕроверка критериев остановки итеративного процесса.
-
-src - параметры, которые надо достичь в результате итеративного процесса
-dst - параметры, полученные в результате итеративного процесса
-
-возвращаемые значени€:
-LF_TERM_ERROR    - ошибочный статус
-LF_TERM_CONTINUE - итеративный процесс следует продолжить
-LF_TERM_BREAK    - итеративный процесс пора останавливать
-*/
-int CompareTermCriteria(LFTermCriteria src, LFTermCriteria dst)
-{
-    if (src.type != dst.type)
-        return LF_TERM_ERROR;
-    switch(src.type)
-    {
-       case LF_TERMC_ITER:
-       if (src.max_iter > dst.max_iter)
-           return LF_TERM_CONTINUE;
-       else
-           return LF_TERM_BREAK;
-       case LF_TERMC_EPS:
-       if (src.eps < dst.eps)
-           return LF_TERM_CONTINUE;
-       else
-           return LF_TERM_BREAK;
-       case LF_TERMC_BOTH_OR:
-       if ((src.max_iter < dst.max_iter) || (src.eps > dst.eps))
-           return LF_TERM_BREAK;
-       else
-           return LF_TERM_CONTINUE;
-       case LF_TERMC_BOTH_AND:
-       if ((src.max_iter < dst.max_iter) && (src.eps > dst.eps))
-           return LF_TERM_BREAK;
-       else
-           return LF_TERM_CONTINUE;
-       default:
-         return LF_TERM_ERROR;
-    }
-   // return LF_TERM_ERROR;
-}
 
 static awpPoint _awpGetCenterMass(awpImage* img, awpRect* r)
 {

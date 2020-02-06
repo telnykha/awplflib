@@ -563,53 +563,6 @@ bool TCSSeparate::SaveToNode(TiXmlElement* parent)
    return true;
 }
 
-TAttrCSStrongTrainer::TAttrCSStrongTrainer(ILFAttrClassifier* classifier) :
-IAttrTrainer(classifier)
-{
-    ab = new TCSAdaBoostSign();
-
-}
-TAttrCSStrongTrainer::~TAttrCSStrongTrainer()
-{
-   delete ab;
-}
-
-void TAttrCSStrongTrainer::UpdateClassifier()
-{
-    if (ab->Boost())
-    {
-      TAttrCSStrongSign* expert = (TAttrCSStrongSign*)m_pClassifier;
-      TCSStrongSign* cl = (TCSStrongSign*)expert->GetDetector();
-      TCSStrongSign* dst = ab->GetResult();
-      cl->Clear();
-      for (int i = 0; i < dst->WeakCount(); i++)
-      {
-        TCSWeakSign* ws = new TCSWeakSign(*dst->GetWeak(i));
-        cl->AddWeak(ws);
-      }
-    }
-}
-
-LFTermCriteria TAttrCSStrongTrainer::EstimateErrors()
-{
-    LFTermCriteria res;
-	res.eps = 0;
-	res.max_iter = 1;
-	res.type = LF_TERMC_ITER;
-    return res;
-}
-bool TAttrCSStrongTrainer::InitConfig(const char* lpXmlName)
-{
-    if (ab == NULL)
-		return false;
-
-	return ab->Load(lpXmlName);
-}
-
-bool TAttrCSStrongTrainer::InitDatabase()
-{
-    return true;
-}
 
 
 //реализация класса TAttrCSStrongSign
@@ -617,7 +570,6 @@ bool TAttrCSStrongTrainer::InitDatabase()
 TAttrCSStrongSign::TAttrCSStrongSign()
 {
     m_Detector = new TCSStrongSign();
-    m_pTrainer = new TAttrCSStrongTrainer(this);
 }
 
 TAttrCSStrongSign::~TAttrCSStrongSign()

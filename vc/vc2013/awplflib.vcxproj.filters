@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\..\src\LFAttrBuildImpl.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\LFAttrFilter.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -56,9 +53,6 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\LFWeak.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\LFAttrTrainer.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\lfcsboost.cpp">
@@ -132,13 +126,7 @@
     <ClInclude Include="..\..\include\LF.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\LFAttrBuilder.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\LFAttrFilter.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\LFAttrLog.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\LFColorDetector.h">
@@ -169,9 +157,6 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\_LF.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\LFAttrTrainer.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\LFCSBoost.h">

@@ -39,7 +39,7 @@
 //
 //      Locate Framework  (LF) Computer Vision Library.
 //		File: LFColorDetector.h
-//		Purpose:  implements human skin color detector, based on simply skin color HSV model 
+//		Purpose:  Implementation of human skin color detector, based on simply skin color HSV model 
 //
 //      CopyRight 2004-2020 (c) NN-Videolab.net
 //M*/
@@ -47,7 +47,7 @@
 #ifndef __LFCOLORDETECTOR_H__
 #define __LFCOLORDETECTOR_H__
 /** \defgroup LFColorDetector
-*	Implements human skin color detector, based on simply skin color HSV model s
+*	(obsolete) Implementation of human skin color detector, based on simply skin color HSV model 
 *   @{
 */
 class TLFColorDetector : public ILFObjectDetector

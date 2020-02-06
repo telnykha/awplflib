@@ -48,7 +48,7 @@
 #ifndef LFSTRONGH
 #define LFSTRONGH
 /** \defgroup LFStrongs
-* Strong classifiers implementation
+*	Implementation the strong classifiers in the Locate Framework
 *   @{
 */
 //---------------------------------------------------------------------------

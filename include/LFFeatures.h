@@ -62,7 +62,7 @@
 #define _HLFEATURES_H
 
 /** \defgroup LFFeatures 
-*	Simply Features Implementation 
+*	Implementation set of features of the Locate Framework
 *   @{
 */
 

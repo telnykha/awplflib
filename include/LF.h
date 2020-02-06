@@ -790,6 +790,14 @@ public:
 		return "ILFObjectDetector";
 	}
 };
+/** @} */ /*  end of LFInterfaces group */
+
+/** \defgroup LFDescriptors 
+*	Object descriptors of the Locate Framework
+*   @{
+*/
+
+
 /* description of the image using the ROI
    files *.ieye
 */
@@ -809,8 +817,6 @@ public:
 	void AddRoi(awpPoint p1, awpPoint p2);
     void Clear();
 };
-/** @} */ /*  end of LFInterfaces group */
-
 
 /*description of the found object in the image
 */
@@ -945,6 +951,10 @@ public:
 		return "TLFSemanticImageDescriptor";
 	}
 };
+/** @} */ /*  end of LFDescriptors group */
+
+/** \addtogroup LFInterfaces
+*   @{
 
 /*
 	Semantic Image Analysis Engine
@@ -1054,7 +1064,7 @@ public:
 		return "ILFDetectEngine";
 	}
 };
-
+/** @} */ /*  end of LFInterfaces group */
 
 /*
 	Attribute classification result
@@ -1159,103 +1169,6 @@ public:
   //interfaces
   IAttrTrainer* GetTrainer();
 };
-/*
-		Termination criteria for iterative algorithms
-*/
-#define LF_TERMC_ITER     1
-#define LF_TERMC_EPS      2
-#define LF_TERMC_BOTH_OR  3
-#define LF_TERMC_BOTH_AND 4
-typedef struct LFTermCriteria
-{
-		int type;       // type of criteria
-		int max_iter;   // number of iterations
-		double eps;      // accuracy to achieve
-}LFTermCriteria;
 
-/*
-   Function test stop criterion of the iterative process.
-   return parameter - check status LF_TERM_XXXX
-*/
-#define LF_TERM_ERROR           1
-#define LF_TERM_CONTINUE        2
-#define LF_TERM_BREAK           3
-int CompareTermCriteria(LFTermCriteria src, LFTermCriteria dst);
-
-/*
-	structure describing these examples, the base for training systems
-*/
-struct LFDatabase
-{
-   std::string m_str_positive_sample; //путь к папке, в которой находятся образцы с атрибутом
-   std::string m_str_negative_sample; //путь к папке, к которой находятся образцы без атрибта
-   std::string m_str_positive_test;   //путь к папке, в которой находятся тестовые образцы с атрибутом
-   std::string m_str_negative_test;   //путь к папке, в которой находятся тестовые образцы без атрибута
-};
-/*
-	Interface teacher attribute classification system.
-*/
-class IAttrTrainer : public TLFObject
-{
-protected:
-  ILFAttrClassifier* m_pClassifier;   // Classifier
-  LFDatabase m_Base;
-  virtual bool InitDatabase() = 0;
-public:
-  IAttrTrainer()
-  {
-	m_pClassifier = NULL;
-	m_Base.m_str_positive_sample = "";
-	m_Base.m_str_negative_sample = "";
-	m_Base.m_str_positive_test = "";
-	m_Base.m_str_negative_test = "";
-  };
-  IAttrTrainer(ILFAttrClassifier* classifier){m_pClassifier = classifier;};
-  virtual ~IAttrTrainer(){};
-
-  virtual void SetCalssifier(ILFAttrClassifier* classifier)
-  {m_pClassifier = classifier;};
-
-  virtual void UpdateClassifier() = 0;
-  virtual LFTermCriteria EstimateErrors() = 0;
-
-  // setup database
-  void SetDatabase(LFDatabase& base)
-  {
-	 m_Base = base;
-  }
-  LFDatabase GetDatabase()
-  {
-	return m_Base;
-  }
-
-  virtual bool InitConfig(const char* lpXnlName) = 0;
-
-  virtual const char* GetName()
-  {
-	return "IAttrTrainer";
-  }
-};
-/*
-The interface defines the behavior of the system of training classifiers
-attributes.
-*/
-class IAttrBuilder : public TLFObject
-{
-protected:
-	   ILFAttrClassifier* m_pClassifier;
-	   LFTermCriteria     m_TermCriteria;
-public:
-		IAttrBuilder();
-		virtual ~IAttrBuilder();
-
-		virtual bool Init(const char* lpFileName) = 0;
-
-		bool Build();
-		virtual const char* GetName()
-		{
-			return "IAttrBuilder";
-		}
-};
 #endif
  

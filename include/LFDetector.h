@@ -48,7 +48,7 @@
 #define HLDETECTORH
 
 /** \defgroup LFDetectors
-*	Object and segmentation detectors 
+*	Implementation general object and events detectors of the Locate Framework
 *   @{
 */
 //---------------------------------------------------------------------------

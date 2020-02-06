@@ -59,7 +59,7 @@
 #define _LF_GEOMETRY_H_
 
 /** \defgroup LFGeometry
-*	Geometry Primitives 
+*	Implementation geometry objects in the Locate Framework 
 *   @{
 */
 
