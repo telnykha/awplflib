@@ -45,6 +45,12 @@
 //M*/
 #ifndef _lf_semantic_h_
 #define _lf_semantic_h_
+
+/** \addtogroup LFSemantic
+*	Implementation of Semantic Dictionary 
+*   @{
+*/
+
 static const char* c_lpDictFileName = "dictionary.xml";
 /**
 \brief Elemnet of semantic dictionary, contains: class label,
@@ -117,5 +123,5 @@ public:
 		return "TLFSemanticDictinary";
 	}
 };
-
+/** @} */ /*  end of LFSSemantic group */
 #endif //_lf_semantic_h_

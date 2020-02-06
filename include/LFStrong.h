@@ -42,12 +42,15 @@
 //	Purpose: Strong classifiers. Implements simply artificial neurons, 
 //	such as the McCullochЦPitts model, based on the list of ILFWeak input elements.
 //
-//	Copyright (C) 2004-2018, NN-Videolab.net, all rights reserved.
+//	Copyright (C) 2004-2020, NN-Videolab.net, all rights reserved.
 //M*/
 
 #ifndef LFSTRONGH
 #define LFSTRONGH
-
+/** \defgroup LFStrongs
+* Strong classifiers implementation
+*   @{
+*/
 //---------------------------------------------------------------------------
 // сильный классификатор, основанный на преобразовании Census
 class TCSStrong : public ILFStrong
@@ -124,4 +127,5 @@ public:
 		return "TIEFSStrong";
 	}
 };
+/** @} */ /*  end of LFStrongs group */
 #endif

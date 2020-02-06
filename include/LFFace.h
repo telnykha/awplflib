@@ -41,12 +41,15 @@
 //		File: LFFace.h
 //		Purpose: contains interface for face recognition system 
 //
-//      CopyRight 2004-2018 (c) NN-Videolab.net
+//      CopyRight 2004-2020 (c) NN-Videolab.net
 //M*/
 
 #ifndef _lf_face_h_
 #define _lf_face_h_
-
+/** \defgroup LFFace
+*	(obsolete)Face descriptor 
+*   @{
+*/
 #define NUM_POINTS 26
 typedef enum  { turnNone = 0, turnLeft, turnRight } ELFFaceTurn;
 
@@ -129,4 +132,5 @@ public:
 public:
 	SLFTriangle     m_tindex[32];
 };
+/** @} */ /*  end of LFFace group */
 #endif //_lf_face_h_ 

@@ -46,7 +46,8 @@
 #ifndef LFZONEH
 #define LFZONEH
 
-/** \addtogroup Zones
+/** \defgroup LFZones
+*	Zones for processing 
 *   @{
 */
 
@@ -166,9 +167,6 @@ public:
 		return "TLFZone";
 	}
 };
-/** \addtogroup Zones
-*   @{
-*/
 
 /**
 \class TLFZones
@@ -212,5 +210,6 @@ public:
 		return "TLFZones";
 	}
 };
+/** @} */ /*  end of LFZones group */
 
 #endif //LFZONEH

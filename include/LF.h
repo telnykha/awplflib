@@ -94,6 +94,10 @@ class  TLFZones;
 class  TLFRoi;
 class  TLFDblVector;
 
+/** \defgroup LFCommon
+*	Commnon classes for Locate Framework
+*   @{
+*/
 /*
    Base class for all objects whithing library
    implementation: LFCommon.cpp
@@ -200,29 +204,10 @@ public:
 	}
 };
 
-// distcance
-class ILFDistance : public TLFObject
-{
-public:
-	virtual double ro(TLFDblVector* v1, TLFDblVector* v2) = 0;
-};
-
-class ILFPredictor : public TLFObject
-{
-protected:
-	TLFRect* m_pPredicted;
-	virtual TLFDblVector* Features(ILFDetectEngine* engine, TLFRect* rect, int id) = 0;
-	virtual bool Classify(TLFDblVector* d, double* err) = 0;
-public:
-	TLFRect* GetPredicted();
-	virtual void Learn(ILFDetectEngine* engine, TLFRect* rect) = 0;
-	virtual TLFRect* Predict(ILFDetectEngine* engine) = 0;
-};
-
 /*
- Image in the awp format
- implementation LFImage.cpp
- */
+Image in the awp format
+implementation LFImage.cpp
+*/
 class  TLFImage : public TLFObject
 {
 protected:
@@ -260,7 +245,7 @@ public:
 	virtual bool LoadMemDump(const unsigned char* pDump, int nDumpSize);
 
 #ifdef WIN32
-//	virtual bool LoadResourceImage(char* lpName);
+	//	virtual bool LoadResourceImage(char* lpName);
 #endif
 
 	//properties
@@ -290,7 +275,7 @@ public:
 	void FreeImages();
 
 #ifdef WIN32
-	void  Show( HDC dc, int x, int y, int w, int h, int from_x, int from_y );
+	void  Show(HDC dc, int x, int y, int w, int h, int from_x, int from_y);
 	void  StretchShow(HDC dc, int x, int y, int w, int h, int from_x, int from_y);
 #endif
 	virtual const char* GetName()
@@ -304,6 +289,31 @@ class TLFImageList : public TLFObjectList
 public:
 	void AddImage(TLFImage* img);
 	TLFImage* GetImage(int index);
+};
+
+/** @} */ /*  end of LFCommon group */
+
+/** \defgroup LFInterfaces 
+*	Interfaces of the Locate Framework
+*   @{
+*/
+// distcance
+class ILFDistance : public TLFObject
+{
+public:
+	virtual double ro(TLFDblVector* v1, TLFDblVector* v2) = 0;
+};
+
+class ILFPredictor : public TLFObject
+{
+protected:
+	TLFRect* m_pPredicted;
+	virtual TLFDblVector* Features(ILFDetectEngine* engine, TLFRect* rect, int id) = 0;
+	virtual bool Classify(TLFDblVector* d, double* err) = 0;
+public:
+	TLFRect* GetPredicted();
+	virtual void Learn(ILFDetectEngine* engine, TLFRect* rect) = 0;
+	virtual TLFRect* Predict(ILFDetectEngine* engine) = 0;
 };
 
 
@@ -799,7 +809,7 @@ public:
 	void AddRoi(awpPoint p1, awpPoint p2);
     void Clear();
 };
-
+/** @} */ /*  end of LFInterfaces group */
 
 
 /*description of the found object in the image

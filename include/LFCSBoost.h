@@ -47,7 +47,10 @@
 //---------------------------------------------------------------------------
 #ifndef CSBoostH
 #define CSBoostH
-//---------------------------------------------------------------------------
+/** \defgroup LFCSBoost
+*	Implementation of  AdaBoost trainig classes 
+*   @{
+*/
 struct TWclErrInfo
 {
 	double m_thr;
@@ -199,4 +202,5 @@ public:
 	bool Load(const char* lpFileName);
 	bool Boost();
 };
+/** @} */ /*  end of LFCSBoolt group */
 #endif

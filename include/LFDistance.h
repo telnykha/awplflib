@@ -45,7 +45,10 @@
 //M*/
 #ifndef _lf_distance_h_
 #define _lf_distance_h_
-
+/** \addtogroup LFVectors
+*	List of doubles with Class Label
+*   @{
+*/
 // distanses
 class TLFL2Distance : public ILFDistance
 {
@@ -68,5 +71,5 @@ public:
 	virtual double ro(TLFDblVector* v1, TLFDblVector* v2);
 	virtual const char* GetName(){ return "TLFIEFSDistance"; }
 };
-
+/** @} */ /*  end of LFVectors group */
 #endif // _lf_distance_h_

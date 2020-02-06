@@ -41,12 +41,15 @@
 //		File: LFColorDetector.h
 //		Purpose:  implements human skin color detector, based on simply skin color HSV model 
 //
-//      CopyRight 2004-2018 (c) NN-Videolab.net
+//      CopyRight 2004-2020 (c) NN-Videolab.net
 //M*/
 
 #ifndef __LFCOLORDETECTOR_H__
 #define __LFCOLORDETECTOR_H__
-
+/** \defgroup LFColorDetector
+*	Implements human skin color detector, based on simply skin color HSV model s
+*   @{
+*/
 class TLFColorDetector : public ILFObjectDetector
 {
 protected:
@@ -71,5 +74,6 @@ public:
     virtual bool          LoadXML(TiXmlElement* parent){return false;};
 	virtual int GetStagesCount() {return 1;};
 };
+/** @} */ /*  end of LFColorDetector group */
 #endif
  

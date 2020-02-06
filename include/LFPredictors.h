@@ -45,6 +45,12 @@
 
 #ifndef _LF_PREDICTORS_
 #define _LF_PREDICTORS_
+
+/** \defgroup LFPredictors 
+*	Implementation of predictors and tracking engine 
+*	@{
+*/
+
 // average area, based on last stage of the engines first detector
 class TLFAverageNNPredictor : public ILFPredictor
 {
@@ -136,5 +142,5 @@ public:
 		return "TLFCarPredictor";
 	}
 };
-
+/** @} */ /*  end of LFPredictors group */
 #endif

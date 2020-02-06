@@ -50,7 +50,10 @@
 
 #ifndef _LFMOTION_H_
 #define _LFMOTION_H_
-
+/** \defgroup LFMotion 
+*	Implementation of Motion Detection Engine 
+*	@{
+*/
 class TLFMotionWeak : public ILFWeak
 {
 protected:
@@ -152,5 +155,6 @@ public:
 	}
 };
 
+/** @} */ /*  end of LFMotion group */
 
 #endif // _LFMOTION_H_

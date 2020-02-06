@@ -44,6 +44,12 @@
 //M*/
 #ifndef ScannersH
 #define ScannersH
+
+/** \addtogroup LFScanners
+*	Image scanners implementation 
+*   @{
+*/
+
 /*
 	standart multiscale scanner 
 */
@@ -99,6 +105,5 @@ public:
 	}
 
 };
-
-//---------------------------------------------------------------------------
+/** @} */ /*  end of LFSSemantic group */
 #endif

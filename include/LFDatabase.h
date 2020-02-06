@@ -41,12 +41,15 @@
 //		File: LFDatabase.h
 //		Purpose: support database of semantic descripted images
 //
-//      CopyRight 2004-2018 (c) NN-Videolab.net
+//      CopyRight 2004-2020 (c) NN-Videolab.net
 //M*/
 
 #ifndef _lf_database_h_
 #define _lf_database_h_
-
+/** \defgroup LFDatabase
+*	Database of xml labeled images 
+*   @{
+*/
 class TLFDBSemanticDescriptor : public TLFSemanticImageDescriptor
 {
 protected:
@@ -108,5 +111,5 @@ public:
 		return "TLFDBLabeledImages";
 	}
 };
-
+/** @} */ /*  end of LFDatabase group */
 #endif 

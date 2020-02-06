@@ -567,11 +567,11 @@ bool TLFClusterRecursive::Search(int& x, int& y, int id)
 	di->SetClusterIdx(id);
 	if (m_descr != NULL)
 		di->SetColor(m_descr->GetBlobId());
-	for (int i = y - 2; i <= y + 2; i++)
+	for (int i = y - 4; i <= y + 4; i++)
 	{
 		if (i < 0 || i >= h)
 			continue;
-		for (int j = x -2; j <= x + 2; j++)
+		for (int j = x -4; j <= x + 4; j++)
 		{
 			if (j < 0 || j >= w)
 				continue;

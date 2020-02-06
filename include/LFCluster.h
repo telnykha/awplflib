@@ -46,7 +46,10 @@
 
 #ifndef _lf_cluster_h_
 #define _lf_cluster_h_
-
+/** \defgroup LFCluster
+*	Implementation of Binary Clusters 
+*   @{
+*/
 #define LF_NUM_CLUSTERS 32
 
 typedef struct tagBinaryBlob
@@ -183,4 +186,5 @@ public:
 	virtual ~TLFClusterTrack();
 	virtual void MakeClusters();
 };
+/** @} */ /*  end of LFCluster group */
 #endif //_lf_cluster_h_

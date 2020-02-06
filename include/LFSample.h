@@ -46,6 +46,9 @@
 #ifndef LFSAMPLE
 #define LFSAMPLE
 #include "LF.h"
+/** \addtogroup LFSample
+*   @{
+*/
 /*
 	Образец для обучения регулярного детектора объектов. 
 	Представляет собой интегральное изображение и дополнительную 
@@ -120,5 +123,5 @@ public:
 
 	double GetValue(int index);
 };
-
+/** @} */ /*  end of LFSSample group */
 #endif //LFSAMPLE 

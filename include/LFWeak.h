@@ -45,7 +45,10 @@
 
 #ifndef HLWEAKH
 #define HLWEAKH
-
+/** \defgroup LFWeaks 
+*	Weak classifiers implemetation
+*   @{
+*/
 class TLFColorWeak : public ILFWeak
 {
 protected:
@@ -56,8 +59,8 @@ protected:
 	double		m_tmp_hst[9];
 	double		m_time_sens;
 	double		m_sens;
-    AWPDWORD		m_st;
-    AWPDWORD		m_t;
+    AWPDWORD	m_st;
+    AWPDWORD	m_t;
 	int			m_result;
 	double      CompareX2();
 public:
@@ -428,4 +431,5 @@ public:
 		return "TLFAccWeak";
 	}
 };
+/** @} */ /*  end of LFBuffers group */
 #endif

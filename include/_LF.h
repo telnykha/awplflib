@@ -221,7 +221,10 @@ public:
 #include "LFCSBoost.h"
 #include "LFBuilder.h"
 #include "LFMCDetector.h"
-
+/** \defgroup LFFactory
+*	Locate Framework factory routines 
+*   @{
+*/
 ILFPredictor* LFCreatePredictor(const char* lpName, ILFDetectEngine* engine);
 ILFFeature*   LFCreateFeature(ILFFeature* feature);
 ILFFeature*   LFCreateFeature(const char* lpName, int sx, int sy, int w, int h);
@@ -233,7 +236,7 @@ ILFWeak*      LFCreateWeak(const char* lpName);
 ILFStrong*    LFCreateStrong(const char* lpName);
 awpRect		  LFRectToFeatureBlock(const char* lpName, awpRect& rect);
 
-
+/** @} */ /*  end of LFFactory group */
 
 template <class T>
 std::string TypeToStr( const T & t )

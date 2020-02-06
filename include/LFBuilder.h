@@ -41,12 +41,16 @@
 //	File: LFBuilder.h
 //	Purpose: Build cascade structure, based on database of labeled images 
 //			 and AdaBoost trainig algorythm 
-//	Copyright (C) 2004-2018, NN-Videolab.net, all rights reserved.
+//	Copyright (C) 2004-2020, NN-Videolab.net, all rights reserved.
 //M*/
 
 #ifndef __lf_builder_h__
 #define __lf_builder_h__
-
+/** \defgroup LFBuilder
+*	Build cascade structure, based on database of labeled images 
+*   and AdaBoost trainig algorythm
+*   @{
+*/
 // класс TCSBuildDetector предназначен для построения
 // многокаскадного детектора с использованием
 // алгоритма AdaBoost и преобразования Census
@@ -94,5 +98,5 @@ public:
 	void		AddNewClassifier();
 	bool		Build();
 };
-
+/** @} */ /*  end of LFBuilder group */
 #endif //__lf_builder_h__

@@ -46,6 +46,11 @@
 
 #ifndef HLDETECTORH
 #define HLDETECTORH
+
+/** \defgroup LFDetectors
+*	Object and segmentation detectors 
+*   @{
+*/
 //---------------------------------------------------------------------------
 // cascade detecor with TLFCSStrong and ILFWeak classifiers 
 class TSCObjectDetector : public ILFObjectDetector
@@ -195,4 +200,5 @@ public:
 		return "TLFFireDetector";
 	}
 };
+/** @} */ /*  end of LFDetectors group */
 #endif

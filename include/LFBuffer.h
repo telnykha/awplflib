@@ -41,10 +41,15 @@
 //		File: LFBuffer.h
 //		Purpose: Contains double buffers 
 //
-//      CopyRight 2004-2018 (c) NN-Videolab.net
+//      CopyRight 2004-2020 (c) NN-Videolab.net
 //M*/
 #ifndef _lf_buffer_h_
 #define _lf_buffer_h_
+
+/** \defgroup LFBuffers
+*	Implementation fast buffer of doubles 
+*   @{
+*/
 class TLFBuffer : public TLFObject
 {
 protected:
@@ -85,4 +90,5 @@ public:
 	void   Clear();
 	virtual const char* GetName(){ return "TLFRingBuffer"; }
 };
+/** @} */ /*  end of LFBuffers group */
 #endif //_lf_buffer_h_

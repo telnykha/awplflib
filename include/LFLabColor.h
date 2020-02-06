@@ -47,6 +47,11 @@
 #ifndef _lf_lab_color_h_
 #define _lf_lab_color_h_
 
+/** \defgroup LFColorConveror 
+*	Implementation of color convertor and color database
+*   @{
+*/
+
 /*
 	LF's color space conveerter
 */
@@ -126,6 +131,6 @@ public:
 	}
 };
 
-
+/** @} */ /*  end of LFColorConveror group */
 
 #endif // _lf_lab_color_h_

@@ -1,6 +1,11 @@
 #ifndef _LF_IMAGE_PROCESSOR_H_
 #define _LF_IMAGE_PROCESSOR_H_
 
+/** \defgroup LFImagePorcessor
+*	Interface of an abstract image processor 
+*   @{
+*/
+
 /* ќбобщенный интерфейс выполн€ющий обработку изображени€ 
 */
 class ILFImageProcessor : public TLFObject
@@ -35,4 +40,5 @@ public:
 	TLFRect GetRoi();
 	void SetRoi(TLFRect& Rect);
 };
+/** @} */ /*  end of LFHistogramm group */
 #endif //_LF_IMAGE_PROCESSOR_H_

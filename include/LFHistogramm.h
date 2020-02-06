@@ -45,6 +45,12 @@
 //M*/
 #ifndef _lf_histogramm_h_
 #define _lf_histogramm_h_
+
+/** \defgroup LFHistogramm
+*	Histogramm implementation 
+*   @{
+*/
+
 /**
 *	\brief Histogramm
 */
@@ -84,4 +90,5 @@ public:
 	int GetNumBins();
 	virtual const char* GetName(){ return "TLFHistogramm"; }
 };
+/** @} */ /*  end of LFHistogramm group */
 #endif //_lf_histogramm_h_

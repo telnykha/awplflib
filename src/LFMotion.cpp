@@ -102,6 +102,7 @@ TLFMotionDetector::TLFMotionDetector() : ILFObjectDetector()
 	m_scanner->GetParameter(0)->SetValue(50);
 	m_threshold = 9;
 	m_delay = 0;
+	printf("INFO: create TLFMotionDetector\n");
 }
 
 bool TLFMotionDetector::Init(awpImage* pImage, bool scan)

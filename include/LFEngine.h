@@ -46,8 +46,11 @@
 
 #ifndef __LFENGINE_H__
 #define __LFENGINE_H__
-
-// general detector
+/** \defgroup LFEngines
+*	General Semantic engines 
+*   @{
+*/
+// general object detection engine 
 class TLFDetectEngine : public ILFDetectEngine
 {
 protected:
@@ -130,4 +133,5 @@ public:
 		return "TLFFGEngine";
 	}
 };
+/** @} */ /*  end of LFEngines group */
 #endif //__LFENGINE_H__

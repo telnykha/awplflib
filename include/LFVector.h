@@ -45,7 +45,10 @@
 //M*/
 #ifndef _lf_vector_h_
 #define _lf_vector_h_
-
+/** \defgroup LFVectors
+*	List of doubles with Class Label 
+*   @{
+*/
 class TLFDouble : public TLFObject
 {
 protected:
@@ -77,4 +80,5 @@ public:
 	int id();
 	virtual const char* GetName(){ return "TLFDblVector"; }
 };
+/** @} */ /*  end of LFVectors group */
 #endif //_lf_vector_h_

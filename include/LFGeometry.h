@@ -57,6 +57,12 @@
 //M*/
 #ifndef _LF_GEOMETRY_H_
 #define _LF_GEOMETRY_H_
+
+/** \defgroup LFGeometry
+*	Geometry Primitives 
+*   @{
+*/
+
 /**
 \class TLFPoint
 \brief LF Point Descriptor based on awpPoint structure 
@@ -417,5 +423,5 @@ public:
 		return "TLFOpenPolygon";
 	}
 };
-
+/** @} */ /*  end of LFGeometry group */
 #endif //_LF_GEOMETRY_H_

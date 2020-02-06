@@ -60,6 +60,12 @@
 //M*/
 #ifndef _HLFEATURES_H
 #define _HLFEATURES_H
+
+/** \defgroup LFFeatures 
+*	Simply Features Implementation 
+*   @{
+*/
+
 /*
 	average feature. 
 */
@@ -375,4 +381,6 @@ public:
 	 TLFFeatureList();
 	 const char* FeatureName(int index);
  };
+
+ /** @} */ /*  end of LFFeatures group */
 #endif
