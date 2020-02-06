@@ -45,7 +45,7 @@
 //M*/
 #ifndef LFEyeH
 #define LFEyeH
-/** \defgroup LFEye
+/** \addtogroup LFDescriptors
 *	(obsolete) Eye detectors 
 *   @{
 */

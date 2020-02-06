@@ -46,8 +46,7 @@
 
 #ifndef _lf_face_h_
 #define _lf_face_h_
-/** \defgroup LFFace
-*	(obsolete) Face descriptor 
+/** \addtogroup LFDescriptors
 *   @{
 */
 #define NUM_POINTS 26

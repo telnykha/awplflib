@@ -355,13 +355,10 @@ ILFAttrClassifier::ILFAttrClassifier()
 {
     m_threshold1 = 0;
     m_threshold2 = 0;
-    m_pTrainer = NULL;
 }
 //---------------------------------------------------------------------------
 ILFAttrClassifier::~ILFAttrClassifier()
 {
-    if (m_pTrainer != NULL)
-       delete m_pTrainer;
 }
 //---------------------------------------------------------------------------
 double ILFAttrClassifier::GetThreshold1()
@@ -444,11 +441,6 @@ bool ILFAttrClassifier::Classify(TLFImage* pImage, TLFRoi* pRoi, SLFAttrResult& 
 SLFAttrResult ILFAttrClassifier::GetlastResult()
 {
         return m_LastResult;
-}
-
-IAttrTrainer* ILFAttrClassifier::GetTrainer()
-{
-        return m_pTrainer;
 }
 
 // TCSSeparate Class------------------------------------------------------------

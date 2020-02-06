@@ -47,7 +47,7 @@
 #define _lf_semantic_h_
 
 /** \defgroup LFSemantic
-*	Implementation of Semantic Dictionary 
+*	Implementation of semantic dictionary 
 *   @{
 */
 

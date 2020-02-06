@@ -44,7 +44,7 @@
 //M*/
 
 /** \defgroup LFSabotage
-*	Implementation of Camera Sabotage Engine 
+*	Implementation of sabotage engine 
 *	@{
 */
 

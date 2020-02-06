@@ -47,7 +47,7 @@
 #ifndef _lf_cluster_h_
 #define _lf_cluster_h_
 /** \defgroup LFCluster
-*	Implementation of Binary Clusters 
+*	Implementation of binary clusters 
 *   @{
 */
 #define LF_NUM_CLUSTERS 32

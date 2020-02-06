@@ -46,9 +46,12 @@
 
 #ifndef __LFCOLORDETECTOR_H__
 #define __LFCOLORDETECTOR_H__
-/** \defgroup LFColorDetector
-*	(obsolete) Implementation of human skin color detector, based on simply skin color HSV model 
+/** \addtogroup LFDetectors
 *   @{
+*/
+
+/**
+	@brief (obsolete) Implementation of human skin color detector, based on simply skin color HSV model 
 */
 class TLFColorDetector : public ILFObjectDetector
 {

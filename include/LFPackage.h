@@ -47,7 +47,7 @@
 #ifndef LFPackageH
 #define LFPackageH
 /** \defgroup LFPackage 
-*	(obsolete) Implementation of Package  Detection Engine
+*	(obsolete) Implementation of package  detection engine
 *	@{
 */
 class TLFPackageEngine : public ILFDetectEngine
