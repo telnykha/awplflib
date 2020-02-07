@@ -13,7 +13,7 @@ LDFLAGS=
 #output library path 
 LIB    = lib/
 #awpipl2 library path 
-AWPLIB = ../awpipl/lib/
+AWPLIB = ../awpipl2/lib/
 
 #library source path 
 SRCPATH= src/ 
@@ -21,11 +21,11 @@ SRCPATH= src/
 #roc path 
 APPROC = utils/roc/
 
-INC= -Iinclude -I../awpipl/include
+INC= -Iinclude -I../awpipl2/include
 
 # source files: awplflib library proper
-LIBSOURCES= LFAttrBuildImpl.cpp LFAttrFilter.cpp LFAttrTrainer.cpp LFAttrTrainer.cpp\
-	LFAttrTrainer.cpp LFBuilder.cpp LFBuffer.cpp LFCluster.cpp LFColorDetector.cpp\
+LIBSOURCES=  LFAttrFilter.cpp \
+	 LFBuilder.cpp LFBuffer.cpp LFCluster.cpp LFColorDetector.cpp\
         LFCommon.cpp lfcsboost.cpp LFCSFeature.cpp LFCSFeature.cpp LFDetectedItem.cpp\
         LFDetector.cpp LFDistance.cpp LFEngine.cpp LFEye.cpp LFFaceDescriptor.cpp\
 	LFFeatureImpl.cpp LFFeatures.cpp LFFileUtils.cpp LFGeometry.cpp LFHistogramm.cpp\
@@ -34,8 +34,8 @@ LIBSOURCES= LFAttrBuildImpl.cpp LFAttrFilter.cpp LFAttrTrainer.cpp LFAttrTrainer
 	LFStrong.cpp LFStrongImpl.cpp LFThresholdProc.cpp LFUtils.cpp LFVector.cpp\
 	LFWeak.cpp LFWeakImpl.cpp LFZones.cpp LFDatabase.cpp LFAvgFeature.cpp LFSabotage.cpp
 
-LIBOBJECTS= LFAttrBuildImpl.o LFAttrFilter.o LFAttrTrainer.o LFAttrTrainer.o\
-	LFAttrTrainer.o LFBuilder.o LFBuffer.o LFCluster.o LFColorDetector.o\
+LIBOBJECTS=  LFAttrFilter.o \
+	 LFBuilder.o LFBuffer.o LFCluster.o LFColorDetector.o\
         LFCommon.o lfcsboost.o LFCSFeature.o LFCSFeature.o LFDetectedItem.o\
         LFDetector.o LFDistance.o LFEngine.o LFEye.o LFFaceDescriptor.o\
 	LFFeatureImpl.o LFFeatures.o LFFileUtils.o LFGeometry.o LFHistogramm.o\
