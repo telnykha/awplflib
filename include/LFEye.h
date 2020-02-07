@@ -41,7 +41,7 @@
 //		File: LFEye.h
 //		Purpose: Eye detection mplementation 
 //
-//      CopyRight 2004-2018 (c) NN-Videolab.net
+//      CopyRight 2004-2020 (c) NN-Videolab.net
 //M*/
 #ifndef LFEyeH
 #define LFEyeH
@@ -49,10 +49,19 @@
 *	(obsolete) Eye detectors 
 *   @{
 */
-//---------------------------------------------------------------------------
-// интерфейс класса, который выполн€ет уточнение местоположени€ глаз
+
+/**
+@brief obsolete
+*/
 enum LFEyes {LFLeftEye, LFRightEye};
-enum LFPreciseMethod {LFAverage, LFExtremum, LFMean};
+/**
+*@brief obsolete 
+*/
+enum LFPreciseMethod { LFAverage, LFExtremum, LFMean };
+/**
+*@brief obsolete
+*class interface that performs eye positioning
+*/
 class ILFEye : public TLFObject
 {
 protected:
@@ -64,12 +73,18 @@ public:
 
    virtual bool Init(const char* lpInitString)= 0;
    virtual bool SetImage(awpImage* pImage) = 0;
-   // выполн€ет уточнение метоположени€ глаз [roi] на изображении [image]
-   // в случае ошибки возвращает NULL
+   /** @brief
+   * Refines the eye position [roi] in the image [image]
+   * in case of an error returns NULL
+   */
    virtual TLFRoi* Precise(TLFImage& image, TLFRoi& roi, LFPreciseMethod Method = LFAverage);
 };
-//----------------------------------------------------------------------------
-//реализаци€ ILFRoi, который использует коррел€цинный алгоритм сравнени€
+
+/**
+*@brief obsolete
+an ILFRoi implementation that uses a correlation comparison algorithm
+*/
+
 class TLFEyeCorrelation : public ILFEye
 {
 private:
@@ -94,5 +109,5 @@ public:
    virtual bool Init(const char* lpInitString);
    virtual bool SetImage(awpImage* pImage){return true;};
 };
-/** @} */ /*  end of LFEye group */
+/** @} */ 
 #endif

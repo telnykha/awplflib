@@ -65,8 +65,6 @@ public:
 	virtual bool LoadXML(TiXmlElement* parent);
     virtual bool FindObjects();
 	virtual void Clear();
-	virtual bool DetectInRect(awpRect* rect);
-
 	virtual TiXmlElement*  SaveXML();
 
 	virtual const char* GetName()
@@ -102,8 +100,6 @@ public:
 	virtual bool LoadXML(TiXmlElement* parent);
 	virtual bool FindObjects();
 	virtual TiXmlElement*  SaveXML();
-	virtual bool DetectInRect(awpRect* rect);
-
 	double GetMinSize();
 	double GetMaxSize();
 	double GetMinAR();

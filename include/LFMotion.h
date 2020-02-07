@@ -136,7 +136,6 @@ public:
 	virtual bool LoadXML(TiXmlElement* parent);
 	virtual bool FindObjects();
 	virtual TiXmlElement*  SaveXML();
-	virtual bool DetectInRect(awpRect* rect);
 
 	double GetMinSize();
 	double GetMaxSize();

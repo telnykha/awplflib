@@ -45,7 +45,7 @@
 //M*/
 #ifndef _LF_THRESHOLD_PROC_
 #define _LF_THRESHOLD_PROC_
-/** \defgroup LFThreshold
+/** \defgroup LFImageProcessors 
 *	(obsolete)Implementation threshold image processor 
 *   @{
 */

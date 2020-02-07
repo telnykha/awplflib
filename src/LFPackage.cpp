@@ -119,10 +119,6 @@ bool TLFPackageEngine::FindObjects()
 	return true;
 }
 
-bool TLFPackageEngine::DetectInRect(awpRect* rect)
-{
-	return false;
-}
 
 int TLFPackageEngine::GetDelay()
 {

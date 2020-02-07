@@ -1,21 +1,22 @@
+
+
 #ifndef _LF_IMAGE_PROCESSOR_H_
 #define _LF_IMAGE_PROCESSOR_H_
 
-/** \defgroup LFImagePorcessor
-*	Interface of an abstract image processor 
+/** \addtogroup LFInterfaces
 *   @{
 */
 
-/* Обобщенный интерфейс выполняющий обработку изображения 
+/** @brief Generalized image processing interface 
 */
 class ILFImageProcessor : public TLFObject
 {
 protected:
-	/*контейнеры для изображений 
+	/** @brief image containers 
 	*/
 	TLFImage m_SourceImage;
 	TLFImage m_ResultImage;
-	/*область обработки изображения 
+	/** @brief image processing area 
 	*/
 	TLFRect  m_ImageRoi;
 	/* вектор параметров
@@ -25,20 +26,20 @@ protected:
 public:
 	ILFImageProcessor();
 	virtual ~ILFImageProcessor();
-	/* изображения 
+	/** @brief images as property 
 	*/
 	virtual bool SetSourceImage(TLFImage* pImage);
 	virtual TLFImage* GetSourceImage();
 	virtual TLFImage* GetResultImage();
-	/* параметры
+	/** @brief parameters
 	*/
 	int GetNumParameters();
 	TLFParameter* GetParameter(int index);
 	bool SetParameterValue(double Value, int index);
-	/* область обработки 
+	/** @brief image processing area as property 
 	*/
 	TLFRect GetRoi();
 	void SetRoi(TLFRect& Rect);
 };
-/** @} */ /*  end of LFHistogramm group */
+/** @} */ 
 #endif //_LF_IMAGE_PROCESSOR_H_

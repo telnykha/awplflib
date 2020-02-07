@@ -49,11 +49,18 @@
 /** \addtogroup LFDescriptors
 *   @{
 */
+
+/**
+* @brief obsolete
+*/
 #define NUM_POINTS 26
+/**
+* @brief obsolete
+*/
 typedef enum  { turnNone = 0, turnLeft, turnRight } ELFFaceTurn;
 
-/*
-files *.face
+/**
+* @brief obsolete
 */
 typedef struct
 {
@@ -63,8 +70,8 @@ typedef struct
 	int v3;
 }SLFTriangle;
 
-/*
-face recognition model
+/**
+* @brief obsolete
 */
 class TLFFaceImageDescriptor : public TLFObject
 {

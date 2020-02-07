@@ -46,9 +46,12 @@
 //M*/
 #ifndef LFPackageH
 #define LFPackageH
-/** \defgroup LFPackage 
-*	(obsolete) Implementation of package  detection engine
+/** \addtogroup LFEngines 
 *	@{
+*/
+
+/**
+* @brief (obsolete) Implementation of package  detection engine
 */
 class TLFPackageEngine : public ILFDetectEngine
 {
@@ -79,7 +82,6 @@ public:
 	virtual bool LoadXML(TiXmlElement* parent);
 	virtual bool FindObjects();
 	virtual TiXmlElement*  SaveXML();
-	virtual bool DetectInRect(awpRect* rect);
 
 	int GetDelay();
 	void SetDelay(int value);

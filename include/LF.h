@@ -998,7 +998,6 @@ protected:
 
 	int                 m_baseWidth;
 	double              m_resizeCoef;
-	awpRect			    m_Roi;
 	TLFObjectList		m_detectors;
 	TLFImage			m_SourceImage;
 	TLFImage			m_mask;
@@ -1030,9 +1029,6 @@ public:
 	bool SetSourceImage(TLFImage* pImage, bool detect = false);
 	bool SetSourceImage(awpImage* pImage, bool detect = false);
 
-	virtual bool DetectInRect(TLFRect& rect);
-	virtual bool DetectInRect(awpRect* rect);
-
 	virtual void SetZones(TLFZones* zones);
 	TLFZones* GetZones();
 	//
@@ -1045,9 +1041,6 @@ public:
 	void AddDetector(ILFObjectDetector* pDetector);
 	ILFObjectDetector* GetDetector(int index = 0);
 
-
-	void SetRoi(awpRect roi);
-	awpRect GetRoi();
 
 	bool GetNeedCluster();
 	void SetNeedCluster(bool Value);

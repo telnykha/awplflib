@@ -321,10 +321,7 @@ TiXmlElement*  TLFMotionEngine::SaveXML()
 {
 	return NULL;
 }
-bool TLFMotionEngine::DetectInRect(awpRect* rect)
-{
-	return false;
-}
+
 
 double TLFMotionEngine::GetMinSize()
 {
@@ -366,7 +363,6 @@ TLFThresholdProc* TLFMotionEngine::GetThresholdProc()
 void TLFMotionEngine::OverlapsFilter(TLFSemanticImageDescriptor* descriptor)
 {
 	awpImage* img = m_foreground.GetImage();
-	TLFRect image_rect(m_Roi);
 	awpStrokeObj* obj = NULL;
 	int num = 0;
 	awpGetStrokes(img, &num, &obj, 128, NULL);
@@ -377,9 +373,6 @@ void TLFMotionEngine::OverlapsFilter(TLFSemanticImageDescriptor* descriptor)
 		awpRect rect;
 		awpCalcObjRect(&obj[i], &rect);
 		TLFRect  r(rect);
-
-		//	       	if (rect.left == m_Roi.left || rect.right >= m_Roi.right - 2 || rect.top == m_Roi.top || rect.bottom >= m_Roi.bottom - 2)
-		//			continue;
 
 		r.Scale(m_resizeCoef);
 		rect = r.GetRect();

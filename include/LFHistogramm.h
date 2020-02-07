@@ -46,8 +46,7 @@
 #ifndef _lf_histogramm_h_
 #define _lf_histogramm_h_
 
-/** \defgroup LFHistogramm
-*	Implementation internal histogramm in the Locate Framework 
+/** \addtogroup LFBuffers
 *   @{
 */
 

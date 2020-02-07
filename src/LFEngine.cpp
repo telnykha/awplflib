@@ -19,7 +19,6 @@ ILFDetectEngine::ILFDetectEngine()
 	m_strPredictorName = "";
 	m_saveToDb = false;
 	m_State = 0;
-	memset(&this->m_Roi, 0, sizeof(awpRect));
 	m_zones = NULL;
 }
 ILFDetectEngine::~ILFDetectEngine()
@@ -128,14 +127,6 @@ bool ILFDetectEngine::SetSourceImage(awpImage* pImage, bool detect)
 
 	// setup roi
 	ILFScanner* s = GetScanner(0);
-	if (s != NULL)
-	{
-		m_Roi.left = s->GetMinX();
-		m_Roi.right = s->GetMaxX();
-		m_Roi.top = s->GetMinY();
-		m_Roi.bottom = s->GetMaxY();
-	}
-
 	if (detect)
 	{
 		bool res =  FindObjects();
@@ -231,14 +222,7 @@ bool ILFDetectEngine::LoadStream(std::istream& in)
 	return this->LoadXML(pElem);
 }
 #endif
-void ILFDetectEngine::SetRoi(awpRect roi)
-{
 
-}
-awpRect ILFDetectEngine::GetRoi()
-{
-	return m_Roi;
-}
  bool ILFDetectEngine::GetNeedCluster()
 {
     return this->m_needCluster;
@@ -300,18 +284,8 @@ void ILFDetectEngine::SetMinNumObjects(int value)
 	if (value >= 0)
 		this->m_minNumObjects = value;
 }
-bool ILFDetectEngine::DetectInRect(TLFRect& rect)
-{
 
-	return false;
 
-	awpRect r = rect.GetRect();
-	return DetectInRect(&r);
-}
-bool ILFDetectEngine::DetectInRect(awpRect* rect)
-{
-	return false;
-}
 TLFSemanticImageDescriptor* ILFDetectEngine::GetSemantic()
 {
 	return &m_result;
@@ -532,21 +506,6 @@ bool TLFDetectEngine::FindObjects()
 
 	return true;
 }
-// 
-bool TLFDetectEngine::DetectInRect(awpRect* rect)
-{
-	if (rect == NULL)
-		return false;
-
-	bool result = false;
-	for (int k = 0; k < m_detectors.GetCount(); k++)
-	{
-		ILFObjectDetector* d = (ILFObjectDetector*)m_detectors.Get(k);
-		if (d->ClassifyRect(*rect,NULL, NULL) == 1)
-			result = true;
-	}
-	return result;
-}
 //
 void TLFDetectEngine::OverlapsFilter(TLFSemanticImageDescriptor* descriptor)
 {
@@ -755,7 +714,6 @@ void TLFFGEngine::OverlapsFilter(TLFSemanticImageDescriptor* descriptor)
 #ifdef _DEBUG
 	awpSaveImage("foreground.awp", img);
 #endif
-	TLFRect image_rect(m_Roi);
 	awpStrokeObj* obj = NULL;
 	int num = 0;
 	awpGetStrokes(img, &num, &obj, 128, NULL);
@@ -766,10 +724,6 @@ void TLFFGEngine::OverlapsFilter(TLFSemanticImageDescriptor* descriptor)
 		awpRect rect;
 		awpCalcObjRect(&obj[i], &rect);
 		TLFRect  r(rect);
-
-    //	       	if (rect.left == m_Roi.left || rect.right >= m_Roi.right - 2 || rect.top == m_Roi.top || rect.bottom >= m_Roi.bottom - 2)
-    //			continue;
-
 		r.Scale(m_resizeCoef);
 		rect = r.GetRect();
 		bool found = false;
@@ -953,7 +907,3 @@ void TLFFGEngine::InitDetectors()
    }
 }
 
-bool TLFFGEngine::DetectInRect(awpRect* rect)
-{
-	return false;
-}
