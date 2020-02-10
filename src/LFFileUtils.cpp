@@ -93,7 +93,9 @@ bool LFDirExist(const char* lpPath)
 #endif
 	return false;
 }
-
+/**
+* @brief clear all files in the direcrory 
+*/
 bool LFRemoveDir(const char* lpPath)
 {
 	return false;
@@ -126,7 +128,6 @@ std::string LFGUIDToString(UUID* id)
 #endif
 	result = uuid_buf;
 	return result;
-
 }
 
 unsigned long LFGetTickCount()
@@ -181,8 +182,6 @@ static bool _LFGetDirNamesLinux(const char* lpDir, TLFStrings& names)
     };
 
     while ( (entry = readdir(dir)) != NULL) {
- //       printf("%d - %s [%d] %d\n",
- //           entry->d_ino, entry->d_name, entry->d_type, entry->d_reclen);
  			string name = path + entry->d_name;
 			names.push_back(name);
 			printf("%s\n", entry->d_name);
