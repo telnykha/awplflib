@@ -73,9 +73,6 @@
     <ClCompile Include="..\..\src\LFAvgFeature.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\LFPackage.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\LFPredictors.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -181,9 +178,6 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\LFAvgFeature.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\LFPackage.h">
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\LFPredictors.h">

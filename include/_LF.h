@@ -207,7 +207,6 @@ public:
 #include "LFParameter.h"
 #include "LFAvgFeature.h"
 #include "LFSabotage.h"
-#include "LFPackage.h"
 #include "LFPredictors.h"
 #include "LFSemantic.h"
 #include "LFDatabase.h"

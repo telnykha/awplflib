@@ -266,7 +266,6 @@
     <ClCompile Include="..\..\src\LFImageProcessor.cpp" />
     <ClCompile Include="..\..\src\LFLabColor.cpp" />
     <ClCompile Include="..\..\src\LFMotion.cpp" />
-    <ClCompile Include="..\..\src\LFPackage.cpp" />
     <ClCompile Include="..\..\src\LFParameter.cpp" />
     <ClCompile Include="..\..\src\LFPredictors.cpp" />
     <ClCompile Include="..\..\src\LFSabotage.cpp" />
@@ -305,7 +304,6 @@
     <ClInclude Include="..\..\include\LFLabColor.h" />
     <ClInclude Include="..\..\include\LFMCDetector.h" />
     <ClInclude Include="..\..\include\LFMotion.h" />
-    <ClInclude Include="..\..\include\LFPackage.h" />
     <ClInclude Include="..\..\include\LFParameter.h" />
     <ClInclude Include="..\..\include\LFPredictors.h" />
     <ClInclude Include="..\..\include\LFSabotage.h" />
