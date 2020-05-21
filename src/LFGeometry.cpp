@@ -1480,7 +1480,7 @@ void TLFTriangleList::ProcessImage(awpImage* img)
 		awpCreateImage(&img1, img->sSizeX, img->sSizeY, 1, AWP_DOUBLE);
 		awpCreateImage(&img2, img->sSizeX, img->sSizeY, 1, AWP_DOUBLE);
 
-		awpEdgeSobel1(m_procImage, img1, img2);
+		//awpEdgeSobel1(m_procImage, img1, img2);
 
 		AWPBYTE* b = (AWPBYTE*)m_procImage->pPixels;
 		AWPDOUBLE* v = (AWPDOUBLE*)img1->pPixels;

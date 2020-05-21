@@ -41,9 +41,11 @@
 //		File: roc.cpp
 //		Purpose: TLFEngine roc test application 
 //
-//      CopyRight 2004-1018 (c) ALT-Soft.net
+//      CopyRight 2004-2019 (c) NN-Videolab
 //M*/
 //
+
+
 #include "_LF.h"
 using namespace std;
 
