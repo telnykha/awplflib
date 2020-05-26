@@ -323,7 +323,7 @@ int  TSCObjectDetector::Detect()
 			double scale = (double)(m_scanner->GetFragmentRect(i).right - m_scanner->GetFragmentRect(i).left)/(double)this->m_baseWidth;
 			sf.Setup(scale, scale, m_scanner->GetFragmentRect(i).left, m_scanner->GetFragmentRect(i).top);
 			double variance = sf.fCalcValue(&m_Image);
-			if (variance > 30)
+			//if (variance > 30)
 			{
 				//printf("-------------------------------\n");
 				for (int j = 0; j < m_Strongs.GetCount(); j++)
@@ -341,8 +341,8 @@ int  TSCObjectDetector::Detect()
 					//	printf("classifyed %i\t %f.\n", j, err);
 				}
 			}
- 			else
- 				has_object = false;
+ 			//else
+ 			//		has_object = false;
 
 			if (has_object)
 			{
