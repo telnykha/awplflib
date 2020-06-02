@@ -29,7 +29,7 @@ LIBSOURCES=  LFAttrFilter.cpp \
         LFCommon.cpp lfcsboost.cpp LFCSFeature.cpp LFCSFeature.cpp LFDetectedItem.cpp\
         LFDetector.cpp LFDistance.cpp LFEngine.cpp LFEye.cpp LFFaceDescriptor.cpp\
 	LFFeatureImpl.cpp LFFeatures.cpp LFFileUtils.cpp LFGeometry.cpp LFHistogramm.cpp\
-	LFImage.cpp LFImageProcessor.cpp LFLabColor.cpp LFMotion.cpp LFPackage.cpp\
+	LFImage.cpp LFImageProcessor.cpp LFLabColor.cpp LFMotion.cpp \
 	LFParameter.cpp LFPredictors.cpp LFSample.cpp LFScanners.cpp LFSemantic.cpp\
 	LFStrong.cpp LFStrongImpl.cpp LFThresholdProc.cpp LFUtils.cpp LFVector.cpp\
 	LFWeak.cpp LFWeakImpl.cpp LFZones.cpp LFDatabase.cpp LFAvgFeature.cpp LFSabotage.cpp
@@ -39,7 +39,7 @@ LIBOBJECTS=  LFAttrFilter.o \
         LFCommon.o lfcsboost.o LFCSFeature.o LFCSFeature.o LFDetectedItem.o\
         LFDetector.o LFDistance.o LFEngine.o LFEye.o LFFaceDescriptor.o\
 	LFFeatureImpl.o LFFeatures.o LFFileUtils.o LFGeometry.o LFHistogramm.o\
-	LFImage.o LFImageProcessor.o LFLabColor.o LFMotion.o LFPackage.o\
+	LFImage.o LFImageProcessor.o LFLabColor.o LFMotion.o \
 	LFParameter.o LFPredictors.o LFSample.o LFScanners.o LFSemantic.o\
 	LFStrong.o LFStrongImpl.o LFThresholdProc.o LFUtils.o LFVector.o\
 	LFWeak.o LFWeakImpl.o LFZones.o LFDatabase.o LFAvgFeature.o LFSabotage.o
