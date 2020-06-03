@@ -8,14 +8,14 @@ int main()
 	printf("Hello Locate Framework!\n");			
 	TLFImage image;
 	TLFDetectEngine engine;
-	printf("Loadng engine....");
+	printf("Loading engine....");
 	if (!engine.Load("engine.xml"))
 	{
 		printf("cannot load engine!\n");
 		return -1;
 	}
 	printf("done.\n");
-	printf("Loadng image....");
+	printf("Loading image....");
 	if (!image.LoadFromFile("test.jpg"))
 	{
 		printf("cannot load image\n");
@@ -32,7 +32,7 @@ int main()
 
 	if (engine.GetItemsCount() > 0)
 	{
-		printf("number detectec objects = %i\n", engine.GetItemsCount());
+		printf("number of detected objects = %i\n", engine.GetItemsCount());
 		TLFSemanticImageDescriptor* si = engine.GetSemantic();
 		if (si != NULL)
 			si->SaveXML("faces.xml");

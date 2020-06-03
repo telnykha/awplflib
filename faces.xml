@@ -1,0 +1,4 @@
+<?xml version="1.0" ?>
+<TLFSemanticImageDescriptor ImageWidth="512" ImageHeight="768">
+    <TLFDetectedItem DetectorName="face_detector_subset1" Raiting="0" Type="1" Angle="0" Racurs="0" Bw="24" Bh="24" left="140" top="233" right="420" bottom="513" Comment="" />
+</TLFSemanticImageDescriptor>
