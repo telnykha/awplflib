@@ -349,6 +349,49 @@ void TLFDetectEngine::Clear()
     this->m_mask.FreeImages();
 }
 
+///////////////
+bool TLFDetectEngine::LoadXML(TiXmlElement* parent)
+{
+    //printf("TLFDetectEngine: LoadXML.\n");
+
+    try
+    {
+      if (parent == NULL)
+          return false;
+      const char* str =  parent->Attribute("type");
+      if (strcmp(str, this->GetName()) != 0)
+		  return false;
+	  this->m_strPredictorName = parent->Attribute("predictor");
+
+	  this->m_detectors.Clear();
+
+	  ILFObjectDetector* dt = NULL;
+	  TiXmlNode* elem = parent->FirstChild("ILFObjectDetector");
+	  if (elem == NULL)
+	  {
+			  dt = new TSCObjectDetector();
+			  this->m_detectors.Add(dt);
+	  }
+	  else
+	  {
+		  do
+		  {
+			  dt = this->LoadDetector(elem->ToElement());
+			  if (dt != NULL)
+				  this->m_detectors.Add(dt);
+
+			  elem = elem->NextSibling();
+		  } while (elem != NULL);
+	  }
+	 }
+     catch(...)
+     {
+        printf("TLFDetectEngine: exeption while loading.");
+	return false;
+     }
+	return true;
+}
+// 
 ILFObjectDetector* TLFDetectEngine::LoadDetector(TiXmlElement* parent)
 {
    	if (parent == NULL)
