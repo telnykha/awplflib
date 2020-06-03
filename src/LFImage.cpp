@@ -106,28 +106,31 @@ void TLFImage::FreeImages()
 	_AWP_SAFE_RELEASE_(m_pIntegralBlue);
 
 
-	this->m_lnpix = NULL;
-	this->m_sqpix = NULL;
+	m_lnpix = NULL;
+	m_sqpix = NULL;
 	m_rlnpix = NULL;
 	m_glnpix = NULL;
 	m_blnpix = NULL;
-
 }
 
 bool TLFImage::LoadFromFile(const char* szFileName)
 {
+    printf("TLFImage::LoadFromFile\n");	
     bool res = true;
 	FreeImages();
     try
     {
-        if (awpLoadImage(szFileName, &m_pImage) != AWP_OK)
+	printf("awpLoadImage\n");	        
+	if (awpLoadImage(szFileName, &m_pImage) != AWP_OK)
            throw 0;
-		this->GetBlueIntegral();
-		this->GetGreenIntegral();
-		this->GetRedIntegral();
+
+   	GetBlueIntegral();
+	GetGreenIntegral();
+	GetRedIntegral();
     }
     catch(...)
     {
+	printf("TLFImage::LoadFromFile exception!\n");	
         res = false;
     }
     return res;

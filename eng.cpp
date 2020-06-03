@@ -5,31 +5,43 @@
 /*начало, поехали*/
 int main()
 {
+	printf("Hello Locate Framework!\n");			
 	TLFImage image;
-	TLFFGEngine engine;
-	if (!engine.Load("/home/nastya/Документы/faces_engine_2016_1.xml"))
+	TLFDetectEngine engine;
+	printf("Loadng engine....");
+	if (!engine.Load("engine.xml"))
 	{
-		printf("1");
+		printf("cannot load engine!\n");
 		return -1;
 	}
-	if (!image.LoadFromFile("/home/nastya/Документы/test456/00002_931230_fa.jpg"))
+	printf("done.\n");
+	printf("Loadng image....");
+	if (!image.LoadFromFile("test.jpg"))
 	{
-		printf("2");
+		printf("cannot load image\n");
 		return -1;
 	}
+	printf("done.\n");
+	printf("Process image....");
 	if (!engine.SetSourceImage(&image, true))
 	{
-		printf("3");
+		printf("cannot process image\n");
 		return -1;
 	}
+	printf("done.\n");
+
 	if (engine.GetItemsCount() > 0)
 	{
-		printf("4");
+		printf("number detectec objects = %i\n", engine.GetItemsCount());
 		TLFSemanticImageDescriptor* si = engine.GetSemantic();
 		if (si != NULL)
 			si->SaveXML("faces.xml");
 	}
-	else printf("!!!");
+	else 
+printf("!!!");
+
+	printf("Work done.\n");			
+
 	return 0;
 }
 /*вот и все*/

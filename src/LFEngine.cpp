@@ -196,9 +196,12 @@ bool ILFDetectEngine::Save(const char* lpFileName)
 }
 bool ILFDetectEngine::Load(const char* lpFileName)
 {
-	TiXmlDocument doc(lpFileName);
+    TiXmlDocument doc(lpFileName);
     if (!doc.LoadFile())
-		return false;
+    {	
+	printf("ILFDetectEngine::Load failed!!!\n");		
+	return false;
+    }
 	this->m_strName = lpFileName;
 	TiXmlHandle hDoc(&doc);
     TiXmlElement* pElem = NULL;
@@ -349,6 +352,8 @@ void TLFDetectEngine::Clear()
 ///////////////
 bool TLFDetectEngine::LoadXML(TiXmlElement* parent)
 {
+    printf("TLFDetectEngine: LoadXML.\n");
+
     try
     {
       if (parent == NULL)
@@ -381,7 +386,8 @@ bool TLFDetectEngine::LoadXML(TiXmlElement* parent)
 	 }
      catch(...)
      {
-        return false;
+        printf("TLFDetectEngine: exeption while loading.");
+	return false;
      }
 	return true;
 }
@@ -421,8 +427,6 @@ TiXmlElement* TLFDetectEngine::SaveXML()
 	parent->SetAttribute("type", GetName());
 	parent->SetAttribute("predictor", "TLFAverageNNPredictor");
 
-    // для детектора создаем новый элемент, а тот, который возвращает детектор
-    // прилинковываем к нему.
     TiXmlElement* de = new TiXmlElement("ILFObjectDetector");
 	de->SetAttribute("type", detector->GetName());
 	TiXmlElement* e = detector->SaveXML();
@@ -444,6 +448,7 @@ void TLFDetectEngine::InitDetectors()
 //searches the objects in the image.
 bool TLFDetectEngine::FindObjects()
 {
+	printf("TLFDetectEngine::FindObjects()\n");
 	if (this->m_SourceImage.GetImage() == NULL)
 		return false;
 	if (this->m_SourceImage.GetImage()->dwType != AWP_BYTE)
@@ -503,7 +508,7 @@ bool TLFDetectEngine::FindObjects()
 		else
 			OverlapsFilter(&this->m_result);
 	}
-
+	printf("TLFDetectEngine::FindObjects() done.\n");
 	return true;
 }
 //
