@@ -45,7 +45,7 @@ TCSAdaBoost::TCSAdaBoost()
     m_widthBase = 24;
     m_heightBase = 24;
     m_nFeaturesCount = 200;
-	m_FinishFar = 0.1;
+	m_FinishFar = 0.2;
   	m_strOutName = "cascade.dat";
     m_nTestFaces = 0;
     m_nTestNonFaces = 0;
@@ -450,7 +450,7 @@ void TCSAdaBoost::InitFeatures()
 {
    
 	DbgMsg("AdaBoost: init features .... ");
-	
+	srand(11);
 	m_Features.Clear();
 
    int sx = 1;
@@ -465,6 +465,10 @@ void TCSAdaBoost::InitFeatures()
 		   {
 			   for (sx = 2; sx <= m_widthBase - w -3; sx++)
 			   {
+				   
+				   bool skip = (rand() % 10) > 2;
+				   if (skip)
+					   continue;
 				   TCSWeakTraining* wt = NULL;
 				   TLFVFeature Sensor0(sx, sy, w/2, h);
 				   wt = new TCSWeakTraining(&Sensor0);

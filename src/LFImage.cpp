@@ -115,12 +115,10 @@ void TLFImage::FreeImages()
 
 bool TLFImage::LoadFromFile(const char* szFileName)
 {
-    printf("TLFImage::LoadFromFile\n");	
     bool res = true;
 	FreeImages();
     try
     {
-	printf("awpLoadImage\n");	        
 	if (awpLoadImage(szFileName, &m_pImage) != AWP_OK)
            throw 0;
 

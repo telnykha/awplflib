@@ -51,6 +51,7 @@
 using namespace std;
 
 typedef vector<string>      TLFStrings;
+typedef string TLFString;
 
 extern "C"
 {
