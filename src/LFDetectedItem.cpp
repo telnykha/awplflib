@@ -52,7 +52,7 @@ TLFDetectedItem::TLFDetectedItem()
 	this->m_bh = 10;
 	this->m_Raiting = 0;
 	this->m_racurs = 0;
-	this->m_pRect = NULL;
+	this->m_pRect = new TLFRect();
 	this->m_type = "unknown";
 	this->m_angle = 0;
 	this->m_strDetectorName = "";
@@ -63,9 +63,19 @@ TLFDetectedItem::TLFDetectedItem()
 	m_state = 1;
 	m_cluster_idx = -1;
 	this->m_strComment = "";
+	this->m_zone = NULL;
 }
 
-TLFDetectedItem::TLFDetectedItem(awpRect* pRect, double raiting, std::string type, int angle, int racurs, int bw, int bh, string strDetector, UUID id, ILFPredictor* predictor) : TLFObject()
+TLFDetectedItem::TLFDetectedItem(awpRect* pRect,
+									double raiting,
+									std::string type,
+									int angle,
+									int racurs,
+									int bw,
+									int bh,
+									string strDetector,
+									UUID id,
+									ILFPredictor* predictor) : TLFObject()
 {
 	this->m_pRect = new TLFRect();
 	if (pRect != NULL)
@@ -84,6 +94,7 @@ TLFDetectedItem::TLFDetectedItem(awpRect* pRect, double raiting, std::string typ
 	m_state = 1;
 	m_cluster_idx = -1;
 	this->m_strComment = "";
+	this->m_zone = NULL;
 }
 
 TLFDetectedItem::TLFDetectedItem(TLFDetectedItem& item) : TLFObject()
@@ -103,6 +114,7 @@ TLFDetectedItem::TLFDetectedItem(TLFDetectedItem& item) : TLFObject()
 	m_state = 1;
 	m_cluster_idx = item.m_cluster_idx;
 	this->m_strComment = item.m_strComment;
+	this->m_zone = NULL;
 }
 
 TLFDetectedItem::TLFDetectedItem(TLFDetectedItem* item) : TLFObject()
@@ -122,6 +134,7 @@ TLFDetectedItem::TLFDetectedItem(TLFDetectedItem* item) : TLFObject()
 	m_state = 1;
 	m_cluster_idx = item->m_cluster_idx;
 	this->m_strComment = item->m_strComment;
+	this->m_zone = NULL;
 }
 
 TLFDetectedItem::~TLFDetectedItem()
@@ -237,6 +250,12 @@ TiXmlElement* TLFDetectedItem::SaveXML()
 	elem->SetAttribute("right", r.right);
 	elem->SetAttribute("bottom", r.bottom);
 	elem->SetAttribute("Comment", m_strComment.c_str());
+	TLFZone* z = GetZone();
+	if (z != NULL)
+	{
+		z->SaveXML(elem);
+		delete z;
+	}
 
 	return elem;
 }
@@ -277,6 +296,14 @@ bool TLFDetectedItem::LoadXML(TiXmlElement* parent)
 		this->m_pRect = new TLFRect();
 
 	this->m_pRect->SetRect(r);
+
+	TiXmlElement* child = parent->FirstChildElement();
+	if (child)
+	{
+		if (m_zone == NULL)
+			m_zone = new TLFZone();
+        m_zone->LoadXML(child);
+	}
 
 	return true;
 }
@@ -332,13 +359,29 @@ void TLFDetectedItem::Rotate(awpPoint c, int angle)
 	rect1->SetRect(awpr);
 }
 
-void		TLFDetectedItem::SetBounds(awpRect& rect)
+void		TLFDetectedItem::SetBounds(awpRect& rect, int iw, int ih)
 {
-    if (this->m_pRect == NULL)
-    {
-        m_pRect = new TLFRect();
-    }
-    m_pRect->SetRect(rect);
+	if (this->m_pRect == NULL)
+	{
+		m_pRect = new TLFRect();
+	}
+	m_pRect->SetRect(rect);
+
+	// setup zone
+	awp2DPoint p1;
+	awp2DPoint p2;
+	p1.X = 100.0*(double)rect.left / (double)iw;
+	p1.Y = 100.0*(double)rect.top / (double)ih;
+	p2.X = 100.0*(double)rect.right / (double)iw;
+	p2.Y = 100.0*(double)rect.bottom / (double)ih;
+	TLF2DRect zr(p1,p2);
+	if (m_zone != NULL)
+	{
+		delete m_zone;
+	}
+
+    m_zone = new TLFZone(zr);
+
 }
 
 TLFRect* TLFDetectedItem::Predict(ILFDetectEngine* engine)
@@ -433,4 +476,39 @@ void TLFDetectedItem::SetHasObject(bool v)
 	{
 		m_cluster_idx = -1;
 	}
+}
+
+
+void TLFDetectedItem::SetZone(TLFZone* zone, int w, int h)
+{
+	if (m_zone != NULL)
+		delete m_zone;
+	m_zone = new TLFZone(*zone);
+	// update m_pRect with new settings
+	TLF2DRect* _rect2D = m_zone->GetBounds();
+	if (_rect2D != NULL)
+	{
+		awpRect _r;
+		_r.left = floor(_rect2D->GetLeftTop().X*w / 100. + 0.5);
+		_r.top = floor(_rect2D->GetLeftTop().Y*h / 100. + 0.5);
+
+		_r.right = floor(_rect2D->GetRightBottom().X*w / 100. + 0.5);
+		_r.bottom = floor(_rect2D->GetRightBottom().Y*h / 100. + 0.5);
+		m_pRect->SetRect(_r);
+		delete _rect2D;
+	}
+}
+
+TLFZone* TLFDetectedItem::GetZone()
+{
+	if (m_pRect == NULL)
+		return NULL;
+	if (m_zone == NULL)
+	{
+	  //TLF2DRect _rect(m_pRect->GetRect());
+	  //return new TLFZone(_rect);
+	  return NULL;
+	}
+	else
+	   return new TLFZone(*m_zone);
 }

@@ -39,7 +39,7 @@
 //
 //      Locate Framework  (LF) Computer Vision Library.
 //		File: LFFeatures.h
-//		Purpose: Declares Geometry classes 
+//		Purpose: Declares Geometry classes
 //
 //		TLFPoint			- awpPoint wrapper class 
 //		TLF2DPoint			- awp2DPoint wrapper class 
@@ -107,6 +107,7 @@ public:
 	TLF2DPoint(awp2DPoint p);
 	TLF2DPoint(TLFPoint& p);
 	TLF2DPoint(TLF2DPoint& p);
+	TLF2DPoint(double x, double y);
 
 	virtual ~TLF2DPoint();
 	awp2DPoint GetPoint();
@@ -191,6 +192,7 @@ public:
 	TLF2DRect();
 	TLF2DRect(awp2DPoint left_top, awp2DPoint right_bottom);
 	TLF2DRect(TLF2DRect& rect);
+    TLF2DRect(awpRect r);
 
 	void SetRect(TLF2DRect& rect);
 
@@ -410,7 +412,7 @@ class TLF2DOpenPolygon : public TLFObjectList
 public:
     TLF2DOpenPolygon();
     TLF2DOpenPolygon& operator=(TLF2DOpenPolygon& other);
-    TLF2DLineSegment* GetSegment(int idx);
+	TLF2DLineSegment* GetSegment(int idx);
     void AddSegment(TLF2DLineSegment* segment);
 
 	/** Load form XML*/

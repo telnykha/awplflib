@@ -51,11 +51,6 @@
 *   @{
 */
 
-/**
-\Enum TEZoneTypes
-\brief LF Zone types
-*/
-typedef enum {ZTUnknown, ZTRect, ZTContour, ZTLineSegment, ZTOpenPolygon} TEZoneTypes;
 
 typedef struct
 {
@@ -130,10 +125,13 @@ public:
 	TLF2DRect* GetRect();
 	/** Contour points. NULL if not contour*/
 	TLF2DContour* GetContour();
-    /** Line segment. NULL if not Line segment */
-    TLF2DLineSegment* GetLineSegmnet();
+	/** Line segment. NULL if not Line segment */
+	TLF2DLineSegment* GetLineSegmnet();
     /** Open Polygon. NULL if not open polygon */
-    TLF2DOpenPolygon* GetOpenPolygon();
+	TLF2DOpenPolygon* GetOpenPolygon();
+
+	TLF2DRect* GetBounds();
+
 	/** Square of Zone*/
 	double Square();
 	/** Square of Zone on particular image*/

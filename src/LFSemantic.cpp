@@ -54,6 +54,7 @@ TLFSemanticDictinaryItem::TLFSemanticDictinaryItem()
 	UUID id;
 	LF_UUID_CREATE(id)
 	m_id = LFGUIDToString(&id);
+	this->m_zoneType = ZTRect;
 }
 
 TLFSemanticDictinaryItem::TLFSemanticDictinaryItem(const char* lpWord)
@@ -64,6 +65,7 @@ TLFSemanticDictinaryItem::TLFSemanticDictinaryItem(const char* lpWord)
 	UUID id;
 	LF_UUID_CREATE(id)
 	m_id = LFGUIDToString(&id);
+	this->m_zoneType = ZTRect;
 }
 
 TLFSemanticDictinaryItem::TLFSemanticDictinaryItem(TLFSemanticDictinaryItem& item)
@@ -74,6 +76,7 @@ TLFSemanticDictinaryItem::TLFSemanticDictinaryItem(TLFSemanticDictinaryItem& ite
 	m_scanner->SetBaseHeight(item.m_scanner->GetBaseHeight());
 	m_scanner->SetBaseWidth(item.m_scanner->GetBaseWidth());
 	m_id = item.m_id;
+	this->m_zoneType = item.m_zoneType;
 }
 
 TLFSemanticDictinaryItem::~TLFSemanticDictinaryItem()
@@ -91,6 +94,7 @@ TLFSemanticDictinaryItem&  TLFSemanticDictinaryItem::operator =(TLFSemanticDicti
 		m_scanner->SetBaseHeight(item.m_scanner->GetBaseHeight());
 		m_scanner->SetBaseWidth(item.m_scanner->GetBaseWidth());
 		m_id = item.m_id;
+		m_zoneType = item.m_zoneType;
 	}
 	return *this;
 }
@@ -131,6 +135,15 @@ std::string TLFSemanticDictinaryItem::GetId()
 {
 	return m_id;
 }
+TEZoneTypes TLFSemanticDictinaryItem::GetZoneType()
+{
+	return this->m_zoneType;
+}
+
+void TLFSemanticDictinaryItem::SetZoneType(TEZoneTypes zt)
+{
+	this->m_zoneType = zt;
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 bool TLFSemanticDictinaryItem::LoadXML(const char* lpFileName)
@@ -144,6 +157,7 @@ TiXmlElement* TLFSemanticDictinaryItem::SaveXML()
 	dscr->SetAttribute("noun", m_strLabel.c_str());
 	dscr->SetAttribute("color", m_color);
 	dscr->SetAttribute("id", m_id.c_str());
+	dscr->SetAttribute("zoneType", m_zoneType);
 	if (m_scanner != NULL)
 	{
 		TiXmlElement* scanner_dscr = m_scanner->SaveXML();
@@ -176,6 +190,13 @@ bool TLFSemanticDictinaryItem::LoadXML(TiXmlElement* parent)
 	}
 	if (!this->m_scanner->LoadXML(parent->FirstChildElement()))
 		return false;
+	const char* zt = parent->Attribute("zoneType");
+	if (zt != NULL)
+	{
+		int value = 0;
+		parent->QueryIntAttribute("zoneType", &value);
+        m_zoneType = value;
+	}
 	return true;
 }
 //---------------------------семантической словарь-----------------------------

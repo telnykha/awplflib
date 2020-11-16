@@ -47,28 +47,35 @@
 #define __LF_H__
 
 #ifdef WIN32
-     #include <windows.h>
+	 #include <windows.h>
 #endif
 
 extern "C"
 {
-#include "awpipl.h"  
+#include "awpipl.h"
 #ifdef WIN32
 	#include <Rpc.h>
 #else
-    #include <uuid/uuid.h>
-    typedef uuid_t UUID;
+	#include <uuid/uuid.h>
+	typedef uuid_t UUID;
 #endif
 }
 #include <string>
-#include <iostream>     
+#include <iostream>
 #include <stdio.h>
 #include "tinyxml.h"
 
 typedef int(*TLFListSortCompare)(void * Item1, void * Item2);
 typedef void (*TLFProgress)(const char* lpMessage, int progress);
 
-typedef struct 
+/**
+\Enum TEZoneTypes
+\brief LF Zone types
+*/
+typedef enum {ZTUnknown, ZTRect, ZTContour, ZTLineSegment, ZTOpenPolygon} TEZoneTypes;
+class TLFZone;
+
+typedef struct
 {
 	bool	HasObject;
 	int		Angle;
@@ -85,6 +92,8 @@ struct SLFAttrResult
 	double  m_Raiting2;
 	int    m_Result;     /*result of classificaton: -1 0 1*/
 };
+
+
 
 /*
     forward declaration
@@ -634,11 +643,11 @@ public:
    \param pImage - pointer to awpImage structure 
    \param scan   - initializes scanner  
    \retrurn  true if detector has valid image and scanner creates all nessesary 
-   \structures 
+   \structures
    */
    virtual bool Init(awpImage* pImage, bool scan = true)					   		=0;
    /**
-   \brief performs classification withing rectangle 
+   \brief performs classification withing rectangle
    \param Fragmnet -  rect withing image. Image was initialized by ILFObjectDetector::Init
    \param err   - pointer to double array with GetStagesCount() + 1 size, 
    \contains responce of each stage  and their sum
@@ -800,7 +809,7 @@ public:
 };
 /** @} */ /*  end of LFInterfaces group */
 
-/** \defgroup LFDescriptors 
+/** \defgroup LFDescriptors
 *	Object descriptors of the Locate Framework.
 *   The library provides several varieties of object descriptors:
 *	(obsolete)TLFRoiImageDescriptor
@@ -812,7 +821,7 @@ public:
 */
 
 
-/**  @brief (obsolete)Description of the image using the ROI files *.ieye file format 
+/**  @brief (obsolete)Description of the image using the ROI files *.ieye file format
 */
 class TLFRoiImageDescriptor : public TLFObject
 {
@@ -828,15 +837,15 @@ public:
 	void LoadFromFile(const char* lpFileName);
 	void SaveToFile(const char* lpFileName);
 	void AddRoi(awpPoint p1, awpPoint p2);
-    void Clear();
+	void Clear();
 };
 
 /** @brief Description of detect item. Can be any rectangle in the image.
 *   Used to describe the result of the operation of all types of detectors.
-*   See ILFObjectDetector. 
-*	Includes detector name and type, bounding box, tilt angle, view type, status, 
+*   See ILFObjectDetector.
+*	Includes detector name and type, bounding box, tilt angle, view type, status,
 *	rating, confidence, and unique identifier.
-*   
+*
 */
 class TLFDetectedItem: public TLFObject
 {
@@ -855,6 +864,8 @@ protected:
 	int				m_state;
 	int				m_cluster_idx;
 	int				m_color;
+	TLFZone*        m_zone;
+
 public:
 
 	TLFDetectedItem();
@@ -864,7 +875,7 @@ public:
 	virtual ~TLFDetectedItem();
 	/*data exchange*/
 	TLFRect*	GetBounds();
-	void		SetBounds(awpRect& rect);
+	void		SetBounds(awpRect& rect, int iw = 640, int ih = 480);
 
 	double		GetRaiting();
 	void		SetRaiting(double value);
@@ -907,6 +918,10 @@ public:
 	TLFRect* Predict(ILFDetectEngine* engine);
 	void Update(ILFDetectEngine* engine, TLFRect* rect);
 	int GetHealth();
+
+	void SetZone(TLFZone* zone, int w = 640, int h = 480);
+	TLFZone* GetZone();
+
 	/*работа с  xml файлом*/
 	TiXmlElement* SaveXML();
 	bool LoadXML(TiXmlElement* parent);

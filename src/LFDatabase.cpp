@@ -614,7 +614,7 @@ void TLFDBLabeledImages::UpdateDatabase()
             {
                 TLFSemanticDictinaryItem* si = m_dictinary.GetWordFromDictinary(k);
                 std::string id   = si->GetId();
-                if (item_type == id)
+				if (item_type == id)
                 {
                     item->SetType(id.c_str());
                     item->SetColor(si->GetColor());

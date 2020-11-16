@@ -100,6 +100,13 @@ TLF2DPoint::TLF2DPoint(TLF2DPoint& p)
 {
 	m_point = p.GetPoint();
 }
+TLF2DPoint::TLF2DPoint(double x, double y)
+
+{
+	m_point.X = x;
+    m_point.Y = y;
+}
+
 
 TLF2DPoint::~TLF2DPoint()
 {}
@@ -520,6 +527,14 @@ TLF2DRect::TLF2DRect(TLF2DRect& rect)
 {
 	this->m_LeftTop = rect.m_LeftTop;
 	this->m_RightBottom = rect.m_RightBottom;
+}
+
+TLF2DRect::TLF2DRect(awpRect r)
+{
+	this->m_LeftTop.X = (double)r.left;
+	this->m_LeftTop.Y = (double)r.top;
+	this->m_RightBottom.X = (double)r.right;
+    this->m_RightBottom.Y = (double)r.bottom;
 }
 
 void TLF2DRect::SetRect(TLF2DRect& rect)

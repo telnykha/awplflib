@@ -63,6 +63,7 @@ protected:
 	std::string        m_strLabel;
 	int                m_color;
 	std::string        m_id;
+	TEZoneTypes        m_zoneType;
 public:
 	TLFSemanticDictinaryItem();
 	TLFSemanticDictinaryItem(const char* lpWord);
@@ -76,6 +77,8 @@ public:
 	void SetColor(int color);
 	void SetItemLabel(const char* lpLabel);
 	std::string GetId();
+	TEZoneTypes GetZoneType();
+	void SetZoneType(TEZoneTypes zt);
 
 	virtual bool SaveXML(const char* lpFileName);
 	virtual bool LoadXML(const char* lpFileName);

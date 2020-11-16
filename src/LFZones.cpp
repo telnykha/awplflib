@@ -176,6 +176,88 @@ double TLFZone::Square()
     else
     	return 0;
 }
+// return bounding box
+TLF2DRect* TLFZone::GetBounds()
+{
+	if (IsRect())
+	{
+		return new TLF2DRect(m_Rect);
+	}
+	else if(this->IsContour())
+	{
+		awp2DPoint p1 = this->m_contour.GetPoint(0);
+		double min_x = p1.X;
+		double min_y = p1.Y;
+		double max_x = p1.X;
+		double max_y = p1.Y;
+		for (int i = 0; i < this->m_contour.GetNumPoints(); i++)
+		{
+		   p1 = this->m_contour.GetPoint(i);
+		   if (min_x > p1.X)
+			min_x = p1.X;
+		   if (max_x < p1.X)
+			max_x = p1.X;
+		   if (min_y > p1.Y)
+			min_y = p1.Y;
+		   if (max_y < p1.Y)
+			max_y = p1.Y;
+		}
+		TLF2DPoint lt(min_x, min_y);
+		TLF2DPoint rb(max_x, max_y);
+		return new TLF2DRect(lt.GetPoint(), rb.GetPoint());
+	}
+	else if (this->IsLineSegment())
+	{
+		awp2DPoint p1 = m_segment.GetStart();
+		awp2DPoint p2 = m_segment.GetFinish();
+
+		double min_x = AWP_MIN(p1.X, p2.X);
+		double min_y = AWP_MIN(p1.Y, p2.Y);
+		double max_x = AWP_MAX(p1.X, p2.X);
+		double max_y = AWP_MAX(p1.Y, p2.Y);
+		TLF2DPoint lt(min_x, min_y);
+		TLF2DPoint rb(max_x, max_y);
+		return new TLF2DRect(lt.GetPoint(), rb.GetPoint());
+	}
+	else if (this->IsOpenPolygon())
+	{
+		awp2DPoint p1 = this->m_openPolygon.GetSegment(0)->GetStart();
+		double min_x = p1.X;
+		double min_y = p1.Y;
+		double max_x = p1.X;
+		double max_y = p1.Y;
+		for (int i = 0; i < this->m_openPolygon.GetCount(); i++)
+		{
+		   p1 = this->m_openPolygon.GetSegment(i)->GetStart();
+		   if (min_x > p1.X)
+			min_x = p1.X;
+		   if (max_x < p1.X)
+			max_x = p1.X;
+		   if (min_y > p1.Y)
+			min_y = p1.Y;
+		   if (max_y < p1.Y)
+			max_y = p1.Y;
+		}
+
+	   p1 = this->m_openPolygon.GetSegment(m_openPolygon.GetCount()-1)->GetStart();
+	   if (min_x > p1.X)
+		min_x = p1.X;
+	   if (max_x < p1.X)
+		max_x = p1.X;
+	   if (min_y > p1.Y)
+		min_y = p1.Y;
+	   if (max_y < p1.Y)
+		max_y = p1.Y;
+
+
+		TLF2DPoint lt(min_x, min_y);
+		TLF2DPoint rb(max_x, max_y);
+		return new TLF2DRect(lt.GetPoint(), rb.GetPoint());
+	}
+	else
+		return NULL;
+}
+
 // returns zone's square in pixels
 double TLFZone::SquareOnImage(awpImage* img)
 {
