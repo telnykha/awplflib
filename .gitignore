@@ -301,3 +301,5 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 *.local
+src/__history/*.*
+src/__recovery/*.*

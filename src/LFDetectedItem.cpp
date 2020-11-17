@@ -114,7 +114,13 @@ TLFDetectedItem::TLFDetectedItem(TLFDetectedItem& item) : TLFObject()
 	m_state = 1;
 	m_cluster_idx = item.m_cluster_idx;
 	this->m_strComment = item.m_strComment;
-	this->m_zone = NULL;
+	TLFZone* z = item.GetZone();
+	if (z != NULL) {
+		this->m_zone = new TLFZone(*z);
+		delete z;
+	}
+	else
+		m_zone = NULL;
 }
 
 TLFDetectedItem::TLFDetectedItem(TLFDetectedItem* item) : TLFObject()
@@ -134,7 +140,13 @@ TLFDetectedItem::TLFDetectedItem(TLFDetectedItem* item) : TLFObject()
 	m_state = 1;
 	m_cluster_idx = item->m_cluster_idx;
 	this->m_strComment = item->m_strComment;
-	this->m_zone = NULL;
+	TLFZone* z = item->GetZone();
+	if (z != NULL) {
+		this->m_zone = new TLFZone(*z);
+		delete z;
+	}
+	else
+		m_zone = NULL;
 }
 
 TLFDetectedItem::~TLFDetectedItem()
