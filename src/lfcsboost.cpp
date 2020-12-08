@@ -457,16 +457,16 @@ void TCSAdaBoost::InitFeatures()
    int sy = 1;
    int w = 3;
    int h = 3;
-   for (h = m_heightBase; h >= 3; h-=3)
+   for (h = m_heightBase; h >= 3; h-=1)
    {
-	   for (w = m_widthBase; w >= 3; w-=3)
+	   for (w = m_widthBase; w >= 3; w-=1)
 	   {
-		   for (sy = 2; sy <= m_heightBase - h -3; sy++)
+		   for (sy = 0; sy <= m_heightBase - h -3; sy++)
 		   {
-			   for (sx = 2; sx <= m_widthBase - w -3; sx++)
+			   for (sx = 0; sx <= m_widthBase - w -3; sx++)
 			   {
 				   
-				   bool skip = (rand() % 10) > 2;
+				   bool skip = false;// (rand() % 10) > 2;
 				   if (skip)
 					   continue;
 				   TCSWeakTraining* wt = NULL;
@@ -531,9 +531,9 @@ void TCSAdaBoost::InitFeatures()
 					   m_Features.Add(wt);
 				   else
 					   delete wt;
-				   TLFColorSensor9Bit Sensor10(sx,sy,w,h);
-				   wt = new TCSWeakTraining(&Sensor10);
-				   m_Features.Add(wt);
+				   //TLFColorSensor9Bit Sensor10(sx,sy,w,h);
+				   //wt = new TCSWeakTraining(&Sensor10);
+				   //m_Features.Add(wt);
 			   }
 		   }
 	   }

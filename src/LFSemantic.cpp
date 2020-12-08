@@ -195,7 +195,7 @@ bool TLFSemanticDictinaryItem::LoadXML(TiXmlElement* parent)
 	{
 		int value = 0;
 		parent->QueryIntAttribute("zoneType", &value);
-        m_zoneType = value;
+        m_zoneType = (TEZoneTypes)value;
 	}
 	return true;
 }

@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "awpipl2", "..\..\..\awpipl2
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JPEGLIB", "..\..\..\jpeg-6b\vc\vc2015\JPEGLIB.vcxproj", "{D22F6666-746D-4436-8EAD-481C2C37AF55}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CSBuilder", "CSBuilder.vcxproj", "{0FDB7646-1291-4823-8819-EB8011A0041F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -61,6 +63,14 @@ Global
 		{D22F6666-746D-4436-8EAD-481C2C37AF55}.Release|Win32.Build.0 = Release|Win32
 		{D22F6666-746D-4436-8EAD-481C2C37AF55}.Release|x64.ActiveCfg = Release|x64
 		{D22F6666-746D-4436-8EAD-481C2C37AF55}.Release|x64.Build.0 = Release|x64
+		{0FDB7646-1291-4823-8819-EB8011A0041F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0FDB7646-1291-4823-8819-EB8011A0041F}.Debug|Win32.Build.0 = Debug|Win32
+		{0FDB7646-1291-4823-8819-EB8011A0041F}.Debug|x64.ActiveCfg = Debug|x64
+		{0FDB7646-1291-4823-8819-EB8011A0041F}.Debug|x64.Build.0 = Debug|x64
+		{0FDB7646-1291-4823-8819-EB8011A0041F}.Release|Win32.ActiveCfg = Release|Win32
+		{0FDB7646-1291-4823-8819-EB8011A0041F}.Release|Win32.Build.0 = Release|Win32
+		{0FDB7646-1291-4823-8819-EB8011A0041F}.Release|x64.ActiveCfg = Release|x64
+		{0FDB7646-1291-4823-8819-EB8011A0041F}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -155,7 +155,7 @@ bool		TCSBuildDetector::Build()
 		//обновление
 		if (!UpdateDetector())
 			break;
-
+		m_AdaBoost.InitFeatures();
 		cascade++;
 	};
 	return true;
