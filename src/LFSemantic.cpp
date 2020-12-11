@@ -395,19 +395,38 @@ bool TLFSemanticDictinary::CheckItem(TLFSemanticDictinaryItem* item)
 
 std::string TLFSemanticDictinary::GetWordByUUID(const char* uuid)
 {
-    std::string result = "";
-    std::string str_uuid = uuid;
-    for (int i = 0; i < GetCount(); i++)
-    {
-        TLFSemanticDictinaryItem* item = GetWordFromDictinary(i);
-        std::string str_item_uuid = item->GetId();
-        if (str_item_uuid == str_uuid)
-        {
-            result = item->GetItemLabel();
-            break;
-        }
-    }
-    return result;
+	std::string result = "";
+	std::string str_uuid = uuid;
+	for (int i = 0; i < GetCount(); i++)
+	{
+		TLFSemanticDictinaryItem* item = GetWordFromDictinary(i);
+		std::string str_item_uuid = item->GetId();
+		if (str_item_uuid == str_uuid)
+		{
+			result = item->GetItemLabel();
+			break;
+		}
+	}
+	return result;
 }
+
+std::string TLFSemanticDictinary::GetUUIDByWord(const char* label)
+{
+	std::string _str_label = label;
+	std::string result = "";
+	for (int i = 0; i < GetCount(); i++)
+	{
+		TLFSemanticDictinaryItem* item = GetWordFromDictinary(i);
+		std::string str_item_label = item->GetItemLabel();
+		if (_str_label == str_item_label)
+		{
+			result = item->GetId();
+			break;
+		}
+	}
+	return result;
+
+}
+
 
 
