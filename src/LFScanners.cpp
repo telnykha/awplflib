@@ -24,6 +24,9 @@ int ILFScanner::GetFragmentsCount()
 }
 TLFBounds* ILFScanner::GetFragment(int index)
 {
+	if (m_Fragments == NULL) {
+        return NULL;
+	}
 	return &m_Fragments[index];
 }
 
@@ -311,6 +314,11 @@ bool TLFScanner::Scan(int w0, int h0)
 	if (m_FragmentsCount == 0)
 		return false;
 	m_Fragments =  (TLFBounds*)malloc(m_FragmentsCount* sizeof(TLFBounds));
+	if (m_Fragments == NULL)
+	{
+        m_FragmentsCount = 0;
+		return false;
+	}
 
 	if (w > h)
 	{
