@@ -247,7 +247,7 @@ bool		TCSBuildDetector::BuildBkground()
 									TLFDetectedItem*  di = sd.GetDetectedItem(ii);
 									TLFRect* bounds = di->GetBounds();
 									rect_ovr = bounds->RectOverlap(r);
-									if (rect_ovr > 0.5)
+									if (rect_ovr > 0.1)
 									{
 										canSave = false;
 										break;
