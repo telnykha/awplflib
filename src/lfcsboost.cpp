@@ -380,6 +380,23 @@ void TCSAdaBoost::SetPath(const char* lpPath)
 	this->m_strPath = lpPath;
 }
 
+static bool _IsImageFile(std::string& strFileName)
+{
+	std::string strExt = LFGetFileExt(strFileName);
+	std::transform(strExt.begin(), strExt.end(), strExt.begin(), ::tolower);
+
+	if (strExt == ".awp")
+		return true;
+	if (strExt == ".jpg")
+		return true;
+	if (strExt == ".jpeg")
+		return true;
+	if (strExt == ".png")
+		return true;
+	if (strExt == ".bmp")
+		return true;
+	return false;
+}
 
 // загружает образцы для обучения из директории path и сохраняет их в списке объектов 
 // SampleList. в зависимости от установленного флага flag образцы считаются образцами 
@@ -387,63 +404,47 @@ void TCSAdaBoost::SetPath(const char* lpPath)
 // соответствует образцам фонов.
 bool TCSAdaBoost::LoadSample(TLFObjectList& SampleList, int flag, std::string const& path)
 {
-	DbgMsg( "Loading samples from " + path + "... " );
+	DbgMsg( "Loading samples from " + path + "... \n" );
     int count = 0;
-#ifdef WIN32
-    _finddata_t filesInfo;
-    intptr_t handle = 0;
+	TLFStrings names;
+	if (!LFGetDirFiles(path.c_str(), names))
+	{
+		DbgMsg("Reading names failed.");
+		return false;
+	}
+	if (names.size() == 0)
+	{
+		DbgMsg("Database is empty.");
+		return false;
+	}
+	DbgMsg("Reading " + TypeToStr(names.size()) + " files.\n");
+	for (int i = 0; i < names.size(); i++)
+	{
+		string name = names[i];
+		if (!_IsImageFile(name))
+			continue;
+		TCSSample* pSample = new TCSSample();
+		DbgMsg(name + "\n");
+		pSample->LoadFromFile((char*)name.c_str());
+		double e = 0;
+		if (pSample->GetImage()->sSizeX < this->m_widthBase || pSample->GetImage()->sSizeY < this->m_heightBase)
+		{
+			delete pSample;
+			continue;
+		}
+		awpImage* img = pSample->GetIntegralImage();
+		if (img == NULL)
+			continue;
+		pSample->GetSqIntegralImage();
+		bool need_process = flag == 1 ? true : false;
+		pSample->SetFlag(flag);
+		SampleList.Add(pSample);
+		++count;
+	}
 
-    if ( (handle = _findfirst( (char*)((path+"*.awp").c_str()), &filesInfo)) != -1 )
-    {
-        do
-        {
-            string name = path + filesInfo.name;
+	DbgMsg(TypeToStr(count) + " ok\n");
+	return count > 0;
 
-            TCSSample* pSample = new TCSSample();
-
-			pSample->LoadFromFile((char*)name.c_str());
-			double e = 0;
-			//if (!this->m_ResultClass.Classify(pSample, e))
-				//DbgMsg("error::" + string(filesInfo.name) + "\n");
-			//else
-			//	DbgMsg("success::" + string(filesInfo.name) + "\n");
-			if (pSample->GetImage()->sSizeX < this->m_widthBase || pSample->GetImage()->sSizeY < this->m_heightBase)
-			{
-				delete pSample;
-				//DeleteFile(name.c_str());
-				continue;
-			}
-			awpImage* img = pSample->GetIntegralImage();
-			if (img == NULL)
-				continue;
-			pSample->GetSqIntegralImage();
-			bool need_process = flag == 1?true:false;
-			pSample->SetFlag(flag);
-            SampleList.Add(pSample);
-            ++count;
-
-        }while(!_findnext( handle, &filesInfo ));
-    }
-    _findclose( handle );
-#else // WIN32
-
-//    struct dirent** namelist;
-//    if(( count = scandir( path.c_str(), &namelist, ".awp", alphasort )) < 0 )
-//            return 0;
-
-//    for( int i=0; i<count; i++ )
-//    {
-//            string name = path + namelist[i]->d_name;
-
-//            TCSSample* pSample = new TCSSample();
-//            pSample->LoadImage((char*)name.c_str());
-//            pSample->SetFlag(flag);
-//            SampleList.Add(pSample);
-//    }
-
-#endif // WIN32
-    DbgMsg( TypeToStr( count ) + " ok\n" );
-    return count > 0;
 }
 //
 void TCSAdaBoost::InitFeatures()
