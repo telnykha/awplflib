@@ -226,14 +226,14 @@ bool		TCSBuildDetector::BuildBkground()
 
 		m_AdaBoost.DbgMsg("Num = " + TypeToStr(count) + " " + names[i] + " ");
 		m_AdaBoost.DbgMsg(TypeToStr(Image.GetImage()->sSizeX) + "x" + TypeToStr(Image.GetImage()->sSizeY) + " ");
-		DWORD tc = GetTickCount();
+		AWPDWORD tc = LFGetTickCount();
 		//поиск образцов
 		int itemsFound = 0;
 		if (cs->GetStagesCount() != 0)
 		{
 			if (m_Engine.SetSourceImage(&Image, true))
 			{
-				tc = GetTickCount() - tc;
+				tc = LFGetTickCount() - tc;
 
 				m_AdaBoost.DbgMsg("Total items = " + TypeToStr(m_Engine.GetScanner()->GetFragmentsCount()) + "\n");
 				int nItemsCount = m_Engine.GetItemsCount() > m_nMaxSamplesPerImage ? m_nMaxSamplesPerImage : m_Engine.GetItemsCount();
