@@ -21,6 +21,10 @@ SRCPATH= src/
 #roc path 
 APPROC = utils/roc/
 
+#builder path 
+APPBUILDER = utils/builder/
+
+
 INC= -Iinclude -I../awpipl2/include
 
 # source files: awplflib library proper
@@ -44,7 +48,7 @@ LIBOBJECTS=  LFAttrFilter.o \
 	LFStrong.o LFStrongImpl.o LFThresholdProc.o LFUtils.o LFVector.o\
 	LFWeak.o LFWeakImpl.o LFZones.o LFDatabase.o LFAvgFeature.o LFSabotage.o
 
-all: awplflib.a rocmain roc engmain eng clean
+all: awplflib.a rocmain roc engmain eng buildmain builder clean
 
 awplflib:   
 	$(CC)  -fPIC -Ofast -c $(INC) $(addprefix src/, $(LIBSOURCES)) 
@@ -54,10 +58,15 @@ rocmain:
 	$(CC) -c $(INC) $(APPROC)roc.cpp 
 engmain:
 	$(CC) -c $(INC) eng.cpp 
+buildmain: 
+	$(CC) -c $(INC) $(APPBUILDER)main.cpp 
 #$(LIB)awplflib.a
 roc:
 	g++ $(INC) roc.o $(LIB)awplflib.a $(AWPLIB)awpipl2.a -ljpeg -luuid -ltinyxml -o roc
 eng:
 	g++ $(INC) eng.o $(LIB)awplflib.a $(AWPLIB)awpipl2.a -ljpeg -luuid -ltinyxml -o eng
+builder:
+	g++ $(INC) main.o $(LIB)awplflib.a $(AWPLIB)awpipl2.a -ljpeg -luuid -ltinyxml -o csbuild
+
 clean:
 	rm -f *.o *.awp

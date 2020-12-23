@@ -434,6 +434,7 @@ bool		TCSBuildDetector::UpdateDetector()
 	m_Engine.Save(this->m_strDetectorName.c_str());
 
 	return InitDetector();
+#endif
 }
 
 bool TCSBuildDetector::SaveConfig(std::string const& filename)
@@ -476,6 +477,7 @@ bool	TCSBuildDetector::InitDetector()
 // проверяет детектор.
 bool		    TCSBuildDetector::CheckDetector()
 {
+#ifdef WIN32 	
 	/*check detector*/
 	std::string strPath = m_AdaBoost.GetObjectsBase();
 	_finddata_t filesInfo;
@@ -520,7 +522,7 @@ bool		    TCSBuildDetector::CheckDetector()
 	//	m_AdaBoost.InitFeatures();
 	return res;
 #else
-return false;
+	return false;
 #endif
 }
 static int boost_random(int v)
