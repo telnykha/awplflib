@@ -448,7 +448,6 @@ void TLFDetectEngine::InitDetectors()
 //searches the objects in the image.
 bool TLFDetectEngine::FindObjects()
 {
-	printf("TLFDetectEngine::FindObjects()\n");
 	if (this->m_SourceImage.GetImage() == NULL)
 		return false;
 	if (this->m_SourceImage.GetImage()->dwType != AWP_BYTE)
@@ -508,7 +507,6 @@ bool TLFDetectEngine::FindObjects()
 		else
 			OverlapsFilter(&this->m_result);
 	}
-	printf("TLFDetectEngine::FindObjects() done.\n");
 	return true;
 }
 //

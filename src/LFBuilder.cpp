@@ -1,4 +1,22 @@
 #include "_LF.h"
+static bool _IsImageFile(std::string& strFileName)
+{
+	std::string strExt = LFGetFileExt(strFileName);
+	std::transform(strExt.begin(), strExt.end(), strExt.begin(), ::tolower);
+
+	if (strExt == ".awp")
+		return true;
+	if (strExt == ".jpg")
+		return true;
+	if (strExt == ".jpeg")
+		return true;
+	if (strExt == ".png")
+		return true;
+	if (strExt == ".bmp")
+		return true;
+	return false;
+}
+
 /**
 	TCSBuildDetector default constructor 
 */
@@ -170,19 +188,196 @@ bool		TCSBuildDetector::Build()
 // см. файл конфигурации m_strPathToBase
 bool		TCSBuildDetector::BuildBkground()
 {
-#ifdef WIN32
 	if (!CheckDetector())
 	{
 		printf("Invalid detector.\n");
 		return false;
 	}
-
 	RemoveBkground();
-
 	ILFObjectDetector* cs = m_Engine.GetDetector();
 	m_AdaBoost.DbgMsg("Building new bkground...\n");
 	int nCount = 0;
+	std::string strPath = m_strPathToBase;
+	TLFStrings names;
+	if (!LFGetDirFiles(strPath.c_str(), names))
+		return false;
+	if (names.size() == 0)
+		return false;
+	std::string strPathToArt = m_AdaBoost.GetArtefactsBase();
+	int count = 0;
+	double rect_ovr;
+	for (int i = 0; i < names.size(); i++)
+	{
+		if (!_IsImageFile(names[i]))
+			continue;
+		count++;
+		//Загрузка
+		std::string strImageName = names[i];
 
+		TLFImage Image;
+		TLFImage Image1;
+		if (!Image.LoadFromFile((char*)strImageName.c_str()))
+		{
+
+			continue;
+		}
+		awpConvert(Image.GetImage(), AWP_CONVERT_3TO1_BYTE);
+		Image1.SetImage(Image.GetImage());
+
+		m_AdaBoost.DbgMsg("Num = " + TypeToStr(count) + " " + names[i] + " ");
+		m_AdaBoost.DbgMsg(TypeToStr(Image.GetImage()->sSizeX) + "x" + TypeToStr(Image.GetImage()->sSizeY) + " ");
+		DWORD tc = GetTickCount();
+		//поиск образцов
+		int itemsFound = 0;
+		if (cs->GetStagesCount() != 0)
+		{
+			if (m_Engine.SetSourceImage(&Image, true))
+			{
+				tc = GetTickCount() - tc;
+
+				m_AdaBoost.DbgMsg("Total items = " + TypeToStr(m_Engine.GetScanner()->GetFragmentsCount()) + "\n");
+				int nItemsCount = m_Engine.GetItemsCount() > m_nMaxSamplesPerImage ? m_nMaxSamplesPerImage : m_Engine.GetItemsCount();
+				//сохранение образцов на диск
+				rect_ovr = 0;
+				for (int i = 0; i < nItemsCount; i++)
+				{
+					TLFDetectedItem* item = m_Engine.GetItem(i);
+
+					awpImage* Fragment = NULL;
+					awpRect r = item->GetBounds()->GetRect();
+					bool canSave = true;
+					/*
+					попытаемся загрузить xml описание изображеия.
+					*/
+					std::string strXmlFileName = LFChangeFileExt(strImageName, ".xml");
+					if (LFFileExists(strXmlFileName))
+					{
+						TLFSemanticImageDescriptor sd;
+						if (sd.LoadXML(strXmlFileName.c_str()))
+						{
+							for (int ii = 0; ii < sd.GetItemsCount(); ii++)
+							{
+								TLFDetectedItem*  di = sd.GetDetectedItem(ii);
+								TLFRect* bounds = di->GetBounds();
+								rect_ovr = bounds->RectOverlap(r);
+								if (rect_ovr > 0.1)
+								{
+									canSave = false;
+									break;
+								}
+							}
+						}
+						if (canSave)
+						{
+							itemsFound++;
+							if (awpCopyRect(Image1.GetImage(), &Fragment, &r) == AWP_OK)
+							{
+								nCount++;
+								std::string strFragmentName = strPathToArt + TypeToStr(nCount) + ".awp";
+								awpSaveImage(strFragmentName.c_str(), Fragment);
+								//m_AdaBoost.DbgMsg("Overlap = " + TypeToStr(rect_ovr) + "\n");
+								awpReleaseImage(&Fragment);
+								if (nCount >= m_nBgrdCount)
+								{
+									m_AdaBoost.DbgMsg("\nDone.\n");
+									return true;
+								}
+							}
+						}
+					}
+					else
+					{
+						itemsFound++;
+						if (awpCopyRect(Image1.GetImage(), &Fragment, &r) == AWP_OK)
+						{
+							nCount++;
+							std::string strFragmentName = strPathToArt + TypeToStr(nCount) + ".awp";
+							awpSaveImage(strFragmentName.c_str(), Fragment);
+							//m_AdaBoost.DbgMsg("Overlap = " + TypeToStr(rect_ovr) + "\n");
+							awpReleaseImage(&Fragment);
+							if (nCount >= m_nBgrdCount)
+							{
+								m_AdaBoost.DbgMsg("\nDone.\n");
+								return true;
+							}
+						}
+					}
+				}
+				m_AdaBoost.DbgMsg("Items found = " + TypeToStr(itemsFound) + " " + TypeToStr(tc) + " ms\n");
+				//if (nItemsCount == 0)
+				//	DeleteFile(strImageName.c_str());
+			}
+		}
+		else
+		{
+			m_AdaBoost.DbgMsg("Total items = " + TypeToStr(m_Engine.GetScanner()->GetFragmentsCount()) + "\n");
+			ILFScanner* s = m_Engine.GetScanner();
+			s->Scan(Image.GetImage()->sSizeX, Image.GetImage()->sSizeY);
+			s->GetFragmentsCount();
+			int nItemsCount = s->GetFragmentsCount() > m_nMaxSamplesPerImage ? m_nMaxSamplesPerImage : s->GetFragmentsCount();
+
+			//сохранение образцов на диск
+			for (int i = 0; i < nItemsCount; i++)
+			{
+				awpImage* Fragment = NULL;
+				awpRect r = s->GetFragmentRect(i);
+				bool canSave = true;
+				/*
+				попытаемся загрузить xml описание изображеия.
+				*/
+				std::string strXmlFileName = LFChangeFileExt(strImageName, ".xml");
+				if (LFFileExists(strXmlFileName))
+				{
+					TLFSemanticImageDescriptor sd;
+					if (sd.LoadXML(strXmlFileName.c_str()))
+					{
+						for (int ii = 0; ii < sd.GetItemsCount(); ii++)
+						{
+							TLFDetectedItem*  di = sd.GetDetectedItem(ii);
+							TLFRect* bounds = di->GetBounds();
+							if (bounds->RectOverlap(r) > 0.75)
+							{
+								canSave = false;
+								break;
+							}
+						}
+					}
+				}
+				if (canSave)
+				{
+					if (awpCopyRect(Image1.GetImage(), &Fragment, &r) == AWP_OK)
+					{
+						nCount++;
+						std::string strFragmentName = strPathToArt + TypeToStr(nCount) + ".awp";
+						awpSaveImage(strFragmentName.c_str(), Fragment);
+						awpReleaseImage(&Fragment);
+						if (nCount >= m_nBgrdCount)
+						{
+							m_AdaBoost.DbgMsg("\nDone.\n");
+							return true;
+						}
+					}
+				}
+			}
+
+
+		}
+		//if (nCount % 10 == 0)
+		m_AdaBoost.DbgMsg(">");
+	}
+	if (nCount < m_nMinBgrdCount)
+	{
+		m_AdaBoost.DbgMsg("\n Bkground not found.\n");
+		return false;
+	}
+	else
+	{
+		m_AdaBoost.DbgMsg("Done.\n");
+		return true;
+	}
+
+/*
+#ifdef WIN32
 	_finddata_t filesInfo;
 	intptr_t handle = 0;
 	std::string strPath = m_strPathToBase;
@@ -190,7 +385,6 @@ bool		TCSBuildDetector::BuildBkground()
 	strPath += "*.awp";
 	int count = 0;
 	double rect_ovr;
-	std::string strPathToArt = m_AdaBoost.GetArtefactsBase();
 	if ((handle = _findfirst((char*)strPath.c_str(), &filesInfo)) != -1)
 	{
 		do
@@ -231,9 +425,6 @@ bool		TCSBuildDetector::BuildBkground()
 						awpImage* Fragment = NULL;
 						awpRect r = item->GetBounds()->GetRect();
 						bool canSave = true;
-						/*
-						попытаемся загрузить xml описание изображеия.
-						*/
 						std::string strXmlFileName = LFChangeFileExt(strImageName, ".xml");
 						if (LFFileExists(strXmlFileName))
 						{
@@ -264,7 +455,6 @@ bool		TCSBuildDetector::BuildBkground()
 									awpReleaseImage(&Fragment);
 									if (nCount >= m_nBgrdCount)
 									{
-
 										m_AdaBoost.DbgMsg("\nDone.\n");
 										return true;
 									}
@@ -283,7 +473,6 @@ bool		TCSBuildDetector::BuildBkground()
 								awpReleaseImage(&Fragment);
 								if (nCount >= m_nBgrdCount)
 								{
-
 									m_AdaBoost.DbgMsg("\nDone.\n");
 									return true;
 								}
@@ -309,9 +498,6 @@ bool		TCSBuildDetector::BuildBkground()
 					awpImage* Fragment = NULL;
 					awpRect r = s->GetFragmentRect(i);
 					bool canSave = true;
-					/*
-					попытаемся загрузить xml описание изображеия.
-					*/
 					std::string strXmlFileName = LFChangeFileExt(strImageName, ".xml");
 					if (LFFileExists(strXmlFileName))
 					{
@@ -367,6 +553,7 @@ bool		TCSBuildDetector::BuildBkground()
 #else
 	return false;
 #endif
+*/
 }
 
 // выполняет "накачку сильного классификатора"
@@ -473,23 +660,7 @@ bool	TCSBuildDetector::InitDetector()
 		return CheckDetector();
 }
 
-static bool _IsImageFile(std::string& strFileName)
-{
-	std::string strExt = LFGetFileExt(strFileName);
-	std::transform(strExt.begin(), strExt.end(), strExt.begin(), ::tolower);
 
-	if (strExt == ".awp")
-		return true;
-	if (strExt == ".jpg")
-		return true;
-	if (strExt == ".jpeg")
-		return true;
-	if (strExt == ".png")
-		return true;
-	if (strExt == ".bmp")
-		return true;
-	return false;
-}
 
 // проверяет детектор.
 bool		    TCSBuildDetector::CheckDetector()
