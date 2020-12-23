@@ -3,6 +3,7 @@
 #ifndef __BCPLUSPLUS__
 #include <sys/stat.h> 
 #include <unistd.h>
+
 std::string LFGetFilePath(const std::string& strPath)
 {
     const std::string c = c_separator;
@@ -118,7 +119,20 @@ bool LFDirExist(const char* lpPath)
 */
 bool LFRemoveDir(const char* lpPath)
 {
-	return false;
+	const char *com = "exec rm -r "; 
+	const char *end = "/*";
+
+	int bufferSize = strlen(com) + strlen(lpPath) + strlen(end) + 1;
+	char* resCom = new char[bufferSize];
+	strcpy(resCom, com);
+	strcat(resCom, lpPath);
+	strcat(resCom, end);
+
+	int status = system(resCom);
+	delete[] resCom;
+	if (status < 0)
+		return false;
+	else return true;
 }
 
 #ifdef WIN32
