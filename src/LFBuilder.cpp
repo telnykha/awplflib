@@ -180,8 +180,6 @@ bool		TCSBuildDetector::BuildBkground()
 	RemoveBkground();
 
 	ILFObjectDetector* cs = m_Engine.GetDetector();
-
-
 	m_AdaBoost.DbgMsg("Building new bkground...\n");
 	int nCount = 0;
 
@@ -474,56 +472,59 @@ bool	TCSBuildDetector::InitDetector()
 	else
 		return CheckDetector();
 }
+
+static bool _IsImageFile(std::string& strFileName)
+{
+	std::string strExt = LFGetFileExt(strFileName);
+	std::transform(strExt.begin(), strExt.end(), strExt.begin(), ::tolower);
+
+	if (strExt == ".awp")
+		return true;
+	if (strExt == ".jpg")
+		return true;
+	if (strExt == ".jpeg")
+		return true;
+	if (strExt == ".png")
+		return true;
+	if (strExt == ".bmp")
+		return true;
+	return false;
+}
+
 // проверяет детектор.
 bool		    TCSBuildDetector::CheckDetector()
 {
-#ifdef WIN32 	
-	/*check detector*/
 	std::string strPath = m_AdaBoost.GetObjectsBase();
-	_finddata_t filesInfo;
-	intptr_t handle = 0;
-	int num = 0;
-	int count = 0;
-	int NumFailed = 0;
+	TLFStrings names;
+	if (!LFGetDirFiles(strPath.c_str(), names))
+		return false;
+	if (names.size() == 0)
+		return false;
 	TSCObjectDetector* d = (TSCObjectDetector*)this->m_Engine.GetDetector();
-
 	bool res = true;
-	if ((handle = _findfirst((char*)((strPath + "\\*.awp").c_str()), &filesInfo)) != -1)
-	{
-		do
-		{
-			TLFImage img;
-			std::string name = strPath + "\\" + filesInfo.name;
-			img.LoadFromFile ((char*)name.c_str());
-			if (img.GetImage() == NULL)
-				continue;
-			d->Init(img.GetImage(), false);
-			awpRect r;
-			r.left = 0;
-			r.right = img.GetImage()->sSizeX;
-			r.top = 0;
-			r.bottom = img.GetImage()->sSizeY;
-			if (img.GetImage()->sSizeX == 14)
-				awpSaveImage("test.awp", img.GetImage());
 
-			if (d->ClassifyRect(r, NULL, NULL) == 0)
-			{
-				//res = false;
-				NumFailed++;
-				m_AdaBoost.DbgMsg(name +" Failed.\n");
-			}
-//			else
-//				m_AdaBoost.DbgMsg(name + " Success.\n");
-			count++;
-		} while (!_findnext(handle, &filesInfo));
+	for (int i = 0; i < names.size(); i++)
+	{
+		if (!_IsImageFile(names[i]))
+			continue;
+		TLFImage img;
+		img.LoadFromFile(names[i].c_str());
+		if (img.GetImage() == NULL)
+			continue;
+		d->Init(img.GetImage(), false);
+		awpRect r;
+		r.left = 0;
+		r.right = img.GetImage()->sSizeX;
+		r.top = 0;
+		r.bottom = img.GetImage()->sSizeY;
+		if (d->ClassifyRect(r, NULL, NULL) == 0)
+		{
+			//NumFailed++;
+			m_AdaBoost.DbgMsg(names[i] + " Failed.\n");
+		}
+
 	}
-	_findclose(handle);
-	//if (res) 
-	//	m_AdaBoost.InitFeatures();
 	return res;
-#else
-	return false;
-#endif
 }
 static int boost_random(int v)
 {
@@ -606,26 +607,18 @@ bool TCSBuildDetector::CreateDetector(const char* lpDetectorName)
 
 int	TCSBuildDetector::GetNumObjects()
 {
-#ifdef WIN32
 	std::string strPath = m_strOBJ;
-	strPath += "*.awp";
+	TLFStrings names;
 	int count = 0;
-	_finddata_t filesInfo;
-	intptr_t handle = 0;
-
-	if ((handle = _findfirst((char*)strPath.c_str(), &filesInfo)) != -1)
+	if (!LFGetDirFiles(strPath.c_str(), names))
+		return 0;
+	for (int i = 0; i < names.size(); i++)
 	{
-		do
-		{
-			std::string strImageName = m_strOBJ + filesInfo.name;
-			count++;
-		} while (!_findnext(handle, &filesInfo));
+		if (!_IsImageFile(names[i]))
+			continue;
+		count++;
 	}
-	_findclose(handle);
 	return count;
-#else
-	return 0;
-#endif
 }
 
 void		TCSBuildDetector::PrintDetectorInfo()
