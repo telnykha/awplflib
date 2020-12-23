@@ -1,6 +1,8 @@
 #include "_LF.h"
 #include "stdio.h"
 #ifndef __BCPLUSPLUS__
+#include <sys/stat.h> 
+#include <unistd.h>
 std::string LFGetFilePath(const std::string& strPath)
 {
     const std::string c = c_separator;
@@ -71,6 +73,11 @@ bool LFCreateDir(const char* lpPath)
 	if (_mkdir(lpPath) == 0)
 		return true;
 	return false;
+#else
+    mode_t mode = 0755;
+    if (mkdir(lpPath, mode) == 0)
+		return true;
+	return false;
 #endif
 	return false;
 }
@@ -88,7 +95,20 @@ bool LFDirExist(const char* lpPath)
 			return true;
 		else
 			return false;
-
+	}
+#else
+    mode_t mode = 0755;
+	if (mkdir(lpPath, mode) == 0)
+	{
+		rmdir(lpPath);
+		return false;
+	}
+	else
+	{
+		if (errno == EEXIST)
+			return true;
+		else
+			return false;
 	}
 #endif
 	return false;
