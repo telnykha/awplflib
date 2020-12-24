@@ -570,7 +570,7 @@ bool		TCSBuildDetector::Boost()
 //к существующему детектору.
 bool		TCSBuildDetector::UpdateDetector()
 {
-#ifdef WIN32
+//#ifdef WIN32
 	m_AdaBoost.DbgMsg("Update detector...\n");
 
 	//анализ сильного классификатора.
@@ -609,17 +609,17 @@ bool		TCSBuildDetector::UpdateDetector()
 	TSCObjectDetector* d = (TSCObjectDetector*)this->m_Engine.GetDetector();
 	d->AddStrong(&cls);
 
-	string strNegativePath = m_AdaBoost.GetArtefactsBase();
-	strNegativePath += "\\stage";
-	strNegativePath += TypeToStr(d->GetStagesCount());
-	strNegativePath += "\\";
+	//string strNegativePath = m_AdaBoost.GetArtefactsBase();
+	//strNegativePath += "\\stage";
+	//strNegativePath += TypeToStr(d->GetStagesCount());
+	//strNegativePath += "\\";
 	//m_AdaBoost.SaveNegativeSamples(strNegativePath.c_str());
 
 	m_AdaBoost.DbgMsg("Save engine. \n");
 	m_Engine.Save(this->m_strDetectorName.c_str());
 
 	return InitDetector();
-#endif
+//#endif
 }
 
 bool TCSBuildDetector::SaveConfig(std::string const& filename)
