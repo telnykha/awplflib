@@ -259,7 +259,7 @@ omp_set_num_threads(8);
 		// завершаем процесс, если ошибка уменьшилась до порогового значения
 		if (FARV < m_FinishFar && afrr == 0)
 		{
-            this->SaveFRRSamples(stage);
+            //this->SaveFRRSamples(stage);
 			return true;
 		}
 
