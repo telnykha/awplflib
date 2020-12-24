@@ -2,7 +2,9 @@
 #include "stdio.h"
 #ifndef __BCPLUSPLUS__
 #include <sys/stat.h> 
-#include <unistd.h>
+#ifndef WIN32
+	#include <unistd.h>
+#endif 
 
 std::string LFGetFilePath(const std::string& strPath)
 {
