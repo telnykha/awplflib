@@ -738,9 +738,10 @@ bool		    TCSBuildDetector::BuildDefaultBkGround()
 // удаляет все изображения из базы образцов фона
 void		    TCSBuildDetector::RemoveBkground()
 {
-#ifdef WIN32
 	m_AdaBoost.DbgMsg("Removing old bkground...\n");
 	std::string strPathToArt = m_AdaBoost.GetArtefactsBase();
+
+#ifdef WIN32
 
 	std::string strPath = strPathToArt;
 	strPath += "*.awp";
@@ -757,10 +758,11 @@ void		    TCSBuildDetector::RemoveBkground()
 		} while (!_findnext(handle, &filesInfo));
 	}
 	_findclose(handle);
-	m_AdaBoost.DbgMsg("Done removing old bkground.\n");
 #else
-	// todo: LINUX
+	LFRemoveDir(strPathToArt.c_str());
 #endif
+	m_AdaBoost.DbgMsg("Done removing old bkground.\n");
+
 }
 
 // создание нового детектора 

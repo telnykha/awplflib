@@ -132,9 +132,9 @@ bool TLFImage::LoadFromFile(const char* szFileName)
 	if (awpLoadImage(szFileName, &m_pImage) != AWP_OK)
            throw 0;
 	//printf(" done. \n", szFileName);
-   	GetBlueIntegral();
-	GetGreenIntegral();
-	GetRedIntegral();
+   	//GetBlueIntegral();
+	//GetGreenIntegral();
+	//GetRedIntegral();
     }
     catch(...)
     {

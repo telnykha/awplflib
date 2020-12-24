@@ -424,7 +424,7 @@ bool TCSAdaBoost::LoadSample(TLFObjectList& SampleList, int flag, std::string co
 		if (!_IsImageFile(name))
 			continue;
 		TCSSample* pSample = new TCSSample();
-		DbgMsg(name + "\n");
+		//DbgMsg(name + "\n");
 		pSample->LoadFromFile((char*)name.c_str());
 		double e = 0;
 		if (pSample->GetImage()->sSizeX < this->m_widthBase || pSample->GetImage()->sSizeY < this->m_heightBase)

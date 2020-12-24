@@ -206,7 +206,7 @@ static bool _LFGetDirNamesWindows(const char* lpDir, TLFStrings& names)
 #else
 static bool _LFGetDirNamesLinux(const char* lpDir, TLFStrings& names)
 {
-    printf("enter _LFGetDirNamesLinux \n");
+    //printf("enter _LFGetDirNamesLinux \n");
     DIR *dir;
     struct dirent *entry;
 	std::string path = lpDir;
@@ -220,7 +220,7 @@ static bool _LFGetDirNamesLinux(const char* lpDir, TLFStrings& names)
     while ( (entry = readdir(dir)) != NULL) {
  			string name = path + entry->d_name;
 			names.push_back(name);
-			printf("%s\n", name.c_str());
+			//printf("%s\n", name.c_str());
     };
 
     closedir(dir);
