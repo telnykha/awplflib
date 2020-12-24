@@ -82,11 +82,11 @@ bool		TCSBuildDetector::LoadConfig(std::string const& filename)
 
 	m_strConfigName = filename;
 	m_strPathToBase = pElem->Attribute("bkground_base");
-	m_strPathToBase += "\\";
+//	m_strPathToBase += "\\";
 	m_strBKG = pElem->Attribute("negative_examples");
-	m_strBKG += "\\";
+//	m_strBKG += "\\";
 	m_strOBJ = pElem->Attribute("positive_examples");
-	m_strOBJ += "\\";
+//	m_strOBJ += "\\";
 
 	m_strDetectorName = pElem->Attribute("detector_name");
 	m_strLogName = pElem->Attribute("log_name");

@@ -111,20 +111,30 @@ void TLFImage::FreeImages()
 	m_rlnpix = NULL;
 	m_glnpix = NULL;
 	m_blnpix = NULL;
+
+	m_pRed = NULL;
+	m_pGreen = NULL;
+	m_pBlue = NULL;
+
+	m_pIntegralRed = NULL;
+	m_pIntegralGreen = NULL;
+	m_pIntegralBlue = NULL;
+
 }
 
 bool TLFImage::LoadFromFile(const char* szFileName)
 {
     bool res = true;
-	FreeImages();
+//	FreeImages();
     try
     {
+	printf("Loading %s ... ", szFileName);		
 	if (awpLoadImage(szFileName, &m_pImage) != AWP_OK)
            throw 0;
-
-   	GetBlueIntegral();
-	GetGreenIntegral();
-	GetRedIntegral();
+	printf(" done. \n", szFileName);
+   	//GetBlueIntegral();
+	//GetGreenIntegral();
+	//GetRedIntegral();
     }
     catch(...)
     {

@@ -218,7 +218,7 @@ static bool _LFGetDirNamesLinux(const char* lpDir, TLFStrings& names)
     while ( (entry = readdir(dir)) != NULL) {
  			string name = path + entry->d_name;
 			names.push_back(name);
-			printf("%s\n", entry->d_name);
+			printf("%s\n", name.c_str());
     };
 
     closedir(dir);

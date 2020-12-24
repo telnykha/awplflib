@@ -5,7 +5,9 @@
 /*начало, поехали*/
 int main()
 {
-	printf("Hello Locate Framework!\n");			
+	AWPDWORD awp_int = 0;	
+	printf("Hello Locate Framework!\n");
+	printf("Size if AWPDWORD %d \n", sizeof(awp_int));			
 	TLFImage image;
 	TLFDetectEngine engine;
 	printf("Loading engine....");
@@ -16,11 +18,13 @@ int main()
 	}
 	printf("done.\n");
 	printf("Loading image....");
-	if (!image.LoadFromFile("test.jpg"))
+	if (!image.LoadFromFile("/home/alt/awplflib/sample/test1.awp"))
 	{
 		printf("cannot load image\n");
 		return -1;
 	}
+	image.SaveToFile("test1.awp");
+	image.LoadFromFile("test1.awp");
 	printf("done.\n");
 	printf("Process image....");
 	if (!engine.SetSourceImage(&image, true))
