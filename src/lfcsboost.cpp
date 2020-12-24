@@ -295,7 +295,7 @@ omp_set_num_threads(8);
 
     }
 
-	this->SaveFRRSamples(stage);
+	//this->SaveFRRSamples(stage);
     return true;
 }
 
