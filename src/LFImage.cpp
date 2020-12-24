@@ -125,16 +125,16 @@ void TLFImage::FreeImages()
 bool TLFImage::LoadFromFile(const char* szFileName)
 {
     bool res = true;
-//	FreeImages();
+	FreeImages();
     try
     {
-	printf("Loading %s ... ", szFileName);		
+	//printf("Loading %s ... ", szFileName);		
 	if (awpLoadImage(szFileName, &m_pImage) != AWP_OK)
            throw 0;
-	printf(" done. \n", szFileName);
-   	//GetBlueIntegral();
-	//GetGreenIntegral();
-	//GetRedIntegral();
+	//printf(" done. \n", szFileName);
+   	GetBlueIntegral();
+	GetGreenIntegral();
+	GetRedIntegral();
     }
     catch(...)
     {
