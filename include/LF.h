@@ -72,7 +72,7 @@ typedef void (*TLFProgress)(const char* lpMessage, int progress);
 \Enum TEZoneTypes
 \brief LF Zone types
 */
-typedef enum {ZTUnknown, ZTRect, ZTContour, ZTLineSegment, ZTOpenPolygon} TEZoneTypes;
+typedef enum {ZTUnknown, ZTRect, ZTContour, ZTLineSegment, ZTOpenPolygon, ZTCircle} TEZoneTypes;
 class TLFZone;
 
 typedef struct
@@ -299,6 +299,12 @@ class TLFImageList : public TLFObjectList
 {
 public:
 	void AddImage(TLFImage* img);
+ /*	void AddImage(awpImage* img)
+	{
+		TLFImage* qq = new TLFImage();
+		qq->SetImage(img);
+		AddImage(qq);
+	}*/
 	TLFImage* GetImage(int index);
 };
 

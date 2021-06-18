@@ -84,8 +84,11 @@ const char* TLFZone::ZoneType()
                 return "Line Segment  ";
         break;
         case ZTOpenPolygon:
-                return "Polyline  ";
-        break;
+				return "Polyline  ";
+		break;
+		case ZTCircle:
+				return "Circle  ";
+		break;
     }
 	return "unknown";
 }
@@ -100,6 +103,12 @@ bool TLFZone::IsContour()
 {
 	return this->m_ZoneType == ZTContour;
 }
+
+bool TLFZone::IsCircle()
+{
+	return this->m_ZoneType == ZTCircle;
+}
+
 
 TLF2DRect* TLFZone::GetRect()
 {
@@ -133,7 +142,7 @@ TLF2DContour* TLFZone::GetContour()
 
 TLF2DLineSegment* TLFZone::GetLineSegmnet()
 {
-	if (IsLineSegment())
+	if (IsLineSegment() || this->IsCircle())
     {
       	return &this->m_segment;
     }
@@ -173,7 +182,12 @@ double TLFZone::Square()
 		}
 		return fabs(0.5*(s1 - s2 - s3 + s4)/ 100.);
 	}
-    else
+	else if (IsCircle())
+	{
+		double r;
+		// todo: return square
+	}
+	else
     	return 0;
 }
 // return bounding box
@@ -392,19 +406,22 @@ bool TLFZone::IsPointNearVertex(TLF2DPoint& point)
 {
  	switch(this->m_ZoneType)
     {
-        case ZTRect:
-                return IsPointNearRect(point);
-        break;
-        case ZTContour:
-                return IsPointNearContour(point);
-        break;
-        case ZTLineSegment:
-                return IsPointNearLineSegment(point);
-        break;
-        case ZTOpenPolygon:
-                return IsPointNearOpenPolygon(point);
-        break;
-    }
+		case ZTRect:
+				return IsPointNearRect(point);
+		break;
+		case ZTContour:
+				return IsPointNearContour(point);
+		break;
+		case ZTLineSegment:
+				return IsPointNearLineSegment(point);
+		break;
+		case ZTOpenPolygon:
+				return IsPointNearOpenPolygon(point);
+		break;
+		case ZTCircle:
+				return IsPointNearLineSegment(point);
+		break;
+	}
 
 	return false;
 }
@@ -572,11 +589,14 @@ SZoneVertex TLFZone::SelectVertex(TLF2DPoint& point)
                 return SelectContourVertex(point);
         break;
         case ZTLineSegment:
-                return SelectLineSegmentVertex(point);
+				return SelectLineSegmentVertex(point);
         break;
         case ZTOpenPolygon:
                 return SelectOpenPolygonVertex(point);
-        break;
+		break;
+		case ZTCircle:
+	        return SelectLineSegmentVertex(point);
+		break;
     }
 
 	return vertex;
@@ -682,13 +702,16 @@ void TLFZone::SetVertex(SZoneVertex& vertex)
         case ZTContour:
                 SetContourVertex(vertex);
         break;
-        case ZTLineSegment:
-                SetLineSegmentVertex(vertex);
-        break;
-        case ZTOpenPolygon:
-                SetOpenPolygonVertex(vertex);
-        break;
-    }
+		case ZTLineSegment:
+				SetLineSegmentVertex(vertex);
+		break;
+		case ZTOpenPolygon:
+				SetOpenPolygonVertex(vertex);
+		break;
+		case ZTCircle:
+				SetLineSegmentVertex(vertex);
+		break;
+	}
 }
 
 
@@ -926,8 +949,22 @@ int TLFZones::IsPointInZone(int x, int y, double dx, double dy)
 				y > dy*rect->GetLeftTop().Y && y < dy*rect->GetRightBottom().Y)
 				return zone->GetClassID();
 		}
-		else
-			if (IsPointInContour(x, y, zone->GetContour(), dx, dy))
+		if (zone->IsCircle())
+		{
+			TLF2DLineSegment* s = zone->GetLineSegmnet();
+			awp2DPoint sp = s->GetStart();
+			awp2DPoint ep = s->GetFinish();
+			sp.X *= dx;
+			sp.Y *= dy;
+			ep.X *= dx;
+			ep.Y *= dy;
+			double r1 = sqrt((sp.X - ep.X)*(sp.X - ep.X) + (sp.Y - ep.Y)*(sp.Y - ep.Y));
+			double r2 = sqrt((sp.X - x)*(sp.X - x) + (sp.Y - y)*(sp.Y-y));
+			if (r2 < r1) {
+                return zone->GetClassID();
+			}
+		}
+		if (IsPointInContour(x, y, zone->GetContour(), dx, dy))
 				return zone->GetClassID();
 	}
 	return -1;

@@ -116,7 +116,9 @@ public:
     /** Line segmnet zone*/
     bool IsLineSegment();
     /** Open polygon zone*/
-    bool IsOpenPolygon();
+	bool IsOpenPolygon();
+	/**Circle zone */
+	bool IsCircle();
     /** Zone type */
     TEZoneTypes  GetZoneType();
     const char* ZoneType();
