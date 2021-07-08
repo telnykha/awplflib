@@ -761,7 +761,7 @@ bool TLFZone::LoadXML(TiXmlElement* parent)
          }
          delete contour;
     }
-    else if (type == ZTLineSegment)
+    else if (type == ZTLineSegment || type == ZTCircle)
     {
          TLF2DLineSegment* segment = new TLF2DLineSegment();
          TiXmlElement* e = parent->FirstChildElement(segment->GetName());
@@ -814,7 +814,7 @@ bool TLFZone::SaveXML(TiXmlElement* parent)
     {
     	this->m_contour.SaveXML(f);
     }
-    else if (this->IsLineSegment())
+	else if (this->IsLineSegment() || this->IsCircle())
     {
 		this->m_segment.SaveXML(f);
     }
