@@ -241,6 +241,7 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\include\LFLandmarks.cpp" />
     <ClCompile Include="..\..\src\LFAttrFilter.cpp" />
     <ClCompile Include="..\..\src\LFAvgFeature.cpp" />
     <ClCompile Include="..\..\src\LFBuffer.cpp" />
@@ -302,6 +303,7 @@
     <ClInclude Include="..\..\include\LFHistogramm.h" />
     <ClInclude Include="..\..\include\LFImageProcessor.h" />
     <ClInclude Include="..\..\include\LFLabColor.h" />
+    <ClInclude Include="..\..\include\LFLandmarks.h" />
     <ClInclude Include="..\..\include\LFMCDetector.h" />
     <ClInclude Include="..\..\include\LFMotion.h" />
     <ClInclude Include="..\..\include\LFParameter.h" />

@@ -118,6 +118,9 @@
     <ClCompile Include="..\..\src\LFCascade.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\include\LFLandmarks.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\LF.h">
@@ -223,6 +226,9 @@
       <Filter>Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\LFMCDetector.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\LFLandmarks.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>

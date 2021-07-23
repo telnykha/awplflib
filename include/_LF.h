@@ -218,6 +218,7 @@ public:
 #include "LFCSBoost.h"
 #include "LFBuilder.h"
 #include "LFMCDetector.h"
+#include "LFLandmarks.h"
 /** \defgroup LFFactory
 *	Locate Framework factory routines 
 *   @{
