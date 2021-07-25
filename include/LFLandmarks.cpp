@@ -501,10 +501,16 @@ TLFDBLandmarks
 TLFDBLandmarks::TLFDBLandmarks()
 {
 	m_fileName = "";
+	m_attributes = new TLFLandmarkAttributes();
+	m_files = new TLFLandmarkFiles();
 }
 TLFDBLandmarks::~TLFDBLandmarks()
 {
 	Close();
+	if (m_attributes != NULL)
+		delete m_attributes;
+	if (m_files != NULL)
+		delete m_files;
 }
 /*this function using only when create database*/
 void TLFDBLandmarks::SetAttributes(TLFLandmarkAttributes& attributes)
@@ -539,8 +545,8 @@ void TLFDBLandmarks::Close()
 {
 	if (m_fileName != "")
 		Save();
-	m_attributes.Clear();
-	m_files.Clear();
+	m_attributes->Clear();
+	m_files->Clear();
 	m_fileName = "";
 }
 
@@ -550,21 +556,67 @@ void TLFDBLandmarks::SetFileName(const char* fileName)
 }
 bool TLFDBLandmarks::Save()
 {
-	return false;
+	if (m_fileName == "")
+		return false;
+	TiXmlDocument doc; 
+	TiXmlDeclaration* decl = new TiXmlDeclaration("1.0", "", "");
+	doc.LinkEndChild(decl);
+	TiXmlElement* parent = new TiXmlElement(GetName());
+
+	TiXmlElement* attributes = m_attributes->SaveXML();
+	if (attributes == NULL)
+		return false;
+	parent->LinkEndChild(attributes);
+	TiXmlElement* files = m_files->SaveXML();
+	if (files == NULL)
+		return false;
+	parent->LinkEndChild(files);
+	doc.LinkEndChild(parent);
+	return doc.SaveFile(m_fileName.c_str());
 }
 bool TLFDBLandmarks::Load(const char* fileName)
 {
-	return false;
+	TiXmlDocument doc(fileName);
+	if (!doc.LoadFile())
+		return false;
+ 
+	TiXmlElement* pElem = doc.FirstChildElement(this->GetName());
+	if (pElem == NULL)
+		return false;
+	
+	m_attributes->Clear();
+	m_files->Clear();
+
+	delete m_attributes;
+	delete m_files;
+
+	m_attributes = TLFLandmarkAttributes::LoadXML(pElem);
+	if (m_attributes == NULL)
+	{
+		m_attributes = new TLFLandmarkAttributes();
+		return false;
+	}
+		return false;
+	m_files = TLFLandmarkFiles::LoadXML(pElem, m_attributes);
+	if (m_files == NULL)
+	{
+		m_files = new TLFLandmarkFiles();
+		return false;
+	}
+		
+	m_fileName = fileName;
+
+	return true;
 }
 
 TLFLandmarkAttributes* TLFDBLandmarks::Attributes()
 {
-	return &m_attributes;
+	return m_attributes;
 }
 
 TLFLandmarkFiles*	   TLFDBLandmarks::Files()
 {
-	return &m_files;
+	return m_files;
 }
 const char*			   TLFDBLandmarks::FileName()
 {

@@ -57,16 +57,18 @@ class TLFLandmarkAttributes;
 class TLFLandmarkFiles;
 class TLFLandmark : public TLFObject
 {
+friend class TLFLandmarkFile;
 protected:
 	awp2DPoint		 m_landmark;
 	TLFLandmarkAttr* m_attr;
+
+	TiXmlElement* SaveXML();
+	static TLFLandmark* LoadXML(TiXmlElement* parent, TLFLandmarkAttributes* attrs);
+
 public:
 	TLFLandmark(TLFLandmarkAttr* attr, awp2DPoint point);
 	virtual ~TLFLandmark();
 	virtual const char* GetName(){ return "TLFLandmark"; }
-
-	TiXmlElement* SaveXML();
-	static TLFLandmark* LoadXML(TiXmlElement* parent, TLFLandmarkAttributes* attrs);
 	
 	void		GetId(UUID& id);
 	const char* GetId();
@@ -84,11 +86,15 @@ public:
 
 class TLFLandmarkAttr : public TLFObject
 {
+friend class TLFLandmarkAttributes;
 protected:
 	TLFString		m_ClassName;
 	UUID			m_id;
 	int				m_color; //web color
 	void SetID(TLFString& strUUID);
+
+	TiXmlElement* SaveXML();
+	static TLFLandmarkAttr* LoadXML(TiXmlElement* parent);
 public:
 	TLFLandmarkAttr();
 	TLFLandmarkAttr(TLFString& id, int color, const char* className);
@@ -104,16 +110,15 @@ public:
 
 	const char* GetID();
 	void GetID(UUID& id);
-
-	TiXmlElement* SaveXML();
-	static TLFLandmarkAttr* LoadXML(TiXmlElement* parent);
-
 };
 
 class TLFLandmarkAttributes : public TLFObject
 {
+	friend class TLFDBLandmarks;
 protected:
 	TLFObjectList	m_attributes;
+	TiXmlElement* SaveXML();
+	static TLFLandmarkAttributes* LoadXML(TiXmlElement* parent);
 public: 
 	TLFLandmarkAttributes();
 	virtual ~TLFLandmarkAttributes();
@@ -127,16 +132,17 @@ public:
 	int Count();
 
 	TLFObjectList* GetList();
-
-	TiXmlElement* SaveXML();
-	static TLFLandmarkAttributes* LoadXML(TiXmlElement* parent);
 };
 
 class TLFLandmarkFile : public TLFObject
 {
+friend class TLFLandmarkFiles;
 protected:
 	TLFObjectList	m_landmarks;
 	TLFString		m_fileName;
+
+	TiXmlElement* SaveXML();
+	static TLFLandmarkFile* LoadXML(TiXmlElement* parent, TLFLandmarkAttributes* attrs);
 public:
 	TLFLandmarkFile(const char* fileName);
 	virtual ~TLFLandmarkFile();
@@ -148,16 +154,16 @@ public:
 	void Delete(int index);
 	void Delete(const TLFString& strUUID);
 	void Append(TLFLandmark* landmark);
-
-	TiXmlElement* SaveXML();
-	static TLFLandmarkFile* LoadXML(TiXmlElement* parent, TLFLandmarkAttributes* attrs);
 };
 
 class TLFLandmarkFiles : public TLFObject
 {
+	friend class TLFDBLandmarks;
 protected:
 	TLFObjectList	m_files;
 	int GetFileIndex(const char* fileName);
+	TiXmlElement* SaveXML();
+	static TLFLandmarkFiles* LoadXML(TiXmlElement* parent, TLFLandmarkAttributes* attrs);
 public:
 	TLFLandmarkFiles();
 	virtual ~TLFLandmarkFiles();
@@ -170,18 +176,14 @@ public:
 	void Delete(const char* fileName);
 	void Append(TLFLandmarkFile* file);
 	void Clear();
-
-	TiXmlElement* SaveXML();
-	static TLFLandmarkFiles* LoadXML(TiXmlElement* parent, TLFLandmarkAttributes* attrs);
-
 };
 
 class TLFDBLandmarks : public TLFObject
 {
 private: 
 	TLFString				m_fileName;
-	TLFLandmarkAttributes	m_attributes;
-	TLFLandmarkFiles		m_files;
+	TLFLandmarkAttributes*	m_attributes;
+	TLFLandmarkFiles*		m_files;
 protected:
 	void SetAttributes(TLFLandmarkAttributes& attributes);
 	void SetFileName(const char* fileName);
