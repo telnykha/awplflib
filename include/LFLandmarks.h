@@ -39,7 +39,7 @@
 //
 //      Locate Framework  (LF) Computer Vision Library.
 //		File: LFLandmarks.h
-//		Purpose: Contains landmarks classes
+//		Purpose: Contains landmark  classes
 //
 //      CopyRight 2004-2021 (c) NN-Videolab.net
 //M*/
@@ -52,38 +52,67 @@
 */
 
 class TLFDBLandmarks;
+class TLFLandmarkAttr;
+class TLFLandmarkAttributes;
+class TLFLandmarkFiles;
 class TLFLandmark : public TLFObject
 {
 protected:
-	awp2DPoint m_landmark;
-	UUID			m_id;
+	awp2DPoint		 m_landmark;
+	TLFLandmarkAttr* m_attr;
 public:
-	TLFLandmark(UUID id, awp2DPoint point);
+	TLFLandmark(TLFLandmarkAttr* attr, awp2DPoint point);
 	virtual ~TLFLandmark();
 	virtual const char* GetName(){ return "TLFLandmark"; }
 
 	TiXmlElement* SaveXML();
-	bool LoadXML(TiXmlElement* parent);
+	static TLFLandmark* LoadXML(TiXmlElement* parent, TLFLandmarkAttributes* attrs);
 	
 	void		GetId(UUID& id);
-	awp2DPoint _landmark();
-	AWPDOUBLE  _x();
-	AWPDOUBLE  _y();
+	const char* GetId();
+	const char* ClassName();
+	int			Color();
+
+	awp2DPoint landmark();
+	AWPDOUBLE  x();
+	AWPDOUBLE  y();
+
+	void SetPoint(awp2DPoint point);
+	void SetX(AWPDOUBLE x);
+	void SetY(AWPDOUBLE y);
 };
+
 class TLFLandmarkAttr : public TLFObject
 {
 protected:
-	TLFString m_ClassName;
+	TLFString		m_ClassName;
 	UUID			m_id;
+	int				m_color; //web color
+	void SetID(TLFString& strUUID);
 public:
 	TLFLandmarkAttr();
+	TLFLandmarkAttr(TLFString& id, int color, const char* className);
 	virtual ~TLFLandmarkAttr();
 	virtual const char* GetName(){ return "TLFLandmarkAttr"; }
+
+	const char* ClassName();
+	void SetClassName(const char* value);
+
+	int Color();
+	void SetColor(int value);
+	void SetColor(AWPBYTE r, AWPBYTE g, AWPBYTE b);
+
+	const char* GetID();
+	void GetID(UUID& id);
+
+	TiXmlElement* SaveXML();
+	static TLFLandmarkAttr* LoadXML(TiXmlElement* parent);
+
 };
+
 class TLFLandmarkAttributes : public TLFObject
 {
 protected:
-	TLFDBLandmarks* m_database;
 	TLFObjectList	m_attributes;
 public: 
 	TLFLandmarkAttributes();
@@ -93,22 +122,66 @@ public:
 	void Clear();
 	void Append(TLFLandmarkAttr* attr);
 	TLFLandmarkAttr* Attribute(int index);
-	void Delete(int index);
+	TLFLandmarkAttr* Attribute(const TLFString& uuid);
+	void Delete(int index, TLFLandmarkFiles* files);
 	int Count();
 
 	TLFObjectList* GetList();
-};
-class TLFLandmarksFile : public TLFObjectList
-{
-protected:
-public:
+
+	TiXmlElement* SaveXML();
+	static TLFLandmarkAttributes* LoadXML(TiXmlElement* parent);
 };
 
-class TLFDBLandmarks : public TLFObjectList
+class TLFLandmarkFile : public TLFObject
+{
+protected:
+	TLFObjectList	m_landmarks;
+	TLFString		m_fileName;
+public:
+	TLFLandmarkFile(const char* fileName);
+	virtual ~TLFLandmarkFile();
+	virtual const char* GetName(){ return "TLFLandmarkFile"; }
+
+	const char* FileName();
+	int Count();
+	TLFLandmark* Landmark(int index);
+	void Delete(int index);
+	void Delete(const TLFString& strUUID);
+	void Append(TLFLandmark* landmark);
+
+	TiXmlElement* SaveXML();
+	static TLFLandmarkFile* LoadXML(TiXmlElement* parent, TLFLandmarkAttributes* attrs);
+};
+
+class TLFLandmarkFiles : public TLFObject
+{
+protected:
+	TLFObjectList	m_files;
+	int GetFileIndex(const char* fileName);
+public:
+	TLFLandmarkFiles();
+	virtual ~TLFLandmarkFiles();
+	virtual const char* GetName(){ return "TLFLandmarkFiles"; }
+
+	int Count();
+	TLFLandmarkFile* File(int index);
+	TLFLandmarkFile* File(const char* fileName);
+	void Delete(int index);
+	void Delete(const char* fileName);
+	void Append(TLFLandmarkFile* file);
+	void Clear();
+
+	TiXmlElement* SaveXML();
+	static TLFLandmarkFiles* LoadXML(TiXmlElement* parent, TLFLandmarkAttributes* attrs);
+
+};
+
+class TLFDBLandmarks : public TLFObject
 {
 private: 
-	TLFString m_fileName;
-	TLFLandmarkAttributes m_attributes;
+	TLFString				m_fileName;
+	TLFLandmarkAttributes	m_attributes;
+	TLFLandmarkFiles		m_files;
 protected:
 	void SetAttributes(TLFLandmarkAttributes& attributes);
 	void SetFileName(const char* fileName);
@@ -121,10 +194,12 @@ public:
 
 	bool Connect(const char* fileName);
 	void Close();
-	TLFLandmarkAttributes* 
+	TLFLandmarkAttributes* Attributes();
+	TLFLandmarkFiles*	   Files();
+	const char*			   FileName();
 
 
 	static TLFDBLandmarks* CreateDatabase(TLFLandmarkAttributes& attributes, const char* fileName);
 };
-/** @} */ /*  end of LFBuffers group */
+/** @} */ /*  end of LFLandmarks group */
 #endif //_lf_landmarks_h_

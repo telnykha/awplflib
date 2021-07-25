@@ -140,6 +140,7 @@ bool LFGetDirFiles(const char* lpDir, TLFStrings& names);
 // functions to convert data
 string LFIntToStr(int value);
 string LFGUIDToString(UUID* id);
+void  LFStringToUUID(const TLFString& strUUID, UUID* id);
 // functions to work with time
 unsigned long LFGetTickCount();
 /** @} */ /*  end of LFFileUtils group */

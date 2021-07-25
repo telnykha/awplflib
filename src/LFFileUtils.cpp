@@ -152,6 +152,30 @@ static char * guid_to_str(UUID* id, char * out) {
 #endif
 
 
+static GUID StringToGuid(const std::string& str)
+{
+	UUID guid;
+	sscanf(str.c_str(),
+		"{%8x-%4hx-%4hx-%2hhx%2hhx-%2hhx%2hhx%2hhx%2hhx%2hhx%2hhx}",
+		&guid.Data1, &guid.Data2, &guid.Data3,
+		&guid.Data4[0], &guid.Data4[1], &guid.Data4[2], &guid.Data4[3],
+		&guid.Data4[4], &guid.Data4[5], &guid.Data4[6], &guid.Data4[7]);
+
+	return guid;
+}
+void  LFStringToUUID(const TLFString& strUUID, UUID* id)
+{
+	try
+	{
+		UUID guid = StringToGuid(strUUID);
+		memcpy(id, &guid, sizeof(UUID));
+	}
+	catch (...)
+	{
+		LF_NULL_UUID_CREATE(id);
+	}
+}
+
 std::string LFGUIDToString(UUID* id)
 {
 	std::string result;
