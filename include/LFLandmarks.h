@@ -70,7 +70,6 @@ public:
 	virtual ~TLFLandmark();
 	virtual const char* GetName(){ return "TLFLandmark"; }
 	
-	void		GetId(UUID& id);
 	const char* GetId();
 	const char* ClassName();
 	int			Color();
@@ -89,7 +88,7 @@ class TLFLandmarkAttr : public TLFObject
 friend class TLFLandmarkAttributes;
 protected:
 	TLFString		m_ClassName;
-	UUID			m_id;
+	TLFString		m_id;
 	int				m_color; //web color
 	void SetID(TLFString& strUUID);
 
@@ -109,7 +108,6 @@ public:
 	void SetColor(AWPBYTE r, AWPBYTE g, AWPBYTE b);
 
 	const char* GetID();
-	void GetID(UUID& id);
 };
 
 class TLFLandmarkAttributes : public TLFObject

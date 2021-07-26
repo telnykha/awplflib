@@ -17,9 +17,8 @@ TiXmlElement* TLFLandmark::SaveXML()
 		return NULL;
 
 	TiXmlElement* f = new TiXmlElement(GetName());
-	UUID id;
-	m_attr->GetID(id);
-	f->SetAttribute("ID", LFGUIDToString(&id).c_str());
+	TLFString id = m_attr->GetID();
+	f->SetAttribute("ID", id.c_str());
 	f->SetDoubleAttribute("X", m_landmark.X);
 	f->SetDoubleAttribute("Y", m_landmark.Y);
 	return f;
@@ -36,20 +35,13 @@ TLFLandmark*  TLFLandmark::LoadXML(TiXmlElement* parent, TLFLandmarkAttributes* 
 		return NULL;
 	TLFString strUUID = _id;
 	TLFLandmarkAttr* attr = attrs->Attribute(_id);
-	if (attr = NULL)
+	if (attr == NULL)
 		return NULL;
 	awp2DPoint p;
 	parent->QueryDoubleAttribute("X"	,&p.X);
 	parent->QueryDoubleAttribute("Y",	&p.Y);
 
 	return new TLFLandmark(attr, p);
-}
-
-void	   TLFLandmark::GetId(UUID& id)
-{
-	UUID _id;
-	m_attr->GetID(_id);
-	memcpy(&id, &_id, sizeof(UUID));
 }
 
 const char* TLFLandmark::GetId()
@@ -98,7 +90,9 @@ void TLFLandmark::SetY(AWPDOUBLE y)
 */
 TLFLandmarkAttr::TLFLandmarkAttr()
 {
-	LF_UUID_CREATE(m_id);
+	UUID id;
+	LF_UUID_CREATE(id)
+	m_id = LFGUIDToString(&id);
 	awpRGBtoWeb(0,255,0, &m_color);
 	m_ClassName = "landmark";
 }
@@ -106,7 +100,7 @@ TLFLandmarkAttr::TLFLandmarkAttr(TLFString& id, int color, const char* className
 {
 	m_color = color;
 	m_ClassName = className;
-	LFStringToUUID(id, &m_id);
+	m_id = id;
 }
 
 TLFLandmarkAttr::~TLFLandmarkAttr()
@@ -136,24 +130,16 @@ void TLFLandmarkAttr::SetColor(AWPBYTE r, AWPBYTE g, AWPBYTE b)
 	awpRGBtoWeb(r,g,b, &m_color);
 }
 
-void TLFLandmarkAttr::GetID(UUID& id)
-{
-#ifdef WIN32
-	memcpy(&id, &this->m_id, sizeof(UUID));
-#else
-	memcpy(&id, this->m_id, sizeof(UUID));
-#endif
-}
+
 const char* TLFLandmarkAttr::GetID()
 {
-	TLFString strUUID = LFGUIDToString(&m_id);
-	return strUUID.c_str();
+	return m_id.c_str();
 }
 
 TiXmlElement* TLFLandmarkAttr::SaveXML()
 {
 	TiXmlElement* f = new TiXmlElement(GetName());
-	f->SetAttribute("ID", LFGUIDToString(&m_id).c_str());
+	f->SetAttribute("ID", m_id.c_str());
 	f->SetAttribute("ClassName", m_ClassName.c_str());
 	f->SetAttribute("Color", m_color);
 	return f;
@@ -170,7 +156,7 @@ TLFLandmarkAttr* TLFLandmarkAttr::LoadXML(TiXmlElement* parent)
 		return NULL;
 	TLFString strUUID = _id;
 	int color;
-	if (!parent->QueryIntAttribute("Color", &color))
+	if (parent->QueryIntAttribute("Color", &color) == TIXML_NO_ATTRIBUTE)
 		return NULL;
 	const char* className = parent->Attribute("ClassName");
 	if (className == NULL)
@@ -280,8 +266,8 @@ TLFLandmarkAttributes* TLFLandmarkAttributes::LoadXML(TiXmlElement* parent)
 {
 	if (parent == NULL)
 		return NULL;
-	const char* name = parent->Value();
-	if (strcmp(name, "TLFLandmarkAttributes") != 0)
+	parent = parent->FirstChildElement("TLFLandmarkAttributes");
+	if (parent == NULL)
 		return NULL;
 
 	TLFLandmarkAttributes* result = new TLFLandmarkAttributes();
@@ -375,6 +361,10 @@ TLFLandmarkFile* TLFLandmarkFile::LoadXML(TiXmlElement* parent, TLFLandmarkAttri
 {
 	if (parent == NULL)
 		return NULL;
+	parent = parent->FirstChildElement("TLFLandmarkFile");
+	if (parent == NULL)
+		return NULL;
+
 	const char* name = parent->Value();
 	if (strcmp(name, "TLFLandmarkFile") != 0)
 		return NULL;
@@ -492,6 +482,10 @@ TLFLandmarkFiles* TLFLandmarkFiles::LoadXML(TiXmlElement* parent, TLFLandmarkAtt
 {
 	if (parent == NULL)
 		return NULL;
+	parent = parent->FirstChildElement("TLFLandmarkFiles");
+	if (parent == NULL)
+		return NULL;
+
 	const char* name = parent->Value();
 	if (strcmp(name, "TLFLandmarkFiles") != 0)
 		return NULL;
@@ -623,9 +617,10 @@ bool TLFDBLandmarks::Load(const char* fileName)
 	if (m_attributes == NULL)
 	{
 		m_attributes = new TLFLandmarkAttributes();
+		m_files = new TLFLandmarkFiles();
 		return false;
 	}
-		return false;
+
 	m_files = TLFLandmarkFiles::LoadXML(pElem, m_attributes);
 	if (m_files == NULL)
 	{
