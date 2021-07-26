@@ -118,7 +118,7 @@
     <ClCompile Include="..\..\src\LFCascade.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\include\LFLandmarks.cpp">
+    <ClCompile Include="..\..\src\LFLandmarks.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
