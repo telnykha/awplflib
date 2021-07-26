@@ -361,9 +361,9 @@ TLFLandmarkFile* TLFLandmarkFile::LoadXML(TiXmlElement* parent, TLFLandmarkAttri
 {
 	if (parent == NULL)
 		return NULL;
-	parent = parent->FirstChildElement("TLFLandmarkFile");
-	if (parent == NULL)
-		return NULL;
+ //	parent = parent->FirstChildElement("TLFLandmarkFile");
+ //	if (parent == NULL)
+ //		return NULL;
 
 	const char* name = parent->Value();
 	if (strcmp(name, "TLFLandmarkFile") != 0)

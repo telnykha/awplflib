@@ -303,3 +303,4 @@ $RECYCLE.BIN/
 *.local
 src/__history/*.*
 src/__recovery/*.*
+lib/awplflibb.lib
