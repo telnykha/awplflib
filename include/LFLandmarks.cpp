@@ -200,7 +200,24 @@ void TLFLandmarkAttributes::Append(TLFLandmarkAttr* attr)
 void TLFLandmarkAttributes::Delete(int index, TLFLandmarkFiles* files)
 {
 	//todo: remove all points with attr UUID in the database 
-
+	TLFLandmarkAttr* attr = Attribute(index);
+	if (attr == NULL)
+		return;
+	if (files != NULL)
+	{
+		TLFString id = attr->GetID();
+		for (int i = 0; i < files->Count(); i++)
+		{
+			TLFLandmarkFile* file = files->File(i);
+			for (int j = file->Count() - 1; j >= 0; j--)
+			{
+				TLFLandmark* lnd = file->Landmark(j);
+				TLFString lndid = lnd->GetId();
+				if (id == lndid)
+					file->Delete(j);
+			}
+		}
+	}
 	this->m_attributes.Delete(index);
 }
 
@@ -515,7 +532,19 @@ TLFDBLandmarks::~TLFDBLandmarks()
 /*this function using only when create database*/
 void TLFDBLandmarks::SetAttributes(TLFLandmarkAttributes& attributes)
 {
-	//todo: set arributes 
+	//set arributes 
+	if (m_attributes == NULL)
+		m_attributes = new TLFLandmarkAttributes();
+
+	m_attributes->Clear();
+	for (int i = 0; i < attributes.Count(); i++)
+	{
+		TLFString id = attributes.Attribute(i)->GetID();
+		TLFString className = attributes.Attribute(i)->ClassName();
+		int color = attributes.Attribute(i)->Color();
+		TLFLandmarkAttr* attr = new TLFLandmarkAttr(id, color, className.c_str());
+		m_attributes->Append(attr);
+	}
 }
 
 TLFDBLandmarks* TLFDBLandmarks::CreateDatabase(TLFLandmarkAttributes& attributes, const char* fileName)
