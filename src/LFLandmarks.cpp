@@ -301,6 +301,12 @@ const char* TLFLandmarkFile::FileName()
 {
 	return m_fileName.c_str();
 }
+
+void TLFLandmarkFile::SetFileName(const char* fileName)
+{
+	m_fileName = fileName;
+}
+
 int TLFLandmarkFile::Count()
 {
 	return m_landmarks.GetCount();
@@ -361,9 +367,6 @@ TLFLandmarkFile* TLFLandmarkFile::LoadXML(TiXmlElement* parent, TLFLandmarkAttri
 {
 	if (parent == NULL)
 		return NULL;
- //	parent = parent->FirstChildElement("TLFLandmarkFile");
- //	if (parent == NULL)
- //		return NULL;
 
 	const char* name = parent->Value();
 	if (strcmp(name, "TLFLandmarkFile") != 0)
@@ -401,16 +404,22 @@ int TLFLandmarkFiles::Count()
 {
 	return m_files.GetCount();
 }
-
+char asciitolower(char in) {
+	if (in <= 'Z' && in >= 'A')
+		return in - ('Z' - 'z');
+	return in;
+}
 int TLFLandmarkFiles::GetFileIndex(const char* fileName)
 {
 	if (fileName == NULL)
 		return -1;
 	TLFString fn = fileName;
+	std::transform(fn.begin(), fn.end(), fn.begin(), asciitolower);
 	for (int i = 0; i < m_files.GetCount(); i++)
 	{
 		TLFLandmarkFile* f = dynamic_cast<TLFLandmarkFile*>(m_files.Get(i));
 		TLFString fn1 = f->FileName();
+		std::transform(fn1.begin(), fn1.end(), fn1.begin(), asciitolower);
 		if (fn == fn1)
 			return i;
 	}

@@ -147,6 +147,8 @@ public:
 	virtual const char* GetName(){ return "TLFLandmarkFile"; }
 
 	const char* FileName();
+	void SetFileName(const char* fileName);
+
 	int Count();
 	TLFLandmark* Landmark(int index);
 	void Delete(int index);
