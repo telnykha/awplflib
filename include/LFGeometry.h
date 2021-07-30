@@ -164,6 +164,7 @@ public:
 
 	AWPSHORT Width();
 	AWPSHORT Height();
+
 	AWPSHORT  Left();
 	AWPSHORT  Top();
 	AWPSHORT Right();
@@ -204,6 +205,11 @@ public:
 	double Width();
 	double Height();
 	awp2DPoint Center();
+
+	double left();
+	double right();
+	double top();
+	double bottom();
 
 	/** Load form XML*/
 	bool LoadXML(TiXmlElement* parent);

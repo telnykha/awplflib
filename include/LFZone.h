@@ -73,7 +73,7 @@ protected:
 	TLF2DContour		m_contour;
     TLF2DLineSegment    m_segment;
     TLF2DOpenPolygon    m_openPolygon;
-    int 				m_classID;
+    int 				m_classID;		
 
 protected:
 	bool IsPointNearRect(TLF2DPoint& point);

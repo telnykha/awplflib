@@ -579,6 +579,22 @@ awp2DPoint TLF2DRect::Center()
 	return result;
 }
 
+double TLF2DRect::left()
+{
+	return m_LeftTop.X;
+}
+double TLF2DRect::right()
+{
+	return m_RightBottom.X;
+}
+double TLF2DRect::top()
+{
+	return m_LeftTop.Y;
+}
+double TLF2DRect::bottom()
+{
+	return m_RightBottom.Y;
+}
 
 
 /** Load form XML*/

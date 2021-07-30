@@ -4,8 +4,8 @@
 
 ILFScanner::ILFScanner()
 {
-	this->m_BaseHeight = 4;
-	this->m_BaseWidth = 4;
+	this->m_BaseHeight = 24;
+	this->m_BaseWidth = 24;
 	m_FragmentsCount = 0;
 	m_Fragments = NULL;
 
@@ -14,6 +14,7 @@ ILFScanner::ILFScanner()
 	m_maxX = 0;
 	m_maxY = 0;
 }
+
 ILFScanner::~ILFScanner()
 {
 	Clear();
@@ -102,6 +103,41 @@ bool ILFScanner::ScanRect(awpRect& rect)
 	}
 	return true;
 }
+
+bool ILFScanner::Filter(awpRect& rect)
+{
+	int count = 0;
+	// the first pass calculates the number of elements
+	for (int i = 0; i < m_FragmentsCount; i++)
+	{
+		awpRect r = m_Fragments[i].Rect;
+		if (r.left > rect.left && r.right < rect.right &&
+			r.top > rect.top && r.bottom < rect.bottom)
+			count++;
+	}
+	if (count == 0)
+		return false;
+	TLFBounds* b = (TLFBounds*)malloc(count*sizeof(TLFBounds));
+	if (b == NULL)
+		return false;
+	// the second pass copies the elements into a new array b
+	int c = 0;
+	for (int i = 0; i < m_FragmentsCount; i++)
+	{
+		awpRect r = m_Fragments[i].Rect;
+		if (r.left > rect.left && r.right < rect.right &&
+			r.top > rect.top && r.bottom < rect.bottom)
+		{
+			b[c] = m_Fragments[i];
+			c++;
+		}
+	}
+	free(m_Fragments);
+	m_Fragments = b;
+	m_FragmentsCount = count;
+	return true;
+}
+
 
 bool ILFScanner::LoadXML(TiXmlElement* parent)
 {
@@ -588,5 +624,30 @@ bool TLFTileScaleScanner::Scan(int w, int h)
 	return true;
 }
 
+TLFAllScanner::TLFAllScanner() : ILFScanner()
+{
+}
 
-
+bool TLFAllScanner::Scan(int w, int h)
+{
+	m_FragmentsCount = (w - m_BaseWidth / 2)*(h - m_BaseHeight / 2);
+	if (m_FragmentsCount <= 0)
+		return false;
+	m_Fragments = (TLFBounds*)malloc(m_FragmentsCount* sizeof(TLFBounds));
+	int c = 0;
+	for (int y = m_BaseHeight / 2; y < h - m_BaseHeight / 2; y++)
+	{
+		for (int x = m_BaseWidth / 2; x < w - m_BaseWidth / 2; x++)
+		{
+			m_Fragments[c].Angle = 0;
+			m_Fragments[c].HasObject = false;
+			m_Fragments[c].ItemIndex = 0;
+			m_Fragments[c].Rect.left  = x - m_BaseWidth / 2;
+			m_Fragments[c].Rect.right = x + m_BaseWidth / 2;
+			m_Fragments[c].Rect.top = y - m_BaseHeight / 2;
+			m_Fragments[c].Rect.bottom = y + m_BaseHeight / 2;
+			c++;
+		}
+	}
+	return true;
+}

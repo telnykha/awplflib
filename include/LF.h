@@ -558,15 +558,28 @@ protected:
 public:
 	ILFScanner();
 	virtual ~ILFScanner();
-
+	/**
+	\brief	Splits the entire TLFImage image into TLFBounds elements
+	*/
 	virtual bool Scan(TLFImage* pImage);
+	/**
+	\brief	Splits a section of an image into TLFBounds elements
+	*/
 	virtual bool ScanRect(awpRect& rect);
+	/**
+	\brief	Defines the abstract Scan (W, H) method to be overridden by children.
+	*/
 	virtual bool Scan(int width, int height) = 0;
+	/**
+	\brief Keeps only those TLFBounds elements that are completely inside rect
+	*/
+	bool Filter(awpRect& rect);
+
 	virtual void Clear();
-	int		GetFragmentsCount();
+	int				GetFragmentsCount();
 	awpRect			GetFragmentRect(int index);
 	TLFBounds*		GetFragment(int index);
-	int GetParamsCount();
+	int				GetParamsCount();
 	TLFParameter* GetParameter(int index);
 
 	int  GetBaseWidth();
