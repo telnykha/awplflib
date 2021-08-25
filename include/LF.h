@@ -37,10 +37,10 @@
 // or tort (including negligence or otherwise) arising in any way out of
 // the use of this software, even if advised of the possibility of such damage.
 //
-//      Locate Framework  (LF) Computer Vision Library. 
+//      Locate Framework  (LF) Computer Vision Library.
 //		File: LF.h
-//		Purpose: Contains abstracts and coomons for Locate Framework  
-//	    
+//		Purpose: Contains abstracts and coomons for Locate Framework
+//
 //      CopyRight 2004-2018 (c) NN-Videolab.net
 //M*/
 #ifndef __LF_H__
@@ -61,6 +61,7 @@ extern "C"
 #endif
 }
 #include <string>
+#include <vector>
 #include <iostream>
 #include <stdio.h>
 #include "tinyxml.h"
@@ -74,6 +75,8 @@ typedef void (*TLFProgress)(const char* lpMessage, int progress);
 */
 typedef enum {ZTUnknown, ZTRect, ZTContour, ZTLineSegment, ZTOpenPolygon, ZTCircle} TEZoneTypes;
 class TLFZone;
+
+
 
 typedef struct
 {

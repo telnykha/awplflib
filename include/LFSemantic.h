@@ -76,7 +76,8 @@ public:
 	int GetColor();
 	void SetColor(int color);
 	void SetItemLabel(const char* lpLabel);
-	std::string GetId();
+	TLFString GetId();
+	void SetId(const TLFString& id);
 	TEZoneTypes GetZoneType();
 	void SetZoneType(TEZoneTypes zt);
 

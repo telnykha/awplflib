@@ -50,8 +50,8 @@
 */
 using namespace std;
 
-typedef vector<string>      TLFStrings;
-typedef string TLFString;
+typedef std::vector<std::string>      	TLFStrings;
+typedef std::string 					TLFString;
 
 extern "C"
 {

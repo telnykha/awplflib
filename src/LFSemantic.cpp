@@ -131,10 +131,16 @@ void TLFSemanticDictinaryItem::SetItemLabel(const char* lpLabel)
 	this->m_strLabel = lpLabel;
 }
 
-std::string TLFSemanticDictinaryItem::GetId()
+TLFString TLFSemanticDictinaryItem::GetId()
 {
 	return m_id;
 }
+
+void TLFSemanticDictinaryItem::SetId(const TLFString& id)
+{
+	m_id = id;
+}
+
 TEZoneTypes TLFSemanticDictinaryItem::GetZoneType()
 {
 	return this->m_zoneType;
