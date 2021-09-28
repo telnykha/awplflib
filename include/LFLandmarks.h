@@ -60,13 +60,14 @@ class TLFLandmark : public TLFObject
 friend class TLFLandmarkFile;
 protected:
 	awp2DPoint		 m_landmark;
+	AWPDOUBLE           m_status;
 	TLFLandmarkAttr* m_attr;
 
 	TiXmlElement* SaveXML();
 	static TLFLandmark* LoadXML(TiXmlElement* parent, TLFLandmarkAttributes* attrs);
 
 public:
-	TLFLandmark(TLFLandmarkAttr* attr, awp2DPoint point);
+	TLFLandmark(TLFLandmarkAttr* attr, awp2DPoint point, AWPDOUBLE status = 0);
 	virtual ~TLFLandmark();
 	virtual const char* GetName(){ return "TLFLandmark"; }
 	
@@ -77,10 +78,12 @@ public:
 	awp2DPoint landmark();
 	AWPDOUBLE  x();
 	AWPDOUBLE  y();
+	AWPDOUBLE  Status();
 
 	void SetPoint(awp2DPoint point);
 	void SetX(AWPDOUBLE x);
 	void SetY(AWPDOUBLE y);
+	void SetStatus(AWPDOUBLE value);
 };
 
 class TLFLandmarkAttr : public TLFObject

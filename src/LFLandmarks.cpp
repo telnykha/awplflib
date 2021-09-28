@@ -2,10 +2,11 @@
 /*
 TLFLandmark
 */
-TLFLandmark::TLFLandmark(TLFLandmarkAttr* attr, awp2DPoint point)
+TLFLandmark::TLFLandmark(TLFLandmarkAttr* attr, awp2DPoint point, AWPDOUBLE status)
 {
 	m_landmark = point;
 	m_attr = attr;
+	m_status = status;
 }
 TLFLandmark::~TLFLandmark()
 {
@@ -21,6 +22,7 @@ TiXmlElement* TLFLandmark::SaveXML()
 	f->SetAttribute("ID", id.c_str());
 	f->SetDoubleAttribute("X", m_landmark.X);
 	f->SetDoubleAttribute("Y", m_landmark.Y);
+	f->SetDoubleAttribute("S", m_status);
 	return f;
 }
 TLFLandmark*  TLFLandmark::LoadXML(TiXmlElement* parent, TLFLandmarkAttributes* attrs)
@@ -40,8 +42,9 @@ TLFLandmark*  TLFLandmark::LoadXML(TiXmlElement* parent, TLFLandmarkAttributes* 
 	awp2DPoint p;
 	parent->QueryDoubleAttribute("X"	,&p.X);
 	parent->QueryDoubleAttribute("Y",	&p.Y);
-
-	return new TLFLandmark(attr, p);
+	AWPDOUBLE d = 0;
+	parent->QueryDoubleAttribute("S", &d);
+	return new TLFLandmark(attr, p, d);
 }
 
 const char* TLFLandmark::GetId()
@@ -85,6 +88,15 @@ void TLFLandmark::SetY(AWPDOUBLE y)
 {
 	m_landmark.Y = y;
 }
+AWPDOUBLE  TLFLandmark::Status()
+{
+	return m_status;
+}
+void TLFLandmark::SetStatus(AWPDOUBLE value)
+{
+	m_status = value;
+}
+
 /*
 	TLFLandmarkAttr
 */
