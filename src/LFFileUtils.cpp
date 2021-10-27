@@ -121,7 +121,25 @@ bool LFDirExist(const char* lpPath)
 */
 bool LFRemoveDir(const char* lpPath)
 {
-	const char *com = "exec rm -r "; 
+#ifdef WIN32
+	TLFString strPath = lpPath;
+	strPath += "\\*.*";
+
+	_finddata_t filesInfo;
+	intptr_t handle = 0;
+
+	if ((handle = _findfirst((char*)strPath.c_str(), &filesInfo)) != -1)
+	{
+		do
+		{
+			TLFString s = lpPath;
+			TLFString strImageName = s + "\\" + filesInfo.name;
+			DeleteFileA(strImageName.c_str());
+		} while (!_findnext(handle, &filesInfo));
+	}
+	_findclose(handle);
+#else
+	const char *com = "exec rm -r ";
 	const char *end = "/*";
 
 	int bufferSize = strlen(com) + strlen(lpPath) + strlen(end) + 1;
@@ -135,6 +153,7 @@ bool LFRemoveDir(const char* lpPath)
 	if (status < 0)
 		return false;
 	else return true;
+#endif
 }
 
 #ifdef WIN32
