@@ -92,8 +92,8 @@ void ILFObjectDetector::SetBaseWidht(int w)
 {
 	this->Clear();
 	m_baseWidth = w;
-	if (m_scanner != NULL)
-		m_scanner->SetBaseWidth(m_baseWidth);
+//	if (m_scanner != NULL)
+//		m_scanner->SetBaseWidth(m_baseWidth);
 }
 int ILFObjectDetector::GetBaseHeight()
 {
@@ -103,8 +103,8 @@ void ILFObjectDetector::SetBaseHeight(int h)
 {
 	this->Clear();
 	m_baseHeight = h;
-	if (m_scanner != NULL)
-		m_scanner->SetBaseHeight(m_baseHeight);
+//	if (m_scanner != NULL)
+//		m_scanner->SetBaseHeight(m_baseHeight);
 }
 
 int  ILFObjectDetector::GetAngle()
@@ -436,16 +436,30 @@ bool          TSCObjectDetector::LoadXML(TiXmlElement* parent)
 	parent->QueryIntAttribute("base_height", &this->m_baseHeight);
 	int value = -1;
 	parent->QueryIntAttribute("object_type", &value);
-	this->m_Type = parent->Attribute("object_type");//LFGetObjectType(value);
+	this->m_Type = parent->Attribute("object_type");
 	this->m_strDetName = parent->Attribute("detector");
 
     TiXmlHandle hRoot = TiXmlHandle(parent);
     TiXmlElement* elem = hRoot.Child(0).ToElement();
-	// загрузка сканера. 
+	/*
 	if (m_scanner == NULL || !this->m_scanner->LoadXML(parent->FirstChildElement()))
 		return false;
 	m_scanner->SetBaseHeight(m_baseHeight);
 	m_scanner->SetBaseWidth(m_baseWidth);
+	*/
+	if (m_scanner != NULL)
+		delete m_scanner;
+	m_scanner = CreateScanner(parent->FirstChildElement());
+	if (m_scanner == NULL)
+		return false;
+	TLFString scannerName = m_scanner->GetName();
+	printf("scanner name = %s\n", scannerName.c_str());
+	if (scannerName == "TLFScanner")
+	{
+		m_scanner->SetBaseHeight(m_baseHeight);
+		m_scanner->SetBaseWidth(m_baseWidth);
+	}
+
     int count = 0;
     for(TiXmlNode* child = parent->FirstChild("CSClassificator"); child; child = child->NextSibling() )
     {

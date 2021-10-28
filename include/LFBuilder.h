@@ -93,10 +93,40 @@ public:
 	TCSBuildDetector();
 	bool		LoadConfig(std::string const& filename);
 	bool		SaveConfig(std::string const& filename);
-	bool		    InitDetector();
+	bool		InitDetector();
 	void		PrintDetectorInfo();
 	void		AddNewClassifier();
 	bool		Build();
+};
+/**
+*/
+class TLFBuilder
+{
+protected:
+	TLFString			m_strDetectorName;
+	TLFString			m_strBackGround;
+	TCSAdaBoost			m_AdaBoost;
+	TSCObjectDetector*  m_detector;
+
+	bool LoadConfig(const char* fileName);
+	void BuildBackground();
+	bool UpdateDetector();
+public:
+	TLFBuilder();
+	~TLFBuilder();
+
+	bool CreateDetector(ILFScanner* scanner, const char* fileName);
+	bool LoadDetector(const char* fileName);
+	bool SaveDetector(const char* fileName);
+
+	//----
+	bool LoadFromEngine(const char* fileName, int index=0);
+
+	//
+	void PrintInfo();
+
+	void Build(const char* fileName);
+
 };
 /** @} */ /*  end of LFBuilder group */
 #endif //__lf_builder_h__

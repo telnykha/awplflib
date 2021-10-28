@@ -138,6 +138,7 @@ bool LFRemoveDir(const char* lpPath)
 		} while (!_findnext(handle, &filesInfo));
 	}
 	_findclose(handle);
+	return true;
 #else
 	const char *com = "exec rm -r ";
 	const char *end = "/*";

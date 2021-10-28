@@ -197,13 +197,13 @@ bool		TCSBuildDetector::BuildBkground()
 	ILFObjectDetector* cs = m_Engine.GetDetector();
 	m_AdaBoost.DbgMsg("Building new bkground...\n");
 	int nCount = 0;
-	std::string strPath = m_strPathToBase;
+	TLFString strPath = m_strPathToBase;
 	TLFStrings names;
 	if (!LFGetDirFiles(strPath.c_str(), names))
 		return false;
 	if (names.size() == 0)
 		return false;
-	std::string strPathToArt = m_AdaBoost.GetArtefactsBase();
+	TLFString strPathToArt = m_AdaBoost.GetArtefactsBase();
 	int count = 0;
 	double rect_ovr;
 	for (int i = 0; i < names.size(); i++)
@@ -376,184 +376,6 @@ bool		TCSBuildDetector::BuildBkground()
 		return true;
 	}
 
-/*
-#ifdef WIN32
-	_finddata_t filesInfo;
-	intptr_t handle = 0;
-	std::string strPath = m_strPathToBase;
-	// todo: сделать параметром тип данных в базе образцов. 
-	strPath += "*.awp";
-	int count = 0;
-	double rect_ovr;
-	if ((handle = _findfirst((char*)strPath.c_str(), &filesInfo)) != -1)
-	{
-		do
-		{
-			count++;
-			//Загрузка
-			std::string strImageName = m_strPathToBase + filesInfo.name;
-
-			TLFImage Image;
-			TLFImage Image1;
-			if (!Image.LoadFromFile((char*)strImageName.c_str()))
-			{
-
-				continue;
-			}
-			awpConvert(Image.GetImage(), AWP_CONVERT_3TO1_BYTE);
-			Image1.SetImage(Image.GetImage());
-
-			m_AdaBoost.DbgMsg("Num = " + TypeToStr(count) + " " + filesInfo.name + " ");
-			m_AdaBoost.DbgMsg(TypeToStr(Image.GetImage()->sSizeX) + "x" + TypeToStr(Image.GetImage()->sSizeY) + " ");
-			DWORD tc = GetTickCount();
-			//поиск образцов
-			int itemsFound = 0;
-			if (cs->GetStagesCount() != 0)
-			{
-				if (m_Engine.SetSourceImage(&Image, true))
-				{
-					tc = GetTickCount() - tc;
-
-					m_AdaBoost.DbgMsg("Total items = " + TypeToStr(m_Engine.GetScanner()->GetFragmentsCount()) + "\n");
-					int nItemsCount = m_Engine.GetItemsCount() > m_nMaxSamplesPerImage ? m_nMaxSamplesPerImage : m_Engine.GetItemsCount();
-					//сохранение образцов на диск
-					rect_ovr = 0;
-					for (int i = 0; i < nItemsCount; i++)
-					{
-						TLFDetectedItem* item = m_Engine.GetItem(i);
-
-						awpImage* Fragment = NULL;
-						awpRect r = item->GetBounds()->GetRect();
-						bool canSave = true;
-						std::string strXmlFileName = LFChangeFileExt(strImageName, ".xml");
-						if (LFFileExists(strXmlFileName))
-						{
-							TLFSemanticImageDescriptor sd;
-							if (sd.LoadXML(strXmlFileName.c_str()))
-							{
-								for (int ii = 0; ii < sd.GetItemsCount(); ii++)
-								{
-									TLFDetectedItem*  di = sd.GetDetectedItem(ii);
-									TLFRect* bounds = di->GetBounds();
-									rect_ovr = bounds->RectOverlap(r);
-									if (rect_ovr > 0.1)
-									{
-										canSave = false;
-										break;
-									}
-								}
-							}
-							if (canSave)
-							{
-								itemsFound++;
-								if (awpCopyRect(Image1.GetImage(), &Fragment, &r) == AWP_OK)
-								{
-									nCount++;
-									std::string strFragmentName = strPathToArt + TypeToStr(nCount) + ".awp";
-									awpSaveImage(strFragmentName.c_str(), Fragment);
-									//m_AdaBoost.DbgMsg("Overlap = " + TypeToStr(rect_ovr) + "\n");
-									awpReleaseImage(&Fragment);
-									if (nCount >= m_nBgrdCount)
-									{
-										m_AdaBoost.DbgMsg("\nDone.\n");
-										return true;
-									}
-								}
-							}
-						}
-						else
-						{
-							itemsFound++;
-							if (awpCopyRect(Image1.GetImage(), &Fragment, &r) == AWP_OK)
-							{
-								nCount++;
-								std::string strFragmentName = strPathToArt + TypeToStr(nCount) + ".awp";
-								awpSaveImage(strFragmentName.c_str(), Fragment);
-								//m_AdaBoost.DbgMsg("Overlap = " + TypeToStr(rect_ovr) + "\n");
-								awpReleaseImage(&Fragment);
-								if (nCount >= m_nBgrdCount)
-								{
-									m_AdaBoost.DbgMsg("\nDone.\n");
-									return true;
-								}
-							}
-						}
-					}
-					m_AdaBoost.DbgMsg("Items found = " + TypeToStr(itemsFound) + " " + TypeToStr(tc) + " ms\n");
-					//if (nItemsCount == 0)
-					//	DeleteFile(strImageName.c_str());
-				}
-			}
-			else
-			{
-				m_AdaBoost.DbgMsg("Total items = " + TypeToStr(m_Engine.GetScanner()->GetFragmentsCount()) + "\n");
-				ILFScanner* s = m_Engine.GetScanner();
-				s->Scan(Image.GetImage()->sSizeX, Image.GetImage()->sSizeY);
-				s->GetFragmentsCount();
-				int nItemsCount = s->GetFragmentsCount() > m_nMaxSamplesPerImage ? m_nMaxSamplesPerImage : s->GetFragmentsCount();
-
-				//сохранение образцов на диск
-				for (int i = 0; i < nItemsCount; i++)
-				{
-					awpImage* Fragment = NULL;
-					awpRect r = s->GetFragmentRect(i);
-					bool canSave = true;
-					std::string strXmlFileName = LFChangeFileExt(strImageName, ".xml");
-					if (LFFileExists(strXmlFileName))
-					{
-						TLFSemanticImageDescriptor sd;
-						if (sd.LoadXML(strXmlFileName.c_str()))
-						{
-							for (int ii = 0; ii < sd.GetItemsCount(); ii++)
-							{
-								TLFDetectedItem*  di = sd.GetDetectedItem(ii);
-								TLFRect* bounds = di->GetBounds();
-								if (bounds->RectOverlap(r) > 0.75)
-								{
-									canSave = false;
-									break;
-								}
-							}
-						}
-					}
-					if (canSave)
-					{
-						if (awpCopyRect(Image1.GetImage(), &Fragment, &r) == AWP_OK)
-						{
-							nCount++;
-							std::string strFragmentName = strPathToArt + TypeToStr(nCount) + ".awp";
-							awpSaveImage(strFragmentName.c_str(), Fragment);
-							awpReleaseImage(&Fragment);
-							if (nCount >= m_nBgrdCount)
-							{
-								m_AdaBoost.DbgMsg("\nDone.\n");
-								return true;
-							}
-						}
-					}
-				}
-
-
-			}
-			//if (nCount % 10 == 0)
-			m_AdaBoost.DbgMsg(">");
-		} while (!_findnext(handle, &filesInfo));
-	}
-	_findclose(handle);
-	if (nCount < m_nMinBgrdCount)
-	{
-		m_AdaBoost.DbgMsg("\n Bkground not found.\n");
-		return false;
-	}
-	else
-	{
-		m_AdaBoost.DbgMsg("Done.\n");
-		return true;
-	}
-#else
-	return false;
-#endif
-*/
 }
 
 // выполняет "накачку сильного классификатора"
@@ -824,4 +646,446 @@ void		TCSBuildDetector::AddNewClassifier()
 		return;
 	if (!UpdateDetector())
 		return;
+}
+
+
+TLFBuilder::TLFBuilder()
+{
+	m_strDetectorName = "";
+	m_detector = NULL;
+}
+
+TLFBuilder::~TLFBuilder()
+{
+
+}
+
+bool TLFBuilder::CreateDetector(ILFScanner* scanner, const char* fileName)
+{
+	m_detector = new TSCObjectDetector();
+
+	if (scanner != NULL)
+		m_detector->SetScanner(scanner);
+	return SaveDetector(fileName);
+}
+bool TLFBuilder::LoadDetector(const char* fileName)
+{
+	if (m_detector != NULL)
+		delete m_detector;
+
+	m_detector = new TSCObjectDetector();
+
+	TiXmlDocument doc;
+	if (!doc.LoadFile(fileName))
+	{
+		delete m_detector;
+		m_detector = NULL;
+		return false;
+	}
+	TiXmlElement* e = doc.FirstChildElement("TSCObjectDetector");
+	if (e == NULL)
+	{
+		delete m_detector;
+		m_detector = NULL;
+		return false;
+	}
+
+	if (!m_detector->LoadXML(e))
+	{
+		delete m_detector;
+		m_detector = NULL;
+		return false;
+	}
+	m_strDetectorName = fileName;
+	return true;
+}
+bool TLFBuilder::SaveDetector(const char* fileName)
+{
+	if (m_detector == NULL)
+		return false;
+	TiXmlDocument doc;
+	TiXmlDeclaration* decl = new TiXmlDeclaration("1.0", "", "");
+	doc.LinkEndChild(decl);
+
+	TiXmlElement* e = m_detector->SaveXML();
+	doc.LinkEndChild(e);
+
+	if (doc.SaveFile(fileName))
+	{
+		m_strDetectorName = fileName;
+		return true;
+	}
+	return false;
+}
+
+bool TLFBuilder::LoadFromEngine(const char* fileName, int index)
+{
+	m_strDetectorName = "";
+	TLFDetectEngine engine;
+	if (!engine.Load(fileName))
+		return false;
+	ILFObjectDetector* detector = engine.GetDetector(index);
+	TSCObjectDetector* d = dynamic_cast<TSCObjectDetector*>(detector);
+	if (d == NULL)
+		return false;
+	TiXmlElement*e = d->SaveXML();
+	if (m_detector != NULL)
+		delete m_detector;
+	m_detector = new TSCObjectDetector();
+	if (m_detector->LoadXML(e))
+	{
+		delete e;
+		return true;
+	}
+	delete e;
+	return false;
+}
+
+void TLFBuilder::PrintInfo()
+{
+	if (m_detector == NULL)
+	{
+		printf("detector is empty!\n");
+		return;
+	}
+
+	ILFScanner* s = m_detector->GetScanner();
+	if (s == NULL)
+	{
+		printf("error: Corrupt detector. Scanner not found.");
+		return;
+	}
+
+	printf("Scanner: %s\n", s->GetName());
+	printf("Scanner: base width = %d\n", s->GetBaseWidth());
+	printf("Scanner: base height = %d\n", s->GetBaseHeight());
+
+	for (int i = 0; i < s->GetParamsCount(); i++)
+	{
+		TLFParameter* p = s->GetParameter(i);
+		printf("Scanner param[%i] name: %s = %lf\n", i,  p->GetPName(), p->GetValue());
+	}
+
+	int num_stages = m_detector->GetStagesCount();
+	this->m_AdaBoost.DbgMsg("Num stages: " + TypeToStr(num_stages) + "\n");
+	for (int i = 0; i < num_stages; i++)
+	{
+		this->m_AdaBoost.DbgMsg("Stage " + TypeToStr(i) + " num weaks = " +
+			TypeToStr(m_detector->GetSensorsCount(i)) + " thr = " +
+			TypeToStr(m_detector->GetStageThreshold(i)) + "\n");
+	}
+}
+
+void TLFBuilder::Build(const char* fileName)
+{
+	if (!LoadConfig(fileName))
+	{
+		printf("error: cannot load configuration file %s\n", fileName);
+		return;
+	}
+	BuildBackground();
+	m_AdaBoost.LoadSamples();
+	m_AdaBoost.Boost(0);
+	UpdateDetector();
+
+}
+/*
+TLFBuilder configuration:
+Path:		contains path to database 
+Name:		name of detector 
+Sanner:		[TLFScanner, TLFAllScanner, TLFTileScanner]
+BaseWidth:  width of detector 
+BaseHeight: height of detector 
+*/
+bool TLFBuilder::LoadConfig(const char* fileName)
+{
+	printf("Loading config.\n");
+	TiXmlDocument doc;
+	if (!doc.LoadFile(fileName))
+		return false;
+	
+	TiXmlElement* e = doc.FirstChildElement();
+	if (e == NULL)
+		return false;
+
+	TLFString str = e->Value();
+	if (str != "TLFBuilder")
+		return false;
+
+	TiXmlElement* child = e->FirstChildElement("Scanner");
+	ILFScanner* scanner = NULL;
+	if (child != NULL)
+	{
+		// create scanner
+		str = child->Attribute("type");
+		if (str == "TLFScanner")
+			scanner = new TLFScanner();
+		else if (str == "TLFAllScanner")
+			scanner = new TLFAllScanner();
+		else if (str == "TLFTileScanner")
+			scanner = new TLFTileScanner();
+		else if (str == "TLFTileScaleScanner")
+			scanner = new TLFTileScaleScanner();
+		else
+			return false;
+
+		int attr = 24;
+		child->QueryIntAttribute("BaseWidth", &attr);
+		scanner->SetBaseWidth(attr);
+		child->QueryIntAttribute("BaseHeight", &attr);
+		scanner->SetBaseHeight(attr);
+	}
+	else
+		return false;
+
+	child = e->FirstChildElement("Detector");
+	if (child != NULL)
+	{
+		// create detector
+		str = child->Attribute("name");
+		if (!LoadDetector(str.c_str()))
+		{
+			printf("create detector\n");
+			m_detector = new TSCObjectDetector();
+			m_detector->SetScanner(scanner);
+			int aw, ah;
+			child->QueryIntAttribute("ApetrureWidth", &aw);
+			child->QueryIntAttribute("ApertureHeight", &ah);
+			m_detector->SetBaseWidht(aw);
+			m_detector->SetBaseHeight(ah);
+			if (!SaveDetector(str.c_str()))
+				return false;
+		}
+	}
+	else
+		return false;
+
+	child = e->FirstChildElement("Boost");
+	if (child != NULL)
+	{
+		// create AdaBoost
+		printf("create AdaBoost\n");
+		str = child->Attribute("path");
+		printf("database: %s \n", str.c_str());
+		if (!LFDirExist(str.c_str()))
+		{
+			printf("error: database %s does not exists.\n", str.c_str());
+			return false;
+		}
+		TLFStrings names;
+		LFGetDirFiles(str.c_str(), names);
+		printf("Source data has %i positive items.\n", names.size());
+		int numsamles = names.size();
+		TLFString strBg = str + "\\bg";
+		if (!LFDirExist(strBg.c_str()))
+		{
+			printf("error: database of backgroud %s does not exists.\n", strBg.c_str());
+			return false;
+		}
+		LFGetDirFiles(strBg.c_str(), names);
+		printf("Source data has %i background images.\n", names.size());
+
+		m_strBackGround = strBg;
+		TLFString strNg = str + "\\negative";
+		if (!LFDirExist(strNg.c_str()))
+			LFCreateDir(strNg.c_str());
+
+		// конфигурирование бустинга
+		m_AdaBoost.SetArtefactsBase(strNg);
+		m_AdaBoost.SetObjectsBase(str);
+		m_AdaBoost.SetWidthBase(m_detector->GetBaseWidth());
+		m_AdaBoost.SetHeightBase(m_detector->GetBaseHeight());
+		m_AdaBoost.SetFeaturesCount(100);
+		m_AdaBoost.SetFinishFar(0.25);
+
+
+		m_AdaBoost.m_CSFeature = 1;
+		m_AdaBoost.m_VFeature = 0;
+		m_AdaBoost.m_HFeature = 0;
+		m_AdaBoost.m_DFeature = 0;
+		m_AdaBoost.m_CFeature = 0;
+		m_AdaBoost.m_VAFeature =0;
+		m_AdaBoost.m_HAFeature =0;
+		m_AdaBoost.m_DAFeature =0;
+		m_AdaBoost.m_CAFeature =0;
+
+
+		m_AdaBoost.DbgMsg(" done.\n");
+
+	}
+	else
+		return false;
+
+	m_AdaBoost.InitFeatures();
+	return true;
+}
+
+void TLFBuilder::BuildBackground()
+{
+	TLFString strNegative = m_AdaBoost.GetArtefactsBase();
+	LFRemoveDir(strNegative.c_str());
+	TLFString strPath = m_AdaBoost.GetObjectsBase();
+
+	ILFObjectDetector* cs = m_detector;
+	m_AdaBoost.DbgMsg("Building new bkground...\n");
+	int nCount = 0;
+	TLFStrings names;
+	if (!LFGetDirFiles(strPath.c_str(), names))
+		return;
+	if (names.size() == 0)
+		return;
+	TLFStrings bgNames;
+	if (!LFGetDirFiles(m_strBackGround.c_str(), bgNames))
+		return;
+	if (bgNames.size() == 0)
+		return;
+
+	int count = 0;
+	double rect_ovr;
+	for (int i = 0; i < bgNames.size(); i++)
+	{
+		if (!_IsImageFile(bgNames[i]))
+			continue;
+		count++;
+		//Загрузка
+		std::string strImageName = bgNames[i];
+
+		TLFImage Image;
+		TLFImage Image1;
+		if (!Image.LoadFromFile((char*)strImageName.c_str()))
+		{
+
+			continue;
+		}
+		awpConvert(Image.GetImage(), AWP_CONVERT_3TO1_BYTE);
+		Image1.SetImage(Image.GetImage());
+
+		m_AdaBoost.DbgMsg("Num = " + TypeToStr(count) + " " + LFGetFileName(bgNames[i]) + " ");
+		m_AdaBoost.DbgMsg(TypeToStr(Image.GetImage()->sSizeX) + "x" + TypeToStr(Image.GetImage()->sSizeY) + "\n");
+		AWPDWORD tc = LFGetTickCount();
+		//поиск образцов
+		int itemsFound = 0;
+		if (cs->GetStagesCount() != 0)
+		{
+			m_detector->Clear();
+			m_detector->Init(Image.GetImage(), true);
+			m_detector->Detect();
+			for (int j = 0; j < m_detector->GetNumItems(); j++)
+			{
+				TLFDetectedItem* item = m_detector->GetItem(j);
+				if (item->HasObject())
+				{
+					//save this
+					awpRect r = item->GetBounds()->GetRect();
+					awpImage* Fragment = NULL;
+					if (awpCopyRect(Image1.GetImage(), &Fragment, &r) == AWP_OK)
+					{
+						nCount++;
+						std::string strFragmentName = strNegative + "\\" + TypeToStr(nCount) + ".awp";
+						awpSaveImage(strFragmentName.c_str(), Fragment);
+						awpReleaseImage(&Fragment);
+						if (nCount >= names.size())
+						{
+							m_AdaBoost.DbgMsg("\nDone.\n");
+							return;
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			//m_AdaBoost.DbgMsg("Total items = " + TypeToStr(m_Engine.GetScanner()->GetFragmentsCount()) + "\n");
+			ILFScanner* s = m_detector->GetScanner();
+			s->Scan(Image.GetImage()->sSizeX, Image.GetImage()->sSizeY);
+			int nItemsCount = s->GetFragmentsCount();// > m_nMaxSamplesPerImage ? m_nMaxSamplesPerImage : s->GetFragmentsCount();
+
+			//сохранение образцов на диск
+			for (int i = 0; i < nItemsCount; i+=100)
+			{
+				awpImage* Fragment = NULL;
+				awpRect r = s->GetFragmentRect(i);
+				if (awpCopyRect(Image1.GetImage(), &Fragment, &r) == AWP_OK)
+				{
+					nCount++;
+					std::string strFragmentName = strNegative + "\\" + TypeToStr(nCount) + ".awp";
+					awpSaveImage(strFragmentName.c_str(), Fragment);
+					awpReleaseImage(&Fragment);
+					if (nCount >= names.size())
+					{
+						m_AdaBoost.DbgMsg("\nDone.\n");
+						return;
+					}
+				}
+			}
+
+
+		}
+		//if (nCount % 10 == 0)
+		m_AdaBoost.DbgMsg(">");
+	}
+	/*
+	if (nCount < m_nMinBgrdCount)
+	{
+		m_AdaBoost.DbgMsg("\n Bkground not found.\n");
+		return false;
+	}
+	else
+	{
+		m_AdaBoost.DbgMsg("Done.\n");
+		return true;
+	}*/
+}
+
+bool TLFBuilder::UpdateDetector()
+{
+	m_AdaBoost.DbgMsg("Update detector...\n");
+
+	//анализ сильного классификатора.
+	TErrTrainData td = m_AdaBoost.GetTrainData();
+	double min_v = 2;
+	int    min_idx = -1;
+
+	for (unsigned int i = 0; i < td.size(); i++)
+	{
+		if (td[i].m_frr > 0.009)
+			continue;
+
+		if (min_v > td[i].m_far)
+		{
+			min_v = td[i].m_far;
+			min_idx = i;
+		}
+	}
+
+	m_AdaBoost.DbgMsg("Min FAR = " + TypeToStr(min_v) + " Min FRR = " + TypeToStr(td[min_idx].m_frr) + ";\n");
+	m_AdaBoost.DbgMsg("Stages count = " + TypeToStr(min_idx) + ";\n");
+	if (min_v > 0.9)
+	{
+		m_AdaBoost.DbgMsg("Cannot update detector. \n");
+		return false;
+	}
+	m_AdaBoost.DbgMsg("Updating detector.... \n");
+
+	TCSStrong cls;
+	for (int i = 0; i < m_AdaBoost.GetClass()->GetCount(); i++)
+	{
+		TCSWeak* wcl1 = (TCSWeak *)m_AdaBoost.GetClass()->GetWeak(i);
+		cls.AddWeak(new TCSWeak(wcl1));
+	}
+	cls.SetThreshold(td[min_idx].m_thr);
+	TSCObjectDetector* d = m_detector;
+	d->AddStrong(&cls);
+
+	//string strNegativePath = m_AdaBoost.GetArtefactsBase();
+	//strNegativePath += "\\stage";
+	//strNegativePath += TypeToStr(d->GetStagesCount());
+	//strNegativePath += "\\";
+	//m_AdaBoost.SaveNegativeSamples(strNegativePath.c_str());
+
+	m_AdaBoost.DbgMsg("Save detector. \n");
+	//m_Engine.Save(this->m_strDetectorName.c_str());
+	return this->SaveDetector(this->m_strDetectorName.c_str());
+
+	//return true;
 }

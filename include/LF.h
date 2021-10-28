@@ -603,6 +603,9 @@ public:
 		return "ILFScanner";
 	}
 };
+
+ILFScanner* CreateScanner(TiXmlElement* parent);
+
 /*    Object detector. 
 */
 class ILFObjectDetector : public TLFObject

@@ -146,7 +146,10 @@ bool ILFScanner::LoadXML(TiXmlElement* parent)
     const char* type = parent->Attribute("type");
     const char* name = this->GetName();
 	if (strcmp(type, name) != 0)
-        return false;
+	{
+		printf("error: type = %s name = %s\n", type, name);
+		return false;
+	}
 	int value;
 	parent->QueryIntAttribute("ApertureWidth", &value);
 	m_BaseWidth = (unsigned int)value;
@@ -650,4 +653,29 @@ bool TLFAllScanner::Scan(int w, int h)
 		}
 	}
 	return true;
+}
+
+
+ILFScanner* CreateScanner(TiXmlElement* parent)
+{
+	if (parent == NULL)
+		return NULL;
+	ILFScanner* scanner = NULL;
+	const char* type = parent->Attribute("type");
+	TLFString strType = type;
+	if (strType == "TLFScanner")
+		scanner = new TLFScanner();
+	else if (strType == "TLFTileScanner")
+		scanner = new TLFTileScanner();
+	else if (strType == "TLFTileScaleScanner")
+		scanner = new TLFTileScaleScanner();
+	else if (strType == "TLFAllScanner")
+		scanner = new TLFAllScanner();
+	else
+		return NULL;
+	if (scanner->LoadXML(parent))
+		return scanner;
+
+	delete scanner;
+	return NULL;
 }
