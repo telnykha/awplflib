@@ -109,7 +109,7 @@ protected:
 	TSCObjectDetector*  m_detector;
 
 	bool LoadConfig(const char* fileName);
-	void BuildBackground();
+	bool BuildBackground();
 	bool UpdateDetector();
 public:
 	TLFBuilder();

@@ -783,11 +783,12 @@ void TLFBuilder::Build(const char* fileName)
 		printf("error: cannot load configuration file %s\n", fileName);
 		return;
 	}
-	BuildBackground();
-	m_AdaBoost.LoadSamples();
-	m_AdaBoost.Boost(0);
-	UpdateDetector();
-
+	while (BuildBackground())
+	{
+		m_AdaBoost.LoadSamples();
+		m_AdaBoost.Boost(0);
+		UpdateDetector();
+	}
 }
 /*
 TLFBuilder configuration:
@@ -920,7 +921,7 @@ bool TLFBuilder::LoadConfig(const char* fileName)
 	return true;
 }
 
-void TLFBuilder::BuildBackground()
+bool TLFBuilder::BuildBackground()
 {
 	TLFString strNegative = m_AdaBoost.GetArtefactsBase();
 	LFRemoveDir(strNegative.c_str());
@@ -931,14 +932,14 @@ void TLFBuilder::BuildBackground()
 	int nCount = 0;
 	TLFStrings names;
 	if (!LFGetDirFiles(strPath.c_str(), names))
-		return;
+		return false;
 	if (names.size() == 0)
-		return;
+		return false;
 	TLFStrings bgNames;
 	if (!LFGetDirFiles(m_strBackGround.c_str(), bgNames))
-		return;
+		return false;
 	if (bgNames.size() == 0)
-		return;
+		return false;
 
 	int count = 0;
 	double rect_ovr;
@@ -959,17 +960,19 @@ void TLFBuilder::BuildBackground()
 		}
 		awpConvert(Image.GetImage(), AWP_CONVERT_3TO1_BYTE);
 		Image1.SetImage(Image.GetImage());
+		m_detector->GetScanner()->Scan(Image.GetImage()->sSizeX, Image.GetImage()->sSizeY);
+		m_AdaBoost.DbgMsg("Count = " + TypeToStr(count) + " file " + LFGetFileName(bgNames[i]) + " ");
+		m_AdaBoost.DbgMsg(TypeToStr(Image.GetImage()->sSizeX) + "x" + TypeToStr(Image.GetImage()->sSizeY) + " ");
+		m_AdaBoost.DbgMsg("Total items = " + TypeToStr(m_detector->GetScanner()->GetFragmentsCount()) + "\n");
 
-		m_AdaBoost.DbgMsg("Num = " + TypeToStr(count) + " " + LFGetFileName(bgNames[i]) + " ");
-		m_AdaBoost.DbgMsg(TypeToStr(Image.GetImage()->sSizeX) + "x" + TypeToStr(Image.GetImage()->sSizeY) + "\n");
 		AWPDWORD tc = LFGetTickCount();
-		//поиск образцов
 		int itemsFound = 0;
 		if (cs->GetStagesCount() != 0)
 		{
 			m_detector->Clear();
 			m_detector->Init(Image.GetImage(), true);
-			m_detector->Detect();
+			itemsFound = m_detector->Detect();
+			m_AdaBoost.DbgMsg("Items found = " + TypeToStr(itemsFound) + "\n");
 			for (int j = 0; j < m_detector->GetNumItems(); j++)
 			{
 				TLFDetectedItem* item = m_detector->GetItem(j);
@@ -987,7 +990,7 @@ void TLFBuilder::BuildBackground()
 						if (nCount >= names.size())
 						{
 							m_AdaBoost.DbgMsg("\nDone.\n");
-							return;
+							return true;
 						}
 					}
 				}
@@ -1014,7 +1017,7 @@ void TLFBuilder::BuildBackground()
 					if (nCount >= names.size())
 					{
 						m_AdaBoost.DbgMsg("\nDone.\n");
-						return;
+						return true;
 					}
 				}
 			}
@@ -1024,13 +1027,13 @@ void TLFBuilder::BuildBackground()
 		//if (nCount % 10 == 0)
 		m_AdaBoost.DbgMsg(">");
 	}
-	/*
-	if (nCount < m_nMinBgrdCount)
+	
+	if (nCount < names.size() / 20)
 	{
 		m_AdaBoost.DbgMsg("\n Bkground not found.\n");
 		return false;
 	}
-	else
+	/*else
 	{
 		m_AdaBoost.DbgMsg("Done.\n");
 		return true;
@@ -1084,8 +1087,5 @@ bool TLFBuilder::UpdateDetector()
 	//m_AdaBoost.SaveNegativeSamples(strNegativePath.c_str());
 
 	m_AdaBoost.DbgMsg("Save detector. \n");
-	//m_Engine.Save(this->m_strDetectorName.c_str());
 	return this->SaveDetector(this->m_strDetectorName.c_str());
-
-	//return true;
 }

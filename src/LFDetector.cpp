@@ -372,6 +372,7 @@ int  TSCObjectDetector::Detect()
              this->m_racurs, this->m_baseWidth, this->m_baseHeight, this->m_strDetName.c_str(), id);
 			de->SetHasObject(true);
 			m_objects.Add(de);
+			res++;
 		}
         m_scanner->GetFragment(i)->HasObject = false;
 	}

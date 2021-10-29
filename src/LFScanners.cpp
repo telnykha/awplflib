@@ -629,10 +629,13 @@ bool TLFTileScaleScanner::Scan(int w, int h)
 
 TLFAllScanner::TLFAllScanner() : ILFScanner()
 {
+	m_Fragments = NULL;
 }
 
 bool TLFAllScanner::Scan(int w, int h)
 {
+	if (m_Fragments != NULL)
+		free(m_Fragments);
 	m_FragmentsCount = (w - m_BaseWidth / 2)*(h - m_BaseHeight / 2);
 	if (m_FragmentsCount <= 0)
 		return false;
