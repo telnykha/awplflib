@@ -84,6 +84,9 @@ extern "C"
 	{
 		const string c = c_separator;
 		int len = strPath.find_last_of(c);
+		if (len == -1)
+			return "";
+
 		return strPath.substr(0, len);
 	}
 
