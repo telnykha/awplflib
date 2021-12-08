@@ -659,6 +659,27 @@ bool TLFAllScanner::Scan(int w, int h)
 }
 
 
+TLFWholeImageScanner::TLFWholeImageScanner() : ILFScanner()
+{
+	this->m_Fragments = NULL;
+	this->m_FragmentsCount = 0;
+}
+bool TLFWholeImageScanner::Scan(int w, int h)
+{
+	if (m_Fragments != NULL)
+		free(m_Fragments);
+	m_FragmentsCount = 1;
+	m_Fragments = (TLFBounds*)malloc(m_FragmentsCount* sizeof(TLFBounds));
+	m_Fragments[0].Angle = 0;
+	m_Fragments[0].HasObject = false;
+	m_Fragments[0].ItemIndex = 0;
+	m_Fragments[0].Rect.left = 0;
+	m_Fragments[0].Rect.right = w;
+	m_Fragments[0].Rect.top = 0;
+	m_Fragments[0].Rect.bottom = h;
+	return true;
+}
+
 ILFScanner* CreateScanner(TiXmlElement* parent)
 {
 	if (parent == NULL)
@@ -674,7 +695,10 @@ ILFScanner* CreateScanner(TiXmlElement* parent)
 		scanner = new TLFTileScaleScanner();
 	else if (strType == "TLFAllScanner")
 		scanner = new TLFAllScanner();
+	else if (strType == "TLFWholeImageScanner")
+		scanner = new TLFWholeImageScanner();
 	else
+
 		return NULL;
 	if (scanner->LoadXML(parent))
 		return scanner;

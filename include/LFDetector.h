@@ -71,6 +71,9 @@ public:
     // xml support
     virtual TiXmlElement* SaveXML();
 	virtual bool          LoadXML(TiXmlElement* parent);
+	// file io 
+	bool SaveDetector(const char* lpFileName);
+	bool LoadDetector(const char* lpFileName);
 	// stages
 	virtual bool	AddStrong(ILFStrong* strong);
 

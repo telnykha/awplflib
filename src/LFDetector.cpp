@@ -313,7 +313,6 @@ int  TSCObjectDetector::Detect()
 		return res;
 	if (this->m_Image.GetImage() == NULL)
 		return res;
-	TLFSFeature sf(0,0,this->m_baseWidth, this->m_baseHeight);
 	for (int i = 0; i < m_scanner->GetFragmentsCount(); i++)
 	{
 		
@@ -321,28 +320,17 @@ int  TSCObjectDetector::Detect()
 		{
 			bool has_object = true;
 			double scale = (double)(m_scanner->GetFragmentRect(i).right - m_scanner->GetFragmentRect(i).left)/(double)this->m_baseWidth;
-			sf.Setup(scale, scale, m_scanner->GetFragmentRect(i).left, m_scanner->GetFragmentRect(i).top);
-			double variance = sf.fCalcValue(&m_Image);
-			//if (variance > 30)
+			for (int j = 0; j < m_Strongs.GetCount(); j++)
 			{
-				//printf("-------------------------------\n");
-				for (int j = 0; j < m_Strongs.GetCount(); j++)
+				TCSStrong* strong = (TCSStrong*)m_Strongs.Get(j);
+				strong->Setup(m_scanner->GetFragment(i)->Rect, m_baseWidth);
+				double err = 0;
+				if (strong->Classify(&m_Image, err) == 0)
 				{
-
-					TCSStrong* strong = (TCSStrong*)m_Strongs.Get(j);
-					strong->Setup(m_scanner->GetFragment(i)->Rect, m_baseWidth);
-					double err = 0;
-					if (strong->Classify(&m_Image, err) == 0)
-					{
-						has_object = false;
-						break;
-					}
-					//else
-					//	printf("classifyed %i\t %f.\n", j, err);
+					has_object = false;
+					break;
 				}
 			}
- 			//else
- 			//		has_object = false;
 
 			if (has_object)
 			{
@@ -377,7 +365,7 @@ int  TSCObjectDetector::Detect()
         m_scanner->GetFragment(i)->HasObject = false;
 	}
 
-	return res;
+	return m_objects.GetCount();
 }
 
 
@@ -482,6 +470,30 @@ bool          TSCObjectDetector::LoadXML(TiXmlElement* parent)
     }
 
     return true;
+}
+
+
+bool TSCObjectDetector::SaveDetector(const char* lpFileName)
+{
+	TiXmlDocument doc;
+	TiXmlDeclaration* decl = new TiXmlDeclaration("1.0", "", "");
+	doc.LinkEndChild(decl);
+
+	TiXmlElement* e = SaveXML();
+	doc.LinkEndChild(e);
+	return doc.SaveFile(lpFileName);
+}
+bool TSCObjectDetector::LoadDetector(const char* lpFileName)
+{
+	Clear();
+
+	TiXmlDocument doc;
+	if (!doc.LoadFile(lpFileName))
+		return false;
+	TiXmlElement* e = doc.FirstChildElement("TSCObjectDetector");
+	if (e == NULL)
+		return false;
+	return LoadXML(e);
 }
 
 
