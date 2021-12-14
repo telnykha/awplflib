@@ -84,6 +84,7 @@ typedef struct
 	int		Angle;
 	int     ItemIndex;
 	awpRect Rect;
+    double  raiting;
 }TLFBounds;
 
 /*
