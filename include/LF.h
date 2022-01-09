@@ -69,6 +69,8 @@ extern "C"
 typedef int(*TLFListSortCompare)(void * Item1, void * Item2);
 typedef void (*TLFProgress)(const char* lpMessage, int progress);
 
+static const char* c_lpDictFileName = "dictionary.xml";
+
 /**
 \Enum TEZoneTypes
 \brief LF Zone types
@@ -494,7 +496,7 @@ public:
 	  0 - object present
 	  1 - object absence
    */
-   virtual int Classify(TLFImage* pImage, double& err, double* vector = NULL) = 0;
+   virtual int Classify(TLFImage* pImage, double& err) = 0;
    /*
 		weak list access
    */
@@ -564,7 +566,7 @@ public:
 	/**
 	\brief	Splits the entire TLFImage image into TLFBounds elements
 	*/
-	virtual bool Scan(TLFImage* pImage);
+	virtual bool ScanImage(TLFImage* pImage);
 	/**
 	\brief	Splits a section of an image into TLFBounds elements
 	*/

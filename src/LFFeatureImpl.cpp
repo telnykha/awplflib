@@ -5,7 +5,7 @@
     Copyright (c) AWPSoft.
 */
 #include "_LF.h"
-#pragma hdrstop
+
 // construction
 ILFFeature::ILFFeature()
 {

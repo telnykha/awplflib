@@ -44,7 +44,6 @@
 //      CopyRight 2004-2019 (c) NN-Videolab.net
 //M*/
 #include "_LF.h"
-
 //--------------------------element dictionary ----------------------------------
 TLFSemanticDictinaryItem::TLFSemanticDictinaryItem()
 {
@@ -114,6 +113,9 @@ bool TLFSemanticDictinaryItem::SaveXML(const char* lpFileName)
 	TiXmlDeclaration* decl = new TiXmlDeclaration("1.0", "", "");
 	doc.LinkEndChild(decl);
 	TiXmlElement* dscr = SaveXML();
+	if (dscr == NULL)
+		return false;
+    doc.LinkEndChild(dscr);
 	return doc.SaveFile(lpFileName);
 }
 
@@ -298,7 +300,7 @@ bool TLFSemanticDictinary::LoadXML(const char* lpFileName)
 	if (!doc.LoadFile())
 		return false;
 	TiXmlHandle hDoc(&doc);
-	TiXmlElement* pElem = NULL;
+	TiXmlElement* pElem;// = NULL;
 
 	pElem = hDoc.FirstChildElement().Element();
 	if (pElem == NULL)

@@ -62,7 +62,7 @@ public:
     // позиционирование
     void Setup( awpRect const& window, int det_width );
     // классификафия
-	virtual int Classify(TLFImage* pImage, double& err, double* vct = NULL);
+	virtual int Classify(TLFImage* pImage, double& err);
 
 	virtual void SaveXML(TiXmlElement* parent);
 	virtual bool LoadXML(TiXmlElement* parent);

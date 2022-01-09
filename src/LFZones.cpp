@@ -75,20 +75,15 @@ const char* TLFZone::ZoneType()
 	switch(this->m_ZoneType)
     {
         case ZTRect:
-                return "Rectangle ";
-        break;
+				return "Rectangle ";
         case ZTContour:
-                return "Polygon  ";
-        break;
+				return "Polygon  ";
         case ZTLineSegment:
-                return "Line Segment  ";
-        break;
+				return "Line Segment  ";
         case ZTOpenPolygon:
 				return "Polyline  ";
-		break;
 		case ZTCircle:
 				return "Circle  ";
-		break;
     }
 	return "unknown";
 }
@@ -188,7 +183,9 @@ double TLFZone::Square()
 		// todo: return square
 	}
 	else
-    	return 0;
+		return 0;
+
+    return 0;
 }
 // return bounding box
 TLF2DRect* TLFZone::GetBounds()
@@ -408,19 +405,14 @@ bool TLFZone::IsPointNearVertex(TLF2DPoint& point)
     {
 		case ZTRect:
 				return IsPointNearRect(point);
-		break;
 		case ZTContour:
 				return IsPointNearContour(point);
-		break;
 		case ZTLineSegment:
 				return IsPointNearLineSegment(point);
-		break;
 		case ZTOpenPolygon:
 				return IsPointNearOpenPolygon(point);
-		break;
 		case ZTCircle:
 				return IsPointNearLineSegment(point);
-		break;
 	}
 
 	return false;
@@ -583,20 +575,15 @@ SZoneVertex TLFZone::SelectVertex(TLF2DPoint& point)
  	switch(this->m_ZoneType)
     {
         case ZTRect:
-                return SelectRectVertex(point);
-        break;
+				return SelectRectVertex(point);
         case ZTContour:
-                return SelectContourVertex(point);
-        break;
-        case ZTLineSegment:
+				return SelectContourVertex(point);
+		case ZTLineSegment:
 				return SelectLineSegmentVertex(point);
-        break;
         case ZTOpenPolygon:
-                return SelectOpenPolygonVertex(point);
-		break;
+				return SelectOpenPolygonVertex(point);
 		case ZTCircle:
-	        return SelectLineSegmentVertex(point);
-		break;
+			return SelectLineSegmentVertex(point);
     }
 
 	return vertex;

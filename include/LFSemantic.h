@@ -51,7 +51,7 @@
 *   @{
 */
 
-static const char* c_lpDictFileName = "dictionary.xml";
+
 /**
 \brief Elemnet of semantic dictionary, contains: class label,
 \ aperture and scanner.

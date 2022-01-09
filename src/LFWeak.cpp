@@ -4,7 +4,7 @@ Purpose: this module includes numeber of WEAK classificators
 Copyright (c) AWPSoft.
 */
 #include "_LF.h"
-#pragma hdrstop
+
 //---------------------------------------------------------------------------
 // слабый классификатор, основанный на преобразовании Census
 TCSWeak::TCSWeak() : ILFWeak()

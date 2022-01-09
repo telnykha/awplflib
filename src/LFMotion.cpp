@@ -42,7 +42,9 @@ int TLFMotionWeak::Classify(TLFImage* pImage,  double* value)
 {
 	if (pImage == NULL)
 		return 0;
+
 	double v = (double)m_pFeature->uCalcValue(pImage);
+    *value = v;
 	m_counter++;
     m_sum += v;
 	if (m_counter <= 50)
@@ -121,7 +123,7 @@ bool TLFMotionDetector::Init(awpImage* pImage, bool scan)
 		this->m_weaks_v.Clear();
 		this->m_weaks_d.Clear();
 
-		m_scanner->Scan(&m_Image);
+		m_scanner->ScanImage(&m_Image);
 
 		for (int i = 0; i < m_scanner->GetFragmentsCount(); i++)
 		{
@@ -169,6 +171,9 @@ bool TLFMotionDetector::Init(awpImage* pImage, bool scan)
 // classification
 int  TLFMotionDetector::ClassifyRect(awpRect Fragmnet, double* err, int* vect)
 {
+	*err = 0;
+    *vect = 0;
+
 	return 0;
 }
 int  TLFMotionDetector::Detect()

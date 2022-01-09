@@ -105,7 +105,7 @@ public:
 	0 - object present
 	1 - object absence
 	*/
-	virtual int Classify(TLFImage* pImage, double& err, double* vct = NULL);
+	virtual int Classify(TLFImage* pImage, double& err);
 	void Clear();
 };
 

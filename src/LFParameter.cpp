@@ -1,5 +1,5 @@
 #include "_LF.h"
-#pragma hdrstop
+
 
 TLFParameter::TLFParameter()
 {

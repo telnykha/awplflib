@@ -116,9 +116,9 @@ extern "C"
 			strPath += "\\";
 		if (strExt.find_first_of('.') != 0)
 		{
-			string tmp = ".";
-			tmp += strExt;
-			strExt = tmp;
+			//string tmp = ".";
+			//tmp += strExt;
+			strExt = "." + strExt;
 		}
 		return strPath + strName + strExt;
 	}

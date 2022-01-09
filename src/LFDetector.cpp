@@ -45,7 +45,7 @@
 //M*/
 
 #include "_LF.h"
-#pragma hdrstop
+
 
 using namespace std;
 #ifndef __CLR_OR_THIS_CALL
@@ -251,7 +251,7 @@ bool TSCObjectDetector::Init(awpImage* pImage, bool scan)
     m_Image.FreeImages();
 	m_Image.SetImage(pImage);
 	if (scan && changed)
-		m_scanner->Scan(&m_Image);
+		m_scanner->ScanImage(&m_Image);
 	return m_Image.GetImage() != NULL;
 }
 bool TSCObjectDetector::AddStrong(ILFStrong* strong)
@@ -533,7 +533,7 @@ bool TLFFGBGDetector::Init(awpImage* pImage, bool scan)
 		this->m_weaks_v.Clear();
 		this->m_weaks_d.Clear();
 		printf("treshold = %f\n", m_threshold);
-		m_scanner->Scan(&m_Image);
+		m_scanner->ScanImage(&m_Image);
 
 		for (int i = 0; i < m_scanner->GetFragmentsCount(); i++)
 		{

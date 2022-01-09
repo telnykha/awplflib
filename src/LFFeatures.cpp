@@ -44,9 +44,6 @@
 //      CopyRight 2004-2019 (c) NN-Videolab.net
 //M*/
 #include "_LF.h"
-#pragma hdrstop
-
-
 
 /*
 	A-Feature 

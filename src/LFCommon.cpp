@@ -43,8 +43,9 @@
 //		Purpose: Implements common classses: TLFObject, TLFListNode, TLFList, TLFObjectList
 //
 //      CopyRight 2004-2018 (c) NN-Videolab.net
-//M*/#include "_LF.h"
-#pragma hdrstop
+//M*/
+#include "_LF.h"
+
 /*
     TLFObject
 */
@@ -329,7 +330,6 @@ void TLFObjectList::Clear()
 	{
 		TLFObject* tmp = Get(i);
 		delete tmp;
-		tmp = NULL;
 	}
 	m_Count = 0;
     SetCapacity(0);

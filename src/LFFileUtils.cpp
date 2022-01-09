@@ -54,7 +54,7 @@ std::string LFMakeFileName(std::string& strPath, std::string strName, std::strin
 bool LFFileExists(const std::string& strFileName)
 {
 	FILE *file;
-	if (file = fopen(strFileName.c_str(), "r"))
+	if ((file = fopen(strFileName.c_str(), "r")) != NULL)
 	{
 		fclose(file);
 		return 1;
@@ -82,7 +82,6 @@ bool LFCreateDir(const char* lpPath)
 		return true;
 	return false;
 #endif
-	return false;
 }
 bool LFDirExist(const char* lpPath)
 {
@@ -114,7 +113,6 @@ bool LFDirExist(const char* lpPath)
 			return false;
 	}
 #endif
-	return false;
 }
 /**
 * @brief clear all files in the direcrory 
@@ -160,7 +158,7 @@ bool LFRemoveDir(const char* lpPath)
 #ifdef WIN32
 /* 128 bit GUID to human-readable string */
 static char * guid_to_str(UUID* id, char * out) {
-	int i;
+	unsigned int i;
 	char * ret = out;
 	out += sprintf(out, "%.8lX-%.4hX-%.4hX-", id->Data1, id->Data2, id->Data3);
 	for (i = 0; i < sizeof(id->Data4); ++i) {

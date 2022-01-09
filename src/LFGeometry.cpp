@@ -1,5 +1,5 @@
 #include "_LF.h"
-#pragma hdrstop
+
 
 TLFPoint::TLFPoint()
 {
@@ -1009,7 +1009,7 @@ awpPoint TLFContour::GetPoint(AWPDWORD idx)
 {
 	awpPoint result;
 	memset(&result, 0, sizeof(awpPoint));
-	if (idx < 0 || idx >= this->m_contour->NumPoints)
+	if ( idx >= this->m_contour->NumPoints)
 		return result;
 	result = m_contour->Points[idx];
 	return result;
@@ -1130,7 +1130,7 @@ awp2DPoint TLF2DContour::GetPoint(AWPDWORD idx)
 {
 	awp2DPoint result;
 	memset(&result, 0, sizeof(awp2DPoint));
-	if (idx < 0 || idx >= this->m_contour->NumPoints)
+	if ( idx >= this->m_contour->NumPoints)
 		return result;
 	result = m_contour->Points[idx];
 	return result;
@@ -1138,7 +1138,7 @@ awp2DPoint TLF2DContour::GetPoint(AWPDWORD idx)
 
 void TLF2DContour::SetPoint(AWPDWORD idx, awp2DPoint& p)
 {
-	if (idx < 0 || idx >= this->m_contour->NumPoints)
+	if (idx >= this->m_contour->NumPoints)
 		return;
 	m_contour->Points[idx] = p;
 }

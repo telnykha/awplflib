@@ -158,7 +158,7 @@ bool TLFDBLabeledImages::LoadDatabase(const char* path)
 		return false;
 	if (names.size() == 0)
 		return false;
-	for (int i = 0; i < names.size(); i++)
+	for (unsigned int i = 0; i < names.size(); i++)
 	{
 			if (_IsImageFile(names[i]))
 			{
@@ -238,7 +238,7 @@ void TLFDBLabeledImages::GetFarHST(TLFDetectEngine& engine, TLFHistogramm& hst, 
 		for (int j = 0; j < scanner->GetFragmentsCount(); j++)
 		{
 			double err = 0;
-			double scale = 1;
+			double scale;// = 1;
 			awpRect rect = scanner->GetFragmentRect(j);
 			TLFRect lf_rect(rect);
 			if (d->Overlap(lf_rect) < overlap)
@@ -247,7 +247,7 @@ void TLFDBLabeledImages::GetFarHST(TLFDetectEngine& engine, TLFHistogramm& hst, 
 				if (!all)
 				{
 					classifier->Setup(scale, scale, rect.left, rect.top);
-					int result = classifier->Classify(img1, err);
+					/*int result = */classifier->Classify(img1, err);
 				}
 				else
 				{
@@ -302,7 +302,7 @@ void TLFDBLabeledImages::GetFrrHST(TLFDetectEngine& engine, TLFHistogramm& hst, 
 		for (int j = 0; j < scanner->GetFragmentsCount(); j++)
 		{
 			double err = 0;
-			double scale = 1;
+			double scale;// = 1;
 			awpRect rect = scanner->GetFragmentRect(j);
 			TLFRect lf_rect(rect);
 			if (d->Overlap(lf_rect) > overlap)
@@ -311,7 +311,7 @@ void TLFDBLabeledImages::GetFrrHST(TLFDetectEngine& engine, TLFHistogramm& hst, 
 				if (!all)
 				{
 					classifier->Setup(scale, scale, rect.left, rect.top);
-					int result = classifier->Classify(img1, err);
+					/*int result = */classifier->Classify(img1, err);
 				}
 				else
 				{
@@ -367,7 +367,7 @@ void TLFDBLabeledImages::GetFarFrrHST(TLFDetectEngine& engine, TLFHistogramm& fa
 		for (int j = 0; j < scanner->GetFragmentsCount(); j++)
 		{
 			double err = 0;
-			double scale = 1;
+			double scale;// = 1;
 			awpRect rect = scanner->GetFragmentRect(j);
 			TLFRect lf_rect(rect);
 			double overlap_det = d->Overlap(lf_rect);
@@ -375,7 +375,7 @@ void TLFDBLabeledImages::GetFarFrrHST(TLFDetectEngine& engine, TLFHistogramm& fa
 			if (!all)
 			{
 				classifier->Setup(scale, scale, rect.left, rect.top);
-				int result = classifier->Classify(img1, err);
+				/*int result = */classifier->Classify(img1, err);
 			}
 			else
 			{
@@ -415,7 +415,7 @@ void TLFDBLabeledImages::GetFarFrr(TLFDetectEngine& engine, double& Far, double&
 		return;
     int num_fragments = 0;
 	unsigned long  ptime = 0;
-	unsigned long  ctime = 0;
+	unsigned long  ctime;// = 0;
 	for (int i = 0; i < m_dataFiles.GetCount(); i++)
 	{
 		TLFDBSemanticDescriptor* d = (TLFDBSemanticDescriptor*)m_dataFiles.Get(i);

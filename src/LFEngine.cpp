@@ -1,5 +1,4 @@
 #include "_LF.h"
-#pragma hdrstop
 
 #define BUFFER_SIZE     1000
 #define DETECTORS_COUNT	5

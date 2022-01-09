@@ -5,7 +5,7 @@
     Copyright (c) AWPSoft.
 */
 #include "_LF.h"
-#pragma hdrstop
+
 ILFStrong::ILFStrong()
 {
     m_threshold = 0.f;

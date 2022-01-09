@@ -5,7 +5,7 @@
     Copyright (c) AWPSoft.
 */
 #include "_LF.h"
-#pragma hdrstop
+
 ILFWeak::ILFWeak(const char* lpFeatureName)
 {
     m_fWeight = 1.f;

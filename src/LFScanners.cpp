@@ -1,6 +1,5 @@
 //---------------------------------------------------------------------------
 #include "_LF.h"
-#pragma hdrstop
 
 ILFScanner::ILFScanner()
 {
@@ -75,7 +74,7 @@ void ILFScanner::SetBaseHeight(int BaseHeight)
 
 
 
-bool ILFScanner::Scan(TLFImage* pImage)
+bool ILFScanner::ScanImage(TLFImage* pImage)
 {
 	if (pImage == NULL)
 		return false;
@@ -160,7 +159,7 @@ bool ILFScanner::LoadXML(TiXmlElement* parent)
     TLFParameter* p = new  TLFParameter();
     TiXmlNode* e = NULL;
 
-    while(e = parent->IterateChildren(e))
+    while((e = parent->IterateChildren(e)) != NULL)
 	{
        if (strcmp(e->Value(), p->GetName()) != 0)
         continue;
@@ -296,8 +295,8 @@ bool TLFScanner::Scan(int w0, int h0)
 	int w =  this->m_BaseWidth;
 	double m_ar = (double)this->m_BaseHeight / (double)this->m_BaseWidth;
 	int h = (AWPSHORT)floor(w*m_ar + 0.5);
-	double _height = 0;
-	double _width = 0;
+	double _height;// = 0;
+	double _width;// = 0;
 	if (w > h)
 	{
 		_width  =  width-2.f;
@@ -312,8 +311,8 @@ bool TLFScanner::Scan(int w0, int h0)
 	double stepx = floor(st*_width / 100.f +0.5f);
 	double stepy = floor(st*_height / 100.f +0.5f);
 
-	stepx < 1 ? 4:stepx;
-	stepy < 1 ? 4:stepy;
+	stepx = stepx < 1 ? 4.:stepx;
+	stepy = stepy < 1 ? 4.:stepy;
 
 	while (_width >= mins*m_BaseWidth)
 	{
@@ -373,8 +372,8 @@ bool TLFScanner::Scan(int w0, int h0)
 	 stepx = floor(st*_width / 100.f +0.5f);
 	 stepy = floor(st*_height / 100.f +0.5f);
 
-	stepx < 1 ? 4:stepx;
-	stepy < 1 ? 4:stepy;
+	stepx = stepx < 1 ? 4:stepx;
+	stepy = stepy < 1 ? 4:stepy;
 	int c = 0;
 
 	while (_width >= mins*m_BaseWidth)
@@ -586,7 +585,7 @@ bool TLFTileScaleScanner::Scan(int w, int h)
 
 
 
-	int num =  0;
+	int num;// =  0;
 	int c = 0;
 	int size = 0;
 	double bh = (double)m_BaseHeight*m_min_scale;
@@ -641,9 +640,9 @@ bool TLFAllScanner::Scan(int w, int h)
 		return false;
 	m_Fragments = (TLFBounds*)malloc(m_FragmentsCount* sizeof(TLFBounds));
 	int c = 0;
-	for (int y = m_BaseHeight / 2; y < h - m_BaseHeight / 2; y++)
+	for (unsigned int y = m_BaseHeight / 2; y < h - m_BaseHeight / 2; y++)
 	{
-		for (int x = m_BaseWidth / 2; x < w - m_BaseWidth / 2; x++)
+		for (unsigned int x = m_BaseWidth / 2; x < w - m_BaseWidth / 2; x++)
 		{
 			m_Fragments[c].Angle = 0;
 			m_Fragments[c].HasObject = false;
@@ -675,7 +674,7 @@ ILFScanner* CreateScanner(TiXmlElement* parent)
 	else if (strType == "TLFAllScanner")
 		scanner = new TLFAllScanner();
 	else
-		return NULL;
+		return scanner;
 	if (scanner->LoadXML(parent))
 		return scanner;
 

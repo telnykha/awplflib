@@ -1,5 +1,5 @@
 #include "_LF.h"
-#pragma hdrstop
+
 TLFColorDetector::TLFColorDetector()
 {
    m_Threshold = 100;

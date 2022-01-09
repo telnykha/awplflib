@@ -1,5 +1,5 @@
 #include "_LF.h"
-#pragma hdrstop
+
 //---------------------------------------------------------------------------
 // сильный классификатор, основанный на преобразовании Census
 TCSStrong::TCSStrong()
@@ -19,7 +19,7 @@ void TCSStrong::Setup( awpRect const& window, int det_width )
     }
 }
 // классификафия
-int TCSStrong::Classify(TLFImage* pImage, double& err, double* vct)
+int TCSStrong::Classify(TLFImage* pImage, double& err)
 {
 	int c = GetCount();
 	if (c == 0)
