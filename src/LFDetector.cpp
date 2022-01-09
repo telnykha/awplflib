@@ -313,36 +313,24 @@ int  TSCObjectDetector::Detect()
 		return res;
 	if (this->m_Image.GetImage() == NULL)
 		return res;
-	TLFSFeature sf(0,0,this->m_baseWidth, this->m_baseHeight);
 	for (int i = 0; i < m_scanner->GetFragmentsCount(); i++)
 	{
-		
+
 		if (!m_scanner->GetFragment(i)->HasObject)
 		{
 			bool has_object = true;
 			double scale = (double)(m_scanner->GetFragmentRect(i).right - m_scanner->GetFragmentRect(i).left)/(double)this->m_baseWidth;
-			sf.Setup(scale, scale, m_scanner->GetFragmentRect(i).left, m_scanner->GetFragmentRect(i).top);
-			double variance = sf.fCalcValue(&m_Image);
-			//if (variance > 30)
+			for (int j = 0; j < m_Strongs.GetCount(); j++)
 			{
-				//printf("-------------------------------\n");
-				for (int j = 0; j < m_Strongs.GetCount(); j++)
+				TCSStrong* strong = (TCSStrong*)m_Strongs.Get(j);
+				strong->Setup(m_scanner->GetFragment(i)->Rect, m_baseWidth);
+				double err = 0;
+				if (strong->Classify(&m_Image, err) == 0)
 				{
-
-					TCSStrong* strong = (TCSStrong*)m_Strongs.Get(j);
-					strong->Setup(m_scanner->GetFragment(i)->Rect, m_baseWidth);
-					double err = 0;
-					if (strong->Classify(&m_Image, err) == 0)
-					{
-						has_object = false;
-						break;
-					}
-					//else
-					//	printf("classifyed %i\t %f.\n", j, err);
+					has_object = false;
+					break;
 				}
 			}
- 			//else
- 			//		has_object = false;
 
 			if (has_object)
 			{
@@ -354,30 +342,103 @@ int  TSCObjectDetector::Detect()
 		{
 			m_scanner->GetFragment(i)->HasObject = false;
 		}
-			
+
 	}
 
 
 
-	// записываем результат в лист. 
+	// записываем результат в лист.
 	m_objects.Clear();
 	for (int i = 0; i < m_scanner->GetFragmentsCount(); i++)
 	{
 		if (m_scanner->GetFragment(i)->HasObject)
 		{
 			awpRect rect = m_scanner->GetFragmentRect(i);
-            UUID id;
+			UUID id;
 			LF_NULL_UUID_CREATE(id);
-            TLFDetectedItem* de = new TLFDetectedItem(&rect, 0, this->m_Type, this->m_Angle,
-             this->m_racurs, this->m_baseWidth, this->m_baseHeight, this->m_strDetName.c_str(), id);
+			TLFDetectedItem* de = new TLFDetectedItem(&rect, 0, this->m_Type, this->m_Angle,
+			 this->m_racurs, this->m_baseWidth, this->m_baseHeight, this->m_strDetName.c_str(), id);
 			de->SetHasObject(true);
 			m_objects.Add(de);
 			res++;
 		}
-        m_scanner->GetFragment(i)->HasObject = false;
+		m_scanner->GetFragment(i)->HasObject = false;
 	}
 
-	return res;
+	return m_objects.GetCount();
+}
+
+int TSCObjectDetector::DetectInRect(awpRect roi)
+{
+
+	int res = 0;
+	if (this->m_scanner == NULL)
+		return res;
+	if (this->m_Image.GetImage() == NULL)
+		return res;
+	for (int i = 0; i < m_scanner->GetFragmentsCount(); i++)
+	{
+		awpRect fr = m_scanner->GetFragmentRect(i);
+		awpPoint c;
+		c.X = (fr.left + fr.right) / 2;
+		c.Y = (fr.top + fr.bottom) / 2;
+		if (c.X >= roi.left && c.X <= roi.right &&
+		c.Y >= roi.top && c.Y <= roi.bottom)
+		{
+			if (!m_scanner->GetFragment(i)->HasObject)
+			{
+
+				bool has_object = true;
+				double scale = (double)(m_scanner->GetFragmentRect(i).right - m_scanner->GetFragmentRect(i).left)/(double)this->m_baseWidth;
+				m_scanner->GetFragment(i)->raiting = 0;
+				for (int j = 0; j < m_Strongs.GetCount(); j++)
+				{
+					TCSStrong* strong = (TCSStrong*)m_Strongs.Get(j);
+					strong->Setup(m_scanner->GetFragment(i)->Rect, m_baseWidth);
+					double err = 0;
+					if (strong->Classify(&m_Image, err) == 0)
+					{
+						has_object = false;
+						break;
+					}
+					m_scanner->GetFragment(i)->raiting += err;
+				}
+
+				if (has_object)
+				{
+					//object detected
+					m_scanner->GetFragment(i)->HasObject = true;
+				}
+			}
+			else
+			{
+				m_scanner->GetFragment(i)->HasObject = false;
+			}
+		}
+	}
+
+
+
+	// записываем результат в лист.
+	m_objects.Clear();
+	for (int i = 0; i < m_scanner->GetFragmentsCount(); i++)
+	{
+		if (m_scanner->GetFragment(i)->HasObject)
+		{
+			awpRect rect = m_scanner->GetFragmentRect(i);
+			UUID id;
+			LF_NULL_UUID_CREATE(id);
+			TLFDetectedItem* de = new TLFDetectedItem(&rect, 0, this->m_Type, this->m_Angle,
+			 this->m_racurs, this->m_baseWidth, this->m_baseHeight, this->m_strDetName.c_str(), id);
+			de->SetHasObject(true);
+			de->SetRaiting(m_scanner->GetFragment(i)->raiting);
+			m_objects.Add(de);
+			res++;
+		}
+		m_scanner->GetFragment(i)->HasObject = false;
+	}
+
+	return m_objects.GetCount();
 }
 
 
@@ -482,6 +543,30 @@ bool          TSCObjectDetector::LoadXML(TiXmlElement* parent)
     }
 
     return true;
+}
+
+
+bool TSCObjectDetector::SaveDetector(const char* lpFileName)
+{
+	TiXmlDocument doc;
+	TiXmlDeclaration* decl = new TiXmlDeclaration("1.0", "", "");
+	doc.LinkEndChild(decl);
+
+	TiXmlElement* e = SaveXML();
+	doc.LinkEndChild(e);
+	return doc.SaveFile(lpFileName);
+}
+bool TSCObjectDetector::LoadDetector(const char* lpFileName)
+{
+	Clear();
+
+	TiXmlDocument doc;
+	if (!doc.LoadFile(lpFileName))
+		return false;
+	TiXmlElement* e = doc.FirstChildElement("TSCObjectDetector");
+	if (e == NULL)
+		return false;
+	return LoadXML(e);
 }
 
 

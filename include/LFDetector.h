@@ -64,13 +64,16 @@ public:
    // classification
    virtual int  ClassifyRect(awpRect Fragmnet, double* err, int* vect);
    virtual int  Detect();
-
+   int DetectInRect(awpRect roi);
    // properties
-    virtual  double GetThreshold();
+	virtual  double GetThreshold();
     virtual  void	SetThreshold(double Value);
     // xml support
     virtual TiXmlElement* SaveXML();
 	virtual bool          LoadXML(TiXmlElement* parent);
+	// file io 
+	bool SaveDetector(const char* lpFileName);
+	bool LoadDetector(const char* lpFileName);
 	// stages
 	virtual bool	AddStrong(ILFStrong* strong);
 

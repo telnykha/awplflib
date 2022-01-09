@@ -973,6 +973,7 @@ bool TLFBuilder::BuildBackground()
 			m_detector->Init(Image.GetImage(), true);
 			itemsFound = m_detector->Detect();
 			m_AdaBoost.DbgMsg("Items found = " + TypeToStr(itemsFound) + "\n");
+			printf("Items = %d\n", itemsFound);
 			for (int j = 0; j < m_detector->GetNumItems(); j++)
 			{
 				TLFDetectedItem* item = m_detector->GetItem(j);

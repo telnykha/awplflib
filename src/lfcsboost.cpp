@@ -257,7 +257,7 @@ omp_set_num_threads(8);
 		//DbgMsg("afrr =" + TypeToStr(afrr) +"\n");
 
 		// завершаем процесс, если ошибка уменьшилась до порогового значения
-		if (FARV < m_FinishFar && afrr == 0)
+		if (FARV < m_FinishFar && afrr < 0.001)
 		{
             //this->SaveFRRSamples(stage);
 			return true;
@@ -549,7 +549,6 @@ void TCSAdaBoost::PrintFeature(ILFFeature* pSensor)
         ", y = " + TypeToStr( pSensor->syBase() ) +
         ", width = " + TypeToStr( pSensor->wUnitBase() ) +
         ", height = " + TypeToStr( pSensor->hUnitBase() ) + ";\n");
-
 }
 
 double TCSAdaBoost::PrintStatistics(TCSStrong& Class, double& afrr)
@@ -594,6 +593,18 @@ double TCSAdaBoost::PrintStatistics(TCSStrong& Class, double& afrr)
     DbgMsg( "\nFAR = " + TypeToStr( dFar ) +
             ", FRR = " + TypeToStr( dFrr ) +
             ", threshold = " + TypeToStr( Class.GetThreshold() )+ ";\n" );
+
+	//todo:
+	afrr = dFrr;
+	
+	TWclErrInfo err_info;
+	err_info.m_far = dFar;
+	err_info.m_frr = dFrr;
+	err_info.m_thr = Class.GetThreshold();
+
+	m_trainData.push_back(err_info);
+    return dFar;
+
 	double ff = 0;
 	double dFar1 = 0;
 	double dFrr1 = 0;
@@ -614,7 +625,7 @@ double TCSAdaBoost::PrintStatistics(TCSStrong& Class, double& afrr)
 
         if ( s->GetFlag() == 1 )
         {
-            if ( err < min_err ) dFrr1 += 1.0;
+			if (err < min_err) dFrr1 += 1.0;
         }
         else
         {
@@ -635,7 +646,7 @@ double TCSAdaBoost::PrintStatistics(TCSStrong& Class, double& afrr)
 	DbgMsg( "ro = " + TypeToStr( min_err ) + "\t frr = " + TypeToStr( dFrr1 ) +
 		",\t far = " + TypeToStr( dFar1 ) + ";\n");
 
-	TWclErrInfo err_info;
+	//TWclErrInfo err_info;
 	err_info.m_far = dFar1;
 	err_info.m_frr = dFrr1;
 	err_info.m_thr = min_err;

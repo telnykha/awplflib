@@ -119,5 +119,18 @@ public:
 		return  "TLFAllScanner";
 	}
 };
+
+class TLFWholeImageScanner : public ILFScanner
+{
+protected:
+public:
+	TLFWholeImageScanner();
+	virtual bool Scan(int w, int h);
+	virtual const char* GetName()
+	{
+		return  "TLFWholeImageScanner";
+	}
+};
+
 /** @} */ /*  end of LFSSemantic group */
 #endif
