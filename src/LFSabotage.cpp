@@ -145,7 +145,7 @@ bool TLFSabotageStrong::LoadXML(TiXmlElement* parent)
 /*
 Classification
 */
-int TLFSabotageStrong::Classify(TLFImage* pImage, double& err, double* vct)
+int TLFSabotageStrong::Classify(TLFImage* pImage, double& err)
 {
 	int c = 0;
 	for (int i = 0; i < this->GetCount(); i++)
