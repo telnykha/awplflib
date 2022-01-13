@@ -64,7 +64,7 @@ class TLFDBLabeledImages : public TLFObject
 protected:
 	TLFProgress   m_progress;
 
-	std::string				m_strPath;
+	TLFString				m_strPath;
 	TLFObjectList			m_dataFiles;
 	TLFSemanticDictinary	m_dictinary;
 	bool LoadDatabase(const char* path);
@@ -89,7 +89,7 @@ public:
     int GetDescrFilesCount();
     int GetLabelCount(const char* class_label);
 
-    std::string GetPath();
+    TLFString GetPath();
     TLFDBSemanticDescriptor* GetDescriptor(int index);
 	TLFSemanticDictinary*	 GetDictinary();
 
@@ -109,6 +109,22 @@ public:
 	virtual const char* GetName()
 	{
 		return "TLFDBLabeledImages";
+	}
+};
+
+class TLFDBlabeledMedia : public TLFObject
+{
+protected:
+	TLFSemanticDictinary	m_dictinary;
+	TLFString				m_strPath;
+	TLFObjectList			m_dataFiles;
+public: 
+	TLFDBlabeledMedia(const char* path);
+	TLFDBlabeledMedia();
+
+	virtual const char* GetName()
+	{
+		return "TLFDBlabeledMedia";
 	}
 };
 /** @} */ /*  end of LFDatabase group */
