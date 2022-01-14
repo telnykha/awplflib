@@ -206,6 +206,12 @@ int TLFDetectedItem::GetAngle()
 	return this->m_angle;
 }
 
+void TLFDetectedItem::SetAngle(int value)
+{
+	m_angle = value;
+}
+
+
 int TLFDetectedItem::GetState()
 {
 	return this->m_state;

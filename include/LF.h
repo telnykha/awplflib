@@ -79,6 +79,10 @@ typedef enum {ZTUnknown, ZTRect, ZTContour, ZTLineSegment, ZTOpenPolygon, ZTCirc
 class TLFZone;
 
 
+using namespace std;
+
+typedef std::vector<std::string>      	TLFStrings;
+typedef std::string 					TLFString;
 
 typedef struct
 {
@@ -878,11 +882,11 @@ public:
 class TLFDetectedItem: public TLFObject
 {
 protected:
-	std::string     m_strDetectorName; /*ID detector*/
-	std::string 	m_strComment;      /*additional description*/
+	TLFString		m_strDetectorName; /*ID detector*/
+	TLFString 		m_strComment;      /*additional description*/
 	TLFRect*		m_pRect;		   /*bounding box*/
 	double			m_Raiting;         /*рейтинг 0..1*/
-	std::string		m_type;            /*type of detection. set by the detector*/
+	TLFString		m_type;            /*type of detection. set by the detector*/
 	int				m_angle;           /*detection angle*/
 	int				m_racurs;		   /**/
 	bool			m_hasObject;       /**/
@@ -899,7 +903,7 @@ public:
 	TLFDetectedItem();
 	TLFDetectedItem(TLFDetectedItem& item);
 	TLFDetectedItem(TLFDetectedItem* pItem);
-	TLFDetectedItem(awpRect* pRect, double raiting, std::string type, int angle, int racurs, int bw, int bh, std::string strDetector,  UUID id, ILFPredictor* predictor = NULL);
+	TLFDetectedItem(awpRect* pRect, double raiting, TLFString, int angle, int racurs, int bw, int bh, TLFString strDetector, UUID id, ILFPredictor* predictor = NULL);
 	virtual ~TLFDetectedItem();
 	/*data exchange*/
 	TLFRect*	GetBounds();
@@ -915,6 +919,7 @@ public:
 	void		SetComment(const char* value);
 
 	int         GetAngle();
+	void		SetAngle(int value);
 
 	int         GetRacurs();
 	void		SetRacurs(int value);

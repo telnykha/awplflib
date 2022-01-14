@@ -48,10 +48,7 @@
 *	Implementation of file system related routines 
 *   @{
 */
-using namespace std;
 
-typedef std::vector<std::string>      	TLFStrings;
-typedef std::string 					TLFString;
 
 extern "C"
 {
