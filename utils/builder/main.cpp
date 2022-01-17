@@ -30,6 +30,7 @@ int main(int argc, char* argv[])
 	if ( argc < 2 )
 	{
 		Usage();
+		getchar();
 		return 0;
 	}  
 	if (argc == 2)
@@ -42,7 +43,7 @@ int main(int argc, char* argv[])
 		key = argv[1];
 		name = argv[2];
 	}
-/*    TCSBuildDetector  Builder;
+    TCSBuildDetector  Builder;
 	if (!Builder.LoadConfig(name))
 	{
 		printf("Failed to load config. \n");
@@ -67,7 +68,7 @@ int main(int argc, char* argv[])
 		//do new detecor
 		Builder.Build();
 	}
-	else*/ if (key == "--create")
+	/*else if (key == "--create")
 	{
 		if (argc < 3)
 			return 0;
@@ -119,10 +120,11 @@ int main(int argc, char* argv[])
 			}
 		}
 
-	}
+	}*/
 	else 
 	{
 		Usage();
+		getchar();
 		return 0;
 	}
 
