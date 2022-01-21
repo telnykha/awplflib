@@ -47,13 +47,14 @@
 //--------------------------element dictionary ----------------------------------
 TLFSemanticDictinaryItem::TLFSemanticDictinaryItem()
 {
-	this->m_strLabel = "Unknown";
-	this->m_scanner = new TLFScanner();
+	m_strLabel = "Unknown";
+	m_scanner = new TLFScanner();
 	awpRGBtoWeb(0,255,0, &m_color);
 	UUID id;
 	LF_UUID_CREATE(id)
 	m_id = LFGUIDToString(&id);
-	this->m_zoneType = ZTRect;
+	m_zoneType = ZTRect;
+	m_needRepairItem = false;
 }
 
 TLFSemanticDictinaryItem::TLFSemanticDictinaryItem(const char* lpWord)
@@ -64,7 +65,8 @@ TLFSemanticDictinaryItem::TLFSemanticDictinaryItem(const char* lpWord)
 	UUID id;
 	LF_UUID_CREATE(id)
 	m_id = LFGUIDToString(&id);
-	this->m_zoneType = ZTRect;
+	m_zoneType = ZTRect;
+	m_needRepairItem = false;
 }
 
 TLFSemanticDictinaryItem::TLFSemanticDictinaryItem(TLFSemanticDictinaryItem& item)
@@ -75,7 +77,8 @@ TLFSemanticDictinaryItem::TLFSemanticDictinaryItem(TLFSemanticDictinaryItem& ite
 	m_scanner->SetBaseHeight(item.m_scanner->GetBaseHeight());
 	m_scanner->SetBaseWidth(item.m_scanner->GetBaseWidth());
 	m_id = item.m_id;
-	this->m_zoneType = item.m_zoneType;
+	m_zoneType = item.m_zoneType;
+	m_needRepairItem = item.m_needRepairItem;
 }
 
 TLFSemanticDictinaryItem::~TLFSemanticDictinaryItem()
@@ -153,6 +156,17 @@ void TLFSemanticDictinaryItem::SetZoneType(TEZoneTypes zt)
 	this->m_zoneType = zt;
 }
 
+
+bool TLFSemanticDictinaryItem::GetNeedRepairItem()
+{
+	return m_needRepairItem;
+}
+void TLFSemanticDictinaryItem::SetNeedRepairItem(const bool value)
+{
+    m_needRepairItem = value;
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////
 bool TLFSemanticDictinaryItem::LoadXML(const char* lpFileName)
 {
@@ -195,6 +209,7 @@ bool TLFSemanticDictinaryItem::LoadXML(TiXmlElement* parent)
 		UUID id;
 		LF_UUID_CREATE(id)
 		m_id = LFGUIDToString(&id);
+		m_needRepairItem = true;
 	}
 	if (!this->m_scanner->LoadXML(parent->FirstChildElement()))
 		return false;
@@ -203,7 +218,12 @@ bool TLFSemanticDictinaryItem::LoadXML(TiXmlElement* parent)
 	{
 		int value = 0;
 		parent->QueryIntAttribute("zoneType", &value);
-        m_zoneType = (TEZoneTypes)value;
+		m_zoneType = (TEZoneTypes)value;
+	}
+	else
+	{
+		m_zoneType = ZTRect;
+        m_needRepairItem = true;
 	}
 	return true;
 }

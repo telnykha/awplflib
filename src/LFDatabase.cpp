@@ -121,11 +121,11 @@ void TLFDBLabeledImages::ClearDatabase()
          if (LFFileExists(strXmlName))
          {
             LFDeleteFile(strXmlName.c_str());
-            if (m_progress != NULL)
+			if (m_progress != NULL)
             {
                 std::string msg = LFGetFileName(strXmlName);
                 msg += ".xml";
-                m_progress(msg.c_str(), 100*i/c);
+				m_progress(msg.c_str(), 100*i/c);
             }
          }
     }
@@ -151,6 +151,14 @@ bool TLFDBLabeledImages::LoadDatabase(const char* path)
 		return false;
 	}
 
+	bool repair = false;
+	for (int i = 0; i < m_dictinary.GetCount(); i++)
+	{
+		TLFSemanticDictinaryItem* sdi = (TLFSemanticDictinaryItem*)m_dictinary.Get(i);
+		if (sdi->GetNeedRepairItem())
+			repair = true;
+	}
+
 	std::string strPath = path;
 	strPath += c_separator;
 	TLFStrings names;
@@ -163,10 +171,46 @@ bool TLFDBLabeledImages::LoadDatabase(const char* path)
 			if (_IsImageFile(names[i]))
 			{
 				TLFDBSemanticDescriptor* d = new TLFDBSemanticDescriptor(names[i].c_str());
+				if (repair)
+				{
+					// repair descriptor
+					for (int j = 0; j < d->GetCount(); j++)
+					{
+						 TLFDetectedItem* di =  d->GetDetectedItem(j);
+						 TLFString di_type = di->GetType();
+						 for (int k = 0; k < m_dictinary.GetCount(); k++)
+						 {
+							TLFSemanticDictinaryItem* sdi = (TLFSemanticDictinaryItem*)m_dictinary.Get(k);
+							TLFString str_sdi_type = sdi->GetItemLabel();
+							if (di_type != "970C3A11-DD73-459B-A741-FB23AA23C883")
+							{
+								// repair here
+								 di->SetType(sdi->GetId().c_str());
+
+							}
+						 }
+					}
+
+
+					std::string strXmlName = LFChangeFileExt(names[i], ".xml");
+					if (!d->SaveXML(strXmlName.c_str()))
+					{
+						return false;
+					}
+				}
 				this->m_dataFiles.Add(d);
-			}		
+			}
 	}
-    m_strPath = path;
+	if (repair)
+	{
+		for (int i = 0; i < m_dictinary.GetCount(); i++)
+		{
+			TLFSemanticDictinaryItem* sdi = (TLFSemanticDictinaryItem*)m_dictinary.Get(i);
+			sdi->SetNeedRepairItem(false);
+		}
+		m_dictinary.SaveXML(strDictinary.c_str());
+	}
+	m_strPath = path;
 	return true;
 }
 
@@ -520,7 +564,7 @@ void TLFDBLabeledImages::SetLabel(const char* label)
 TLFDBSemanticDescriptor* TLFDBLabeledImages::GetDescriptor(int index)
 {
      if (index < 0 || index >= m_dataFiles.GetCount())
-     	return NULL;
+		return NULL;
      return dynamic_cast<TLFDBSemanticDescriptor*> ( m_dataFiles.Get(index));
 }
 
@@ -580,7 +624,7 @@ void TLFDBLabeledImages::UpdateUUIDsDatabase()
             std::string item_type = item->GetType();
             for (int k = 0; k < m_dictinary.GetCount(); k++)
             {
-                TLFSemanticDictinaryItem* si = m_dictinary.GetWordFromDictinary(k);
+				TLFSemanticDictinaryItem* si = m_dictinary.GetWordFromDictinary(k);
                 std::string noun = si->GetItemLabel();
                 std::string id   = si->GetId();
                 if (item_type == noun)
@@ -610,7 +654,7 @@ void TLFDBLabeledImages::UpdateDatabase()
             TLFDetectedItem* item = d->GetDetectedItem(j);
             std::string item_type = item->GetType();
             bool found = false;
-            for (int k = 0; k < m_dictinary.GetCount(); k++)
+			for (int k = 0; k < m_dictinary.GetCount(); k++)
             {
                 TLFSemanticDictinaryItem* si = m_dictinary.GetWordFromDictinary(k);
                 std::string id   = si->GetId();

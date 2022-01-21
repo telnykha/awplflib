@@ -64,6 +64,7 @@ protected:
 	int                m_color;
 	std::string        m_id;
 	TEZoneTypes        m_zoneType;
+	bool               m_needRepairItem;
 public:
 	TLFSemanticDictinaryItem();
 	TLFSemanticDictinaryItem(const char* lpWord);
@@ -80,6 +81,9 @@ public:
 	void SetId(const TLFString& id);
 	TEZoneTypes GetZoneType();
 	void SetZoneType(TEZoneTypes zt);
+
+	bool GetNeedRepairItem();
+	void SetNeedRepairItem(const bool value);
 
 	virtual bool SaveXML(const char* lpFileName);
 	virtual bool LoadXML(const char* lpFileName);
